@@ -2,9 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { FormatResponseInterceptor } from './common/interceptors/format-response.interceptor';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // 1. Enregistrer l'intercepteur globalement
+  app.useGlobalInterceptors(new FormatResponseInterceptor());
+  // 2. Enregistrer le filtre d'exception globalement
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({

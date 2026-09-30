@@ -167,8 +167,8 @@ export class Quittance extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean = false;
 
-  @Column({ name: 'id_quittance_annule', nullable: true })
-  idQuittanceAnnule?: number;
+  @Column({ name: 'quittance_id_annule', nullable: true })
+  quittanceIdAnnule?: number;
 
   // =========================================================================
   // RELATIONS POUR L'ANNULATION EN CASCADE

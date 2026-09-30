@@ -14,7 +14,7 @@ export class CreateBordereauDto {
   quittanceCessionId?: number;
 
   @IsNumber()
-  montant: number;
+  montant: number=0;
 
   @IsBoolean()
   @IsOptional()

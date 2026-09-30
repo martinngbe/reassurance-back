@@ -1,21 +1,21 @@
 import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateNoteDebitCreditDto {
-  @IsInt()
-  @IsOptional()
-  idNoteDebitCreditReference?: number;
+  // @IsInt()
+  // @IsOptional()
+  // idNoteDebitCreditReference?: number;
 
   @IsInt()
-  @IsOptional()
+  //@IsOptional()
   quittanceId?: number;
 
   @IsInt()
   @IsOptional()
   quittanceCessionId?: number;
 
-  @IsInt()
-  @IsOptional()
-  idReference?: number;
+  // @IsInt()
+  // @IsOptional()
+  // idReference?: number;
 
   @IsInt()
   @IsOptional()
@@ -58,7 +58,7 @@ export class CreateNoteDebitCreditDto {
   isDebit?: boolean;
 
   @IsNumber()
-  montant: number;
+  montant: number=0;
 
   @IsBoolean()
   @IsOptional()

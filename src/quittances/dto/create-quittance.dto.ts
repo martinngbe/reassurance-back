@@ -118,5 +118,5 @@ export class CreateQuittanceDto {
 
   @IsInt()
   @IsOptional()
-  idQuittanceAnnule?: number;
+  quittanceIdAnnule?: number;
 }

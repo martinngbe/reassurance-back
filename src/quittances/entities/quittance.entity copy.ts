@@ -142,5 +142,5 @@
 //   isAnnule: boolean=false;
 
 //   @Column({ name: 'id_quittance_annule', nullable: true })
-//   idQuittanceAnnule?: number;
+//   quittanceIdAnnule?: number;
 // }

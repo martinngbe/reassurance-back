@@ -3,19 +3,19 @@ import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
 export class CreateCompteTraiteDto {
   @IsInt()
   @IsOptional()
-  idQuittanceRetroCession?: number;
+  quittanceRetroCessionId?: number;
 
   @IsInt()
-  idCompteType: number;
+  idCompteType!: number;
 
   @IsInt()
-  acteurId: number;
+  acteurId!: number;
 
   @IsInt()
-  idDeviseId: number;
+  DeviseId!: number;
 
   @IsNumber()
-  coursDevise: number;
+  coursDevise: number=0;
 
   @IsBoolean()
   @IsOptional()
@@ -35,7 +35,7 @@ export class CreateCompteTraiteDto {
 
   @IsInt()
   @IsOptional()
-  idCompteTratieAnnule?: number;
+  compteTratieIdAnnule?: number;
 
   @IsNumber()
   @IsOptional()

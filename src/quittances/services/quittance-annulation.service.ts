@@ -146,7 +146,7 @@ export class QuittanceAnnulationService {
         ...quittance,
         id: undefined,
         isAnnule: true,
-        idQuittanceAnnule: quittance.id,
+        quittanceIdAnnule: quittance.id,
         createdAt: now,
         updatedAt: now,
       });
