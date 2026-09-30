@@ -1,0 +1,20 @@
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { config as loadEnv } from 'dotenv';
+
+loadEnv();
+
+export const typeOrmConfig: DataSourceOptions = {
+  type: 'mariadb',
+  host: process.env.DB_HOST || 'localhost',
+  port: Number(process.env.DB_PORT) || 3306,
+  username: process.env.DB_USERNAME || 'reassurance',
+  password: process.env.DB_PASSWORD || 'reassurance',
+  database: process.env.DB_DATABASE || 'reassurance_back',
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+  synchronize: process.env.DB_SYNCHRONIZE === 'true',
+  logging: process.env.DB_LOGGING === 'true',
+};
+
+// Data source utilisé par la CLI TypeORM (migrations)
+export default new DataSource(typeOrmConfig);
