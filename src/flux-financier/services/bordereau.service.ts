@@ -39,4 +39,35 @@ export class BordereauService {
     const result = await this.bordereauRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException(`Bordereau ${id} not found`);
   }
+
+  async annuler(bordereauId: number): Promise<void> {
+      const bordereau = await  this.bordereauRepository.findOne( {
+        where: { id: bordereauId },
+        relations: ['notesDebitCredit'],
+      });
+  
+      if (!bordereau || bordereau.isAnnule) return;
+  
+/*      // Annuler les NDC liées à ce bordereau
+      for (const ndc of bordereau.notesDebitCredit || []) {
+        await this.annulerNoteDebitCredit(ndc.id, queryRunner, now);
+      }
+*/  
+      // Créer la copie d'annulation
+      const annulation = this.bordereauRepository.create({
+        ...bordereau,
+        id: undefined,
+        montant: - bordereau.montant,
+        isAnnule: true,
+        bordereauIdAnnule: bordereau.id,
+        createdAt: undefined,
+        updatedAt: undefined,
+      });
+      const bordereauAnnulation= await  this.bordereauRepository.save( annulation);
+  
+      bordereau.isAnnule = true;
+      bordereau.bordereauIdAnnule=bordereauAnnulation.id
+      await  this.bordereauRepository.save(bordereau);
+    }
+    
 }

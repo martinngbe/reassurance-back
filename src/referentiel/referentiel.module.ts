@@ -38,8 +38,8 @@ import { ClsModule } from 'nestjs-cls';
  */
 @Module({
   imports: [
+    ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module
     TypeOrmModule.forFeature([
-      ClsModule, // ⬅️ OBLIGATOIRE pour que le CLS fonctionne dans ce module
       Branche,
       SousBranche,
       DomaineActivite,

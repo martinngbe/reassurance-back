@@ -67,7 +67,7 @@ export class CompteTraite extends BaseEntity {
   isAnnule: boolean=false;
 
   @Column({ name: 'compte_traite_id_annule', nullable: true })
-  compteTratieIdAnnule?: number;
+  compteTraiteIdAnnule?: number;
 
   @Column({ type: 'decimal', precision: 18, scale: 2, default: 0 })
   solde: number=0;

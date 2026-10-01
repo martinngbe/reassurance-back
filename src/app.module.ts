@@ -13,7 +13,10 @@ import { ClsModule } from 'nestjs-cls';
 import { ClsPluginTransactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterTypeOrm } from '@nestjs-cls/transactional-adapter-typeorm';
 import { DataSource } from 'typeorm';
-import { FluxFinancierModule } from './flux-financier/services/flux-financier.module';
+import { FluxFinancierModule } from './flux-financier/flux-financier.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { AppLogger } from './common/logger/app-logger.service';
 
 @Module({
   imports: [
@@ -35,6 +38,14 @@ import { FluxFinancierModule } from './flux-financier/services/flux-financier.mo
     QuittancesModule,
     FluxFinancierModule,
     SinistresModule,
+  ],
+
+  providers: [
+  AppLogger,
+      {
+        provide: APP_INTERCEPTOR,
+        useClass: LoggingInterceptor,
+      },
   ],
 })
 export class AppModule {}

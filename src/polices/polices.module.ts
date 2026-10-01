@@ -6,9 +6,10 @@ import { PoliceController } from './controllers/police.controller';
 import { ClsModule } from 'nestjs-cls';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module
-    Police])],
+  
+  imports: [
+     ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module
+    TypeOrmModule.forFeature([Police])],
   controllers: [PoliceController],
   providers: [PoliceService],
   exports: [PoliceService],

@@ -12,8 +12,9 @@ import { QuittanceCessionService } from './services/quittance-cession.service';
 import { QuittanceCessionController } from './controllers/quittance-cession.controller';
 import { EcheancePmdService } from './services/echeance-pmd.service';
 import { EcheancePmdController } from './controllers/echeance-pmd.controller';
-import { QuittanceAnnulationService } from './services/quittance-annulation.service';
+//import { QuittanceAnnulationService } from './services/quittance-annulation.service';
 import { ClsModule } from 'nestjs-cls';
+import { FluxFinancierModule } from 'src/flux-financier/flux-financier.module';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
@@ -24,13 +25,16 @@ import { ClsModule } from 'nestjs-cls';
  */
 @Module({
   imports: [
+    ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module    
+    FluxFinancierModule,
     TypeOrmModule.forFeature([
-      ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module
       Quittance, 
-      QuittanceCession, ObjetAssure, EcheancePmd]),
+      QuittanceCession, 
+      ObjetAssure, 
+      EcheancePmd]),
   ],
   controllers: [QuittanceController, QuittanceCessionController, EcheancePmdController],
-  providers: [QuittanceService,QuittanceAnnulationService, QuittanceCessionService, EcheancePmdService],
+  providers: [QuittanceService, QuittanceCessionService, EcheancePmdService],
   exports: [QuittanceService, QuittanceCessionService, EcheancePmdService],
 })
 export class QuittancesModule {}

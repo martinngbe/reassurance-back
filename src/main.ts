@@ -4,10 +4,16 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { FormatResponseInterceptor } from './common/interceptors/format-response.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { AppLogger } from './common/logger/app-logger.service';
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true, // Important pour que les logs de démarrage soient capturés
+  });
+   // On remplace le logger interne de NestJS par le nôtre
+  app.useLogger(app.get(AppLogger)); 
+  
 
   // 1. Enregistrer l'intercepteur globalement
   app.useGlobalInterceptors(new FormatResponseInterceptor());

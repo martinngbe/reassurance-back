@@ -39,4 +39,23 @@ export class EcheancePmdService {
     const result = await this.echeancePmdRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException(`EcheancePmd ${id} not found`);
   }
+
+  async annuler(id: number): Promise<void> {
+      const echeancePmd = await  this.echeancePmdRepository.findOne( {
+        where: { id },
+        relations: ['notesDebitCredit'],
+      });
+  
+      if (!echeancePmd || echeancePmd.isAnnule) return;
+  
+/*      // Annuler les NDC liées à ce bordereau
+      for (const ndc of bordereau.notesDebitCredit || []) {
+        await this.annulerNoteDebitCredit(ndc.id, queryRunner, now);
+      }
+*/  
+   
+      echeancePmd.isAnnule = true;
+      await  this.echeancePmdRepository.save(echeancePmd);
+    }
+    
 }

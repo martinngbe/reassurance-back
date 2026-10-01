@@ -46,4 +46,34 @@ export class CompteTraiteService {
     const result = await this.compteTraiteRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException(`CompteTraite ${id} not found`);
   }
+
+  async annuler(id: number): Promise<void> {
+      const compte = await  this.compteTraiteRepository.findOne( {
+        where: { id },
+        relations: ['notesDebitCredit'],
+      });
+  
+      if (!compte || compte.isAnnule) return;
+  
+/*      // Annuler les NDC liées à ce bordereau
+      for (const ndc of bordereau.notesDebitCredit || []) {
+        await this.annulerNoteDebitCredit(ndc.id, queryRunner, now);
+      }
+*/  
+      // Créer la copie d'annulation
+      const annulation = this.compteTraiteRepository.create({
+        ...compte,
+        id: undefined,
+        solde: - compte.solde,
+        isAnnule: true,
+        compteTraiteIdAnnule: compte.id,
+        createdAt: undefined,
+        updatedAt: undefined,
+      });
+      const compteAnnulation= await  this.compteTraiteRepository.save( annulation);
+  
+      compte.isAnnule = true;
+      compte.compteTraiteIdAnnule=compteAnnulation.id
+      await  this.compteTraiteRepository.save(compte);
+    }
 }
