@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 import { FormatResponseInterceptor } from './common/interceptors/format-response.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AppLogger } from './common/logger/app-logger.service';
+import { DataSource } from 'typeorm';
+import { seedAuth } from './auth/seed/seed-auth';
 
 
 async function bootstrap() {
@@ -39,6 +41,14 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
+
+
+ // Seed auth au démarrage (uniquement en développement)
+  if (process.env.NODE_ENV !== 'production') {
+    const dataSource = app.get(DataSource);
+    await seedAuth(dataSource);
+  }
+
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

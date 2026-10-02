@@ -17,12 +17,13 @@ import { FluxFinancierModule } from './flux-financier/flux-financier.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AppLogger } from './common/logger/app-logger.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(typeOrmConfig),
-
+    AuthModule,
     ReferentielModule,
     ActeursModule,
     PolicesModule,   // ⬇️ AJOUTER CE BLOC
