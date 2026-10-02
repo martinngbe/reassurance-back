@@ -10,6 +10,8 @@
 npm-debug.log
 .DS_Store
 
+.log
+
 # tests
 /test
 /coverage
