@@ -42,7 +42,7 @@ export class NoteDebitCredit extends BaseEntity {
    * ✅ Relation inverse : une NDC peut être référencée par plusieurs ReglementDetail
    */
   @OneToMany(() => ReglementDetail, (rd) => rd.noteDebitCredit)
-  reglementDetails: ReglementDetail[]=[];
+  reglementDetails!: ReglementDetail[];
 
 
   @ManyToOne(() => Bordereau, { nullable: true })

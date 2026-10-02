@@ -6,7 +6,7 @@ import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
 
 /** Échéance de prime à terme (traités non proportionnels). */
-@Entity('echeances_pmd')
+@Entity('echeance_pmd')
 export class EcheancePmd extends BaseEntity {
   @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })
@@ -44,7 +44,7 @@ export class EcheancePmd extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
 
-  @Column({ name: 'id_echeance_pmd_annule', nullable: true })
+  @Column({ name: 'echeance_pmd_id_annule', nullable: true })
   echeancePmdIdAnnule?: number;
 
   @OneToMany(() => NoteDebitCredit, (b) => b.echeancePmd)

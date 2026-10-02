@@ -1,7 +1,10 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateSinistreDto {
+  @IsInt()
+  sinistreStatutId!: number;
+
   @IsString()
-  @IsOptional()
-  reference?: string;
+  @IsNotEmpty()
+  numero!: string;
 }

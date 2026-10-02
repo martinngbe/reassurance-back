@@ -10,7 +10,7 @@ import { SinistreTypeEvaluation } from './sinistre-type-evaluation.entity';
  * Évaluation sinistre-cession : provient de SinistreEvaluation, ventilée
  * sur une QuittanceCession avec le taux de cession appliqué.
  */
-@Entity('sinistre_evaluation_quittance_cessions')
+@Entity('sinistre_evaluation_quittance_cession')
 export class SinistreEvaluationQuittanceCession extends BaseEntity {
   @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })
@@ -61,5 +61,5 @@ export class SinistreEvaluationQuittanceCession extends BaseEntity {
   isAnnule: boolean=false;
 
   @Column({ name: 'sinistre_evaluation_cession_id_annule', nullable: true })
-  sinistreEvaluationCessionIdAnnule?: string | null;
+  sinistreEvaluationCessionIdAnnule?: string ;
 }

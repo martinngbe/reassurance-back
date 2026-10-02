@@ -35,7 +35,7 @@ import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
  * - SinistreQuittance (duplication pour traçabilité)
  * - SinistreEvaluationQuittance (et leurs SinistreEvaluationQuittanceCession)
  */
-@Entity('quittances')
+@Entity('quittance')
 export class Quittance extends BaseEntity {
   @Column()
   numero!: string;
@@ -179,7 +179,7 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque QuittanceCession est également annulée
    * (ainsi que ses Bordereaux, EcheancesPmd, NotesDebitCredit).
    */
-  @OneToMany(() => QuittanceCession, (qc) => qc.quittance)
+  @OneToMany(() => QuittanceCession, (qc) => qc.quittance, {cascade: true,})
   quittancesCession!: QuittanceCession[];
 
   /**
@@ -203,7 +203,7 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque EcheancePmd est annulée
    * (ainsi que ses NotesDebitCredit).
    */
-  @OneToMany(() => CompteTraite, (ep) => ep.quittance)
+  @OneToMany(() => CompteTraite, (ep) => ep.quittance, {cascade: true,})
   ComptesTraite!: CompteTraite[];
 
 
@@ -212,7 +212,7 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque NoteDebitCredit est annulée
    * (ainsi que ses Reglements et ReglementDetails).
    */
-  @OneToMany(() => NoteDebitCredit, (ndc) => ndc.quittance)
+  @OneToMany(() => NoteDebitCredit, (ndc) => ndc.quittance, {cascade: true,})
   notesDebitCredit!: NoteDebitCredit[];
 
   /**
@@ -230,7 +230,7 @@ export class Quittance extends BaseEntity {
    * Liens entre cette quittance et les déclarations de sinistre.
    * Lors de l'annulation, une copie miroir est créée pour la traçabilité.
    */
-  @OneToMany(() => SinistreQuittance, (sq) => sq.quittance)
+  @OneToMany(() => SinistreQuittance, (sq) => sq.quittance, {cascade: true,})
   sinistreQuittances!: SinistreQuittance[];
 
   /**
@@ -238,7 +238,7 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque SinistreEvaluationQuittance est dupliquée
    * (ainsi que ses SinistreEvaluationQuittanceCession associées).
    */
-  @OneToMany(() => SinistreEvaluationQuittance, (seq) => seq.quittance)
+  @OneToMany(() => SinistreEvaluationQuittance, (seq) => seq.quittance, {cascade: true,})
   sinistreEvaluationQuittances!: SinistreEvaluationQuittance[];
 
   /**
@@ -247,13 +247,13 @@ export class Quittance extends BaseEntity {
    * Null si cette quittance n'est pas une copie d'annulation.
    */
   @ManyToOne(() => Quittance, { nullable: true })
-  @JoinColumn({ name: 'id_quittance_annule' })
+  @JoinColumn({ name: 'quittance_id_annule' })
   quittanceAnnulee?: Quittance;
 
   /**
    * Copies d'annulation de cette quittance.
    * Permet de retrouver toutes les annulations successives d'une quittance.
    */
-  @OneToMany(() => Quittance, (q) => q.quittanceAnnulee)
+  @OneToMany(() => Quittance, (q) => q.quittanceAnnulee )
   annulations!: Quittance[];
 }

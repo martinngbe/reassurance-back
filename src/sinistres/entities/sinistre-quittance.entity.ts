@@ -4,7 +4,7 @@ import { Sinistre } from './sinistre.entity';
 import { Quittance } from '../../quittances/entities/quittance.entity';
 
 /** Rattachement d'un sinistre aux quittances (acceptation) concernées. */
-@Entity('sinistre_quittances')
+@Entity('sinistre_quittance')
 export class SinistreQuittance extends BaseEntity {
   @ManyToOne(() => Sinistre)
   @JoinColumn({ name: 'sinistre_id' })

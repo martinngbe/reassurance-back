@@ -7,9 +7,7 @@ import { NoteDebitCredit } from './note-debit-credit.entity';
 /** Bordereau de primes ou de sinistres (FAC), manuel ou généré. */
 @Entity('bordereau')
 export class Bordereau extends BaseEntity {
-  // @Column({ name: 'id_bordereau_reference', nullable: true })
-  // idBordereauReference?: number;
-
+  
   @ManyToOne(() => Quittance, { nullable: true })
   @JoinColumn({ name: 'quittance_id' })
   quittance?: Quittance;
@@ -42,7 +40,7 @@ export class Bordereau extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
 
-  @Column({ name: 'bordereau_annule_id', nullable: true })
+  @Column({ name: 'bordereau_id_annule', nullable: true })
   bordereauIdAnnule!: number;
 
  

@@ -1,18 +1,21 @@
-import { IsInt, IsNumber } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateSinistreEvaluationDto {
   @IsInt()
-  sinistreId: number;
+  @IsNotEmpty()
+  sinistreId!: number;
 
   @IsInt()
-  sinistreTypeEvaluationId: number;
+  @IsNotEmpty()
+  sinistreTypeEvaluationId!: number;
 
   @IsInt()
-  deviseId: number;
+  @IsNotEmpty()
+  deviseId!: number;
 
   @IsNumber()
-  coursDevise: number;
+  coursDevise: number=0;
 
   @IsNumber()
-  montant: number;
+  montant: number=0;
 }

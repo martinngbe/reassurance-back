@@ -22,56 +22,15 @@ export class Reglement extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
 
-  @Column({ name: 'reglement_annule_id', nullable: true })
+  @Column({ name: 'reglement_id_annule', nullable: true })
   reglementIdAnnule?: number;
 
   /**
    * Un règlement possède plusieurs détails (lignes).
    * Chaque détail référence une NoteDebitCredit.
    */
-  @OneToMany(() => ReglementDetail, (rd) => rd.reglement, {
-    cascade: true,
-  })
-  reglementDetails: ReglementDetail[]=[];
+  @OneToMany(() => ReglementDetail, (rd) => rd.reglement, {cascade: true,})
+  reglementDetails!: ReglementDetail[];
 
 
 }
-
-
-// @Entity('reglement')
-// export class Reglement  extends BaseEntity{
- 
-//   @Column({ name: 'acteur_id', type: 'int' })
-//   acteurId!: number;
-
-//   @Column({ name: 'is_courtier', type: 'boolean', default: false })
-//   isCourtier: boolean;
-
-//   @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-//   montant: number;
-
-//   @Column({ name: 'is_annule', type: 'boolean', default: false })
-//   isAnnule: boolean;
-
-//   @Column({ name: 'id_reglement_annule', type: 'int', nullable: true })
-//   idReglementAnnule: number;
-
-//   @CreateDateColumn({ name: 'created_at' })
-//   createdAt: Date;
-
-//   @UpdateDateColumn({ name: 'updated_at' })
-//   updatedAt: Date;
-
-//   @ManyToOne(() => Acteur, (acteur) => acteur.reglements)
-//   @JoinColumn({ name: 'acteur_id' })
-//   acteur: Acteur;
-
-//   /**
-//    * Un règlement possède plusieurs détails (lignes).
-//    * Chaque détail référence une NoteDebitCredit.
-//    */
-//   @OneToMany(() => ReglementDetail, (rd) => rd.reglement, {
-//     cascade: true,
-//   })
-//   details: ReglementDetail[];
-// }

@@ -1,10 +1,7 @@
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreatePaysDto {
-  @IsString()
-  @IsNotEmpty()
-  indicatif!: string;
-
+export class CreateDeviseDto {
+  
   @IsString()
   @IsNotEmpty()
   code!: string;
@@ -13,7 +10,4 @@ export class CreatePaysDto {
   @IsNotEmpty()
   libelle!: string;
 
-  @IsInt()
-   @IsNotEmpty()
-  idRegion!: number;
 }

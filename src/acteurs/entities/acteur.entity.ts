@@ -9,7 +9,7 @@ import { Contact } from './contact.entity';
  * Les booléens isCourtier / isCompagnieAssurance / isReassureur permettent
  * de qualifier le rôle (un acteur peut cumuler plusieurs rôles).
  */
-@Entity('acteurs')
+@Entity('acteur')
 export class Acteur extends BaseEntity {
   @Column()
   sigle!: string 
@@ -29,21 +29,15 @@ export class Acteur extends BaseEntity {
   @Column({ name: 'is_reassureur', default: false })
   isReassureur: boolean=false;
 
-  // Renseigné uniquement pour les affaires facultatives (Fac Uniquement)
   @ManyToOne(() => Pays, { nullable: true })
   @JoinColumn({ name: 'pays_id' })
   pays?: Pays;
 
   @Column({ name: 'pays_id', nullable: true })
-  idPays?: number;
+  paysId?: number;
 
-  @ManyToOne(() => DomaineActivite, { nullable: true })
-  @JoinColumn({ name: 'id_domaine_activite' })
-  domaineActivite?: DomaineActivite;
 
-  @Column({ name: 'id_domaine_activite', nullable: true })
-  idDomaineActivite?: number;
 
   @OneToMany(() => Contact, (contact) => contact.acteur)
-  contacts: Contact[]=[];
+  contacts!: Contact[];
 }

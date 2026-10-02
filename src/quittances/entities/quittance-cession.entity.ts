@@ -10,7 +10,7 @@ import { EcheancePmd } from './echeance-pmd.entity';
  * Rétrocession d'une quittance vers un autre réassureur ("autres
  * réassureurs" dans le diagramme), avec le taux de cession appliqué.
  */
-@Entity('quittance_cessions')
+@Entity('quittance_cession')
 export class QuittanceCession extends BaseEntity {
   @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })
@@ -27,7 +27,7 @@ export class QuittanceCession extends BaseEntity {
   acteurId!: number;
 
   @ManyToOne(() => NatureCession)
-  @JoinColumn({ name: 'id_nature_cession' })
+  @JoinColumn({ name: 'nature_cession_id' })
   natureCession!: NatureCession;
 
   @Column({ name: 'nature_cession_id' })
@@ -57,7 +57,7 @@ export class QuittanceCession extends BaseEntity {
    * Bordereaux générés directement depuis cette quittance cession.
    * Lors de l'annulation, chaque Bordereau est annulé
    */
-  @OneToMany(() => Bordereau, (b) => b.quittanceCession)
+  @OneToMany(() => Bordereau, (b) => b.quittanceCession, {cascade: true,})
   bordereaux!: Bordereau[];
   
 
@@ -65,6 +65,6 @@ export class QuittanceCession extends BaseEntity {
    * Bordereaux générés directement depuis cette quittance cession.
    * Lors de l'annulation, chaque Bordereau est annulé
    */
-  @OneToMany(() => EcheancePmd, (b) => b.quittanceCession)
+  @OneToMany(() => EcheancePmd, (b) => b.quittanceCession, {cascade: true,})
   echeancesPmd!: EcheancePmd[];
 }

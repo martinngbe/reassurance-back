@@ -26,10 +26,10 @@ export class CompteTraite extends BaseEntity {
   quittanceRetroCessionId?: number;
 
   @OneToMany(() => NoteDebitCredit, (b) => b.compteTraite)
-  notesDebitCredit: NoteDebitCredit[]=[];
+  notesDebitCredit!: NoteDebitCredit[];
 
   @OneToMany(() => CompteTraiteDetail, (b) => b.compteTraite)
-  compteTraiteDetails: CompteTraiteDetail[]=[];
+  compteTraiteDetails!: CompteTraiteDetail[];
 
 
   @ManyToOne(() => CompteType)

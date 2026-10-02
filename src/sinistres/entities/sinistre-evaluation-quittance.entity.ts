@@ -5,7 +5,7 @@ import { Sinistre } from './sinistre.entity';
 import { SinistreTypeEvaluation } from './sinistre-type-evaluation.entity';
 
 /** Ventilation de l'évaluation d'un sinistre sur une quittance d'acceptation. */
-@Entity('sinistre_evaluation_quittances')
+@Entity('sinistre_evaluation_quittance')
 export class SinistreEvaluationQuittance extends BaseEntity {
   @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })

@@ -1,24 +1,27 @@
-import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateSinistreReglementDto {
   @IsInt()
-  sinistreId: number;
+  @IsNotEmpty()
+  sinistreId!: number;
 
   @IsInt()
-  idActeurCedante: number;
+  @IsNotEmpty() 
+  acteurCedanteId!: number;
 
   @IsInt()
   @IsOptional()
-  idActeurCourtier?: number;
+  acteurCourtierId?: number;
 
   @IsInt()
-  deviseId: number;
+  @IsNotEmpty()
+  deviseId!: number;
 
   @IsNumber()
-  coursDevise: number;
+  coursDevise: number=0;
 
   @IsNumber()
-  montant: number;
+  montant: number=0;
 
   @IsBoolean()
   @IsOptional()
@@ -26,5 +29,5 @@ export class CreateSinistreReglementDto {
 
   @IsInt()
   @IsOptional()
-  idSinistreReglementAnnule?: number;
+  sinistreReglementIdAnnule?: number;
 }

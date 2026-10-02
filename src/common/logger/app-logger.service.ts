@@ -2,7 +2,8 @@ import { Injectable, LoggerService, Scope } from '@nestjs/common';
 import * as winston from 'winston';
 import { winstonConfig } from '../../config/winston.config';
 
-@Injectable({ scope: Scope.TRANSIENT }) // Transient pour avoir une instance par classe injectée
+//@Injectable({ scope: Scope.TRANSIENT }) // Transient pour avoir une instance par classe injectée
+@Injectable() 
 export class AppLogger implements LoggerService {
   private context?: string;
   private readonly logger: winston.Logger;

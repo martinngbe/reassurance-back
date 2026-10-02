@@ -1,10 +1,10 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+// import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateSinistreDeclarationDto {
-  @IsInt()
-  idSinistreStatut: number;
+// export class CreateSinistreDeclarationDto {
+//   @IsInt()
+//   idSinistreStatut: number;
 
-  @IsString()
-  @IsNotEmpty()
-  numero: string;
-}
+//   @IsString()
+//   @IsNotEmpty()
+//   numero: string;
+// }

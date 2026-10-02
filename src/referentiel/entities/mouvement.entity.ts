@@ -2,7 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 
 /** Nature du mouvement d'une quittance : Affaire Nouvelle, Avenant, ... */
-@Entity('mouvements')
+@Entity('mouvement')
 export class Mouvement extends BaseEntity {
   @Column({ unique: true })
   code!: string;

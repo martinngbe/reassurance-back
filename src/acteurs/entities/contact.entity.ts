@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Acteur } from './acteur.entity';
 
-@Entity('contacts')
+@Entity('contact')
 export class Contact extends BaseEntity {
   @Column()
   nom!: string;

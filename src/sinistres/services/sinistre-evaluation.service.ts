@@ -25,7 +25,7 @@ export class SinistreEvaluationService {
 
   findByDeclaration(declarationId: number): Promise<SinistreEvaluation[]> {
     return this.sinistreEvaluationRepository.find({
-      where: { sinistreDeclarationId: declarationId },
+      where: { sinistreId: declarationId },
       relations: ['sinistreTypeEvaluation'],
     });
   }

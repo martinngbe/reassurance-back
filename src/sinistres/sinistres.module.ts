@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SinistreStatut } from './entities/sinistre-statut.entity';
 import { SinistreTypeEvaluation } from './entities/sinistre-type-evaluation.entity';
 import { Sinistre } from './entities/sinistre.entity';
-import { SinistreDeclaration } from './entities/sinistre-declaration.entity';
 import { SinistreEvaluation } from './entities/sinistre-evaluation.entity';
 import { SinistreQuittance } from './entities/sinistre-quittance.entity';
 import { SinistreReglement } from './entities/sinistre-reglement.entity';
@@ -19,14 +18,12 @@ import { SinistreStatutController } from './controllers/sinistre-statut.controll
 import { SinistreTypeEvaluationService } from './services/sinistre-type-evaluation.service';
 import { SinistreTypeEvaluationController } from './controllers/sinistre-type-evaluation.controller';
 import { SinistreService } from './services/sinistre.service';
-import { SinistreController } from './controllers/sinistre.controller';
-import { SinistreDeclarationService } from './services/sinistre-declaration.service';
-import { SinistreDeclarationController } from './controllers/sinistre-declaration.controller';
 import { SinistreEvaluationService } from './services/sinistre-evaluation.service';
 import { SinistreEvaluationController } from './controllers/sinistre-evaluation.controller';
 import { SinistreReglementService } from './services/sinistre-reglement.service';
 import { SinistreReglementController } from './controllers/sinistre-reglement.controller';
 import { ClsModule } from 'nestjs-cls';
+import { SinistreController } from './controllers/sinistre.controller';
 
 /**
  * Module sinistres : statuts, types d'évaluation, déclaration,
@@ -43,7 +40,6 @@ import { ClsModule } from 'nestjs-cls';
       SinistreStatut,
       SinistreTypeEvaluation,
       Sinistre,
-      SinistreDeclaration,
       SinistreEvaluation,
       SinistreQuittance,
       SinistreReglement,
@@ -58,7 +54,6 @@ import { ClsModule } from 'nestjs-cls';
     SinistreStatutController,
     SinistreTypeEvaluationController,
     SinistreController,
-    SinistreDeclarationController,
     SinistreEvaluationController,
     SinistreReglementController,
   ],
@@ -66,7 +61,6 @@ import { ClsModule } from 'nestjs-cls';
     SinistreStatutService,
     SinistreTypeEvaluationService,
     SinistreService,
-    SinistreDeclarationService,
     SinistreEvaluationService,
     SinistreReglementService,
   ],
@@ -74,7 +68,6 @@ import { ClsModule } from 'nestjs-cls';
     SinistreStatutService,
     SinistreTypeEvaluationService,
     SinistreService,
-    SinistreDeclarationService,
     SinistreEvaluationService,
     SinistreReglementService,
   ],

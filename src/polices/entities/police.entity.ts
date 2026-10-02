@@ -9,7 +9,7 @@ import { Assure } from '../../acteurs/entities/assure.entity';
  * isCession). Rattachée à une sous-branche, à la cédante, au courtier
  * éventuel et à l'assuré.
  */
-@Entity('polices')
+@Entity('police')
 export class Police extends BaseEntity {
   @Column()
   numero!: string;
@@ -24,27 +24,27 @@ export class Police extends BaseEntity {
   @JoinColumn({ name: 'id_sous_branche' })
   sousBranche!: SousBranche;
 
-  @Column({ name: 'id_sous_branche' })
-  idSousBranche!: number;
+  @Column({ name: 'sous_branche_id' })
+  sousBrancheId!: number;
 
   @ManyToOne(() => Acteur)
-  @JoinColumn({ name: 'id_acteur_cedante' })
+  @JoinColumn({ name: 'acteur_cedante_id' })
   acteurCedante!: Acteur;
 
-  @Column({ name: 'id_acteur_cedante' })
-  idActeurCedante!: number;
+  @Column({ name: 'acteur_cedante_id' })
+  acteurCedanteId!: number;
 
   @ManyToOne(() => Acteur, { nullable: true })
-  @JoinColumn({ name: 'id_acteur_courtier' })
+  @JoinColumn({ name: 'acteur_courtier_id' })
   acteurCourtier?: Acteur;
 
-  @Column({ name: 'id_acteur_courtier', nullable: true })
-  idActeurCourtier?: number;
+  @Column({ name: 'acteur_courtier_id', nullable: true })
+  acteurCourtierId?: number;
 
   @ManyToOne(() => Assure)
-  @JoinColumn({ name: 'id_assure' })
+  @JoinColumn({ name: 'assure_id' })
   assure!: Assure;
 
-  @Column({ name: 'id_assure' })
-  idAssure!: number;
+  @Column({ name: 'assure_id' })
+  assureId!: number;
 }

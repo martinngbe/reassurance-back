@@ -4,13 +4,13 @@ import { SinistreReglement } from './sinistre-reglement.entity';
 import { SinistreEvaluation } from './sinistre-evaluation.entity';
 
 /** Ventilation d'un règlement de sinistre sur les évaluations. */
-@Entity('sinistre_reglement_details')
+@Entity('sinistre_reglement_detail')
 export class SinistreReglementDetail extends BaseEntity {
   @ManyToOne(() => SinistreReglement)
-  @JoinColumn({ name: 'id_sinistre_reglement' })
+  @JoinColumn({ name: 'sinistre_reglement_id' })
   sinistreReglement!: SinistreReglement;
 
-  @Column({ name: 'id_sinistre_reglement' })
+  @Column({ name: 'sinistre_reglement_id' })
   idSinistreReglement!: number;
 
   @ManyToOne(() => SinistreEvaluation)

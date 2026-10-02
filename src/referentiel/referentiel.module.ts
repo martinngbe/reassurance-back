@@ -30,6 +30,9 @@ import { RegionController } from './controllers/region.controller';
 import { PaysService } from './services/pays.service';
 import { PaysController } from './controllers/pays.controller';
 import { ClsModule } from 'nestjs-cls';
+import { Devise } from './entities/devise.entity';
+import { DeviseController } from './controllers/devise.controller';
+import { DeviseService } from './services/devise.service';
 
 /**
  * Regroupe les tables de référence communes ("Référentiel" et une partie
@@ -43,6 +46,7 @@ import { ClsModule } from 'nestjs-cls';
       Branche,
       SousBranche,
       DomaineActivite,
+      Devise,
       Campagne,
       Mouvement,
       CompteType,
@@ -54,6 +58,7 @@ import { ClsModule } from 'nestjs-cls';
   controllers: [
     BrancheController,
     SousBrancheController,
+    DeviseController,
     DomaineActiviteController,
     CampagneController,
     MouvementController,
@@ -65,6 +70,7 @@ import { ClsModule } from 'nestjs-cls';
   providers: [
     BrancheService,
     SousBrancheService,
+    DeviseService,
     DomaineActiviteService,
     CampagneService,
     MouvementService,
@@ -76,6 +82,7 @@ import { ClsModule } from 'nestjs-cls';
   exports: [
     BrancheService,
     SousBrancheService,
+    DeviseService,
     DomaineActiviteService,
     CampagneService,
     MouvementService,

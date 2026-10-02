@@ -1,10 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Sinistre } from './sinistre.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
+import { SinistreReglementDetail } from './sinistre-reglement-detail.entity';
+import { SinistreReglementCession } from './sinistre-reglement-cession.entity';
 
 /** Règlement d'un sinistre par la cédante / via le courtier. */
-@Entity('sinistre_reglements')
+@Entity('sinistre_reglement')
 export class SinistreReglement extends BaseEntity {
   @ManyToOne(() => Sinistre)
   @JoinColumn({ name: 'sinistre_id' })
@@ -14,18 +16,25 @@ export class SinistreReglement extends BaseEntity {
   sinistreId!: number;
 
   @ManyToOne(() => Acteur)
-  @JoinColumn({ name: 'id_acteur_cedante' })
+  @JoinColumn({ name: 'acteur_cedante_id' })
   acteurCedante!: Acteur;
 
-  @Column({ name: 'id_acteur_cedante' })
-  idActeurCedante!: number;
+  @Column({ name: 'acteur_cedante_id' })
+  acteurCedanteId!: number;
 
   @ManyToOne(() => Acteur, { nullable: true })
-  @JoinColumn({ name: 'id_acteur_courtier' })
+  @JoinColumn({ name: 'acteur_courtier_id' })
   acteurCourtier?: Acteur;
 
-  @Column({ name: 'id_acteur_courtier', nullable: true })
-  idActeurCourtier?: number;
+  @OneToMany(() => SinistreReglementDetail, (qc) => qc.sinistreReglement, {cascade: true,})
+  sinistreReglement!: SinistreReglementDetail[];
+
+  @OneToMany(() => SinistreReglementCession, (qc) => qc.sinistreReglement, {cascade: true,})
+  sinistreReglementCession!: SinistreReglementCession[];
+
+
+  @Column({ name: 'acteur_courtier_id', nullable: true })
+  acteurCourtierId?: number;
 
   @Column({ name: 'devise_id' })
   deviseId!: number;
@@ -39,6 +48,6 @@ export class SinistreReglement extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
 
-  @Column({ name: 'id_sinistre_reglement_annule', nullable: true })
-  idSinistreReglementAnnule?: number;
+  @Column({ name: 'sinistre_reglement_id_annule', nullable: true })
+  sinistreReglementIdAnnule?: number;
 }
