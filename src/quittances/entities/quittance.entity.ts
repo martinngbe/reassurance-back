@@ -12,13 +12,13 @@ import { Police } from '../../polices/entities/police.entity';
 // Imports des entités liées pour l'annulation en cascade
 // ⚠️ Adaptez les chemins selon votre structure de projet
 import { SinistreQuittance } from '../../sinistres/entities/sinistre-quittance.entity';
-import { SinistreEvaluationQuittance } from '../../sinistres/entities/sinistre-evaluation-quittance.entity';
 import { QuittanceCession } from './quittance-cession.entity';
 import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
 import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
 import { EcheancePmd } from './echeance-pmd.entity';
 import { ObjetAssure } from './objet-assure.entity';
 import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
+import { Acteur } from 'src/acteurs/entities/acteur.entity';
 
 /**
  * Quittance d'acceptation ou de cession de réassurance (proportionnelle,
@@ -170,6 +170,28 @@ export class Quittance extends BaseEntity {
   @Column({ name: 'quittance_id_annule', nullable: true })
   quittanceIdAnnule?: number;
 
+  // ===============================================
+  // RELATIONS AVEC ACTEUR
+  // ===============================================
+   // Relation Cedente
+    @ManyToOne(() => Acteur)
+    @JoinColumn({ name: 'acteur_cedante_id' })
+    acteurCedante!: Acteur;
+    @Column({ name: 'acteur_cedante_id' })
+    acteurCedanteId!: number;
+  
+  // Relation courtier
+    @ManyToOne(() => Acteur, { nullable: true })
+    @JoinColumn({ name: 'acteur_courtier_id' })
+    acteurCourtier?: Acteur;
+    @Column({ name: 'acteur_courtier_id', nullable: true })
+    acteurCourtierId?: number;
+  
+
+
+
+
+
   // =========================================================================
   // RELATIONS POUR L'ANNULATION EN CASCADE
   // =========================================================================
@@ -232,15 +254,7 @@ export class Quittance extends BaseEntity {
    */
   @OneToMany(() => SinistreQuittance, (sq) => sq.quittance, {cascade: true,})
   sinistreQuittances!: SinistreQuittance[];
-
-  /**
-   * Évaluations de sinistre ventilées sur cette quittance.
-   * Lors de l'annulation, chaque SinistreEvaluationQuittance est dupliquée
-   * (ainsi que ses SinistreEvaluationQuittanceCession associées).
-   */
-  @OneToMany(() => SinistreEvaluationQuittance, (seq) => seq.quittance, {cascade: true,})
-  sinistreEvaluationQuittances!: SinistreEvaluationQuittance[];
-
+ 
   /**
    * Relation self-referencing vers la quittance originale qui a été annulée.
    * Permet de naviguer de la copie d'annulation vers la quittance source.

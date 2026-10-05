@@ -8,10 +8,6 @@ import { SinistreEvaluation } from './entities/sinistre-evaluation.entity';
 import { SinistreQuittance } from './entities/sinistre-quittance.entity';
 import { SinistreReglement } from './entities/sinistre-reglement.entity';
 import { SinistreReglementDetail } from './entities/sinistre-reglement-detail.entity';
-import { SinistreReglementCession } from './entities/sinistre-reglement-cession.entity';
-import { SinistreReglementCessionDetail } from './entities/sinistre-reglement-cession-detail.entity';
-import { SinistreEvaluationQuittance } from './entities/sinistre-evaluation-quittance.entity';
-import { SinistreEvaluationQuittanceCession } from './entities/sinistre-evaluation-quittance-cession.entity';
 
 import { SinistreStatutService } from './services/sinistre-statut.service';
 import { SinistreStatutController } from './controllers/sinistre-statut.controller';
@@ -24,6 +20,8 @@ import { SinistreReglementService } from './services/sinistre-reglement.service'
 import { SinistreReglementController } from './controllers/sinistre-reglement.controller';
 import { ClsModule } from 'nestjs-cls';
 import { SinistreController } from './controllers/sinistre.controller';
+import { SinistreReglementQuittance } from './entities/sinistre-reglement-quittance.entity';
+import { SinistreReglementQuittanceCession } from './entities/sinistre-reglement-quittance-cession.entity';
 
 /**
  * Module sinistres : statuts, types d'évaluation, déclaration,
@@ -44,10 +42,8 @@ import { SinistreController } from './controllers/sinistre.controller';
       SinistreQuittance,
       SinistreReglement,
       SinistreReglementDetail,
-      SinistreReglementCession,
-      SinistreReglementCessionDetail,
-      SinistreEvaluationQuittance,
-      SinistreEvaluationQuittanceCession,
+      SinistreReglementQuittance,
+      SinistreReglementQuittanceCession
     ]),
   ],
   controllers: [

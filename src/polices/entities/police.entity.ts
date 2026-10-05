@@ -20,31 +20,31 @@ export class Police extends BaseEntity {
   @Column({ name: 'is_reconduction_tacite', default: false })
   isReconductionTacite: boolean=false;
 
+  // Relation SousBranche
   @ManyToOne(() => SousBranche)
   @JoinColumn({ name: 'id_sous_branche' })
   sousBranche!: SousBranche;
-
   @Column({ name: 'sous_branche_id' })
   sousBrancheId!: number;
 
+  // Relation Cedente
   @ManyToOne(() => Acteur)
   @JoinColumn({ name: 'acteur_cedante_id' })
   acteurCedante!: Acteur;
-
   @Column({ name: 'acteur_cedante_id' })
   acteurCedanteId!: number;
 
+// Relation courtier
   @ManyToOne(() => Acteur, { nullable: true })
   @JoinColumn({ name: 'acteur_courtier_id' })
   acteurCourtier?: Acteur;
-
   @Column({ name: 'acteur_courtier_id', nullable: true })
   acteurCourtierId?: number;
 
-  @ManyToOne(() => Assure)
+  // Relation courtier
+  @ManyToOne(() => Assure, { nullable: true })
   @JoinColumn({ name: 'assure_id' })
   assure!: Assure;
-
   @Column({ name: 'assure_id' })
   assureId!: number;
 }

@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,4 +18,7 @@ export abstract class BaseEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+
+  @Column({ name: 'utilisateurId' , nullable: true})
+  utilisateurId?: number;
 }

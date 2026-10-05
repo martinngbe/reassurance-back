@@ -10,9 +10,8 @@
 npm-debug.log
 .DS_Store
 
-.log
-.logs
-.env
+/logs
+/.env
 
 # tests
 /test

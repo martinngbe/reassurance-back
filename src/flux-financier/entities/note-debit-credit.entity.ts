@@ -6,65 +6,73 @@ import { Bordereau } from './bordereau.entity';
 import { CompteTraite } from './compte-traite.entity';
 import { EcheancePmd } from '../../quittances/entities/echeance-pmd.entity';
 import { ReglementDetail } from './reglement-detail.entity';
+import { SinistreReglementQuittance } from 'src/sinistres/entities/sinistre-reglement-quittance.entity';
+import { SinistreReglementQuittanceCession } from 'src/sinistres/entities/sinistre-reglement-quittance-cession.entity';
 
 /**
  * Note de débit / crédit : pièce comptable générée à partir d'une
  * quittance, d'un bordereau, d'une échéance PMD, d'un compte traité ou
- * d'un sinistre (sinistreId / sinistreEvaluationId référencent le module
+ * d'un sinistre (sinistreId / sinistreRelementQuittance référencent le module
  * sinistres, sans contrainte FK stricte pour rester découplé).
  */
 @Entity('note_debit_credit')
 export class NoteDebitCredit extends BaseEntity {
-  // @Column({ name: 'id_note_debit_credit_reference', nullable: true })
-  // idNoteDebitCreditReference?: number;
-
-  @ManyToOne(() => Quittance, { nullable: true })
+ 
+  // Relation Quittance
+  @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })
   quittance?: Quittance;
-
-  @Column({ name: 'quittance_id', nullable: true })
+  @Column({ name: 'quittance_id' })
   quittanceId?: number;
-
+  // Relation QuittanceCession
   @ManyToOne(() => QuittanceCession, { nullable: true })
   @JoinColumn({ name: 'quittance_cession_id' })
   quittanceCession?: QuittanceCession;
-
   @Column({ name: 'quittance_cession_id', nullable: true })
   quittanceCessionId?: number;
+  //////////////////////////////
+  //  Relation Bordereau
+  @ManyToOne(() => Bordereau, { nullable: true })
+  @JoinColumn({ name: 'bordereau_id' })
+  bordereau?: Bordereau;
+  @Column({ name: 'bordereau_id', nullable: true })
+  bordereauId?: number;
+  //////////////////////////////
+  // Relation CompteTraite
+  @ManyToOne(() => CompteTraite, { nullable: true })
+  @JoinColumn({ name: 'compte_traite_id' })
+  compteTraite?: CompteTraite;
+  @Column({ name: 'compte_traite_id', nullable: true })
+  compteTraiteId?: number;
+  //////////////////////////////
+  // Relation EcheancePmd
+  @ManyToOne(() => EcheancePmd, { nullable: true })
+  @JoinColumn({ name: 'echeance_pmd_id' })
+  echeancePmd?: EcheancePmd;
+  @Column({ name: 'echeance_pmd_id', nullable: true })
+  echeancePmdId?: number;
+  //////////////  SINISTRE /////////////////////////////////
+  // Relation SinistreReglementQuittance
+  @ManyToOne(() => SinistreReglementQuittance, { nullable: true })
+  @JoinColumn({ name: 'sinistre_reglement_quittance_id' })
+  sinistreReglementQuittance?: SinistreReglementQuittance;
+  @Column({ name: 'sinistre_reglement_quittance_id', nullable: true })
+  sinistreReglementQuittanceId?: number;
+  // Relation SinistreReglementQuittanceCession
+  @ManyToOne(() => SinistreReglementQuittanceCession, { nullable: true })
+  @JoinColumn({ name: 'sinistre_reglement_quittance_cession_id' })
+  sinistreReglementQuittanceCession?: SinistreReglementQuittanceCession;
+  @Column({ name: 'sinistre_reglement_quittance_cession_id', nullable: true })
+  sinistreReglementQuittanceCessionId?: number;
 
-  // @Column({ name: 'id_reference', nullable: true })
-  // idReference?: number;
 
-  // @ManyToOne(() => ReglementDetail, { nullable: true })
-  // @JoinColumn({ name: 'reglement_detail_id' })
-  // reglementDetail?: ReglementDetail;
+
   /**
    * ✅ Relation inverse : une NDC peut être référencée par plusieurs ReglementDetail
    */
   @OneToMany(() => ReglementDetail, (rd) => rd.noteDebitCredit)
-  reglementDetails!: ReglementDetail[];
+  reglementDetails!: ReglementDetail[]; 
 
-
-  @ManyToOne(() => Bordereau, { nullable: true })
-  @JoinColumn({ name: 'bordereau_id' })
-  bordereau?: Bordereau;
-
-  @Column({ name: 'bordereau_id', nullable: true })
-  bordereauId?: number;
-
-  @ManyToOne(() => CompteTraite, { nullable: true })
-  @JoinColumn({ name: 'compte_traite_id' })
-  compteTraite?: CompteTraite;
-
-  @Column({ name: 'compte_traite_id', nullable: true })
-  compteTraiteId?: number;
-
-  @ManyToOne(() => EcheancePmd, { nullable: true })
-  @JoinColumn({ name: 'echeance_pmd_id' })
-  echeancePmd?: EcheancePmd;
-
-  @Column({ name: 'echeance_pmd_id', nullable: true })
-  echeancePmdId?: number;
 
   @Column({ name: 'sinistre_id', nullable: true })
   sinistreId?: number;
@@ -91,9 +99,9 @@ export class NoteDebitCredit extends BaseEntity {
   @Column({ type: 'decimal', precision: 18, scale: 2 })
   montant: number=0;
 
+  // Annulation
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
-
   @Column({ name: 'note_debit_credit_id_annule', nullable: true })
   noteDebitCreditIdAnnule?: number;
 }

@@ -11,9 +11,9 @@ export class SousBranche extends BaseEntity {
   libelle!: string;
 
   @ManyToOne(() => Branche, (branche) => branche.sousBranches)
-  @JoinColumn({ name: 'id_branche' })
+  @JoinColumn({ name: 'branche_id' })
   branche!: Branche;
 
-  @Column({ name: 'id_branche' })
-  idBranche!: number;
+  @Column({ name: 'branche_id' })
+  brancheid!: number;
 }

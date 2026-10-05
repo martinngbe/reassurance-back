@@ -11,7 +11,7 @@ export class SinistreReglementDetail extends BaseEntity {
   sinistreReglement!: SinistreReglement;
 
   @Column({ name: 'sinistre_reglement_id' })
-  idSinistreReglement!: number;
+  sinistreReglementId!: number;
 
   @ManyToOne(() => SinistreEvaluation)
   @JoinColumn({ name: 'sinistre_evaluation_id' })
@@ -19,4 +19,16 @@ export class SinistreReglementDetail extends BaseEntity {
 
   @Column({ name: 'sinistre_evaluation_id' })
   sinistreEvaluationId!: number;
+
+
+  @Column({ name: 'devise_id' })
+  deviseId!: number;
+
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 6 })
+  coursDevise: number=0;
+  // Par défaut, on affiche le montant sinistreEvaluationId
+  // si non une fraction de sinistreEvaluationId
+  @Column({ type: 'decimal', precision: 20, scale: 5 })
+  montant: number=0;
+
 }

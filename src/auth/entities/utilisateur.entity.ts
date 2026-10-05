@@ -5,15 +5,18 @@ import {
   JoinTable,
   BeforeInsert,
   BeforeUpdate,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcryptjs';
 import { Role } from './role.entity';
-import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity('utilisateur')
-export class Utilisateur extends BaseEntity{
-
+export class Utilisateur {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
   @Column({ unique: true })
   email!: string;
@@ -22,10 +25,10 @@ export class Utilisateur extends BaseEntity{
   @Exclude()
   password!: string;
 
-  @Column({ name: 'first_name', length: 100 })
+  @Column({ name: 'nom', length: 100 })
   nom!: string;
 
-  @Column({ name: 'last_name', length: 100 })
+  @Column({ name: 'prenoms', length: 255 })
   prenoms!: string;
 
   @Column({ name: 'is_active', default: true })
@@ -64,4 +67,11 @@ export class Utilisateur extends BaseEntity{
   async comparePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
   }
+
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date;
 }
