@@ -12,7 +12,7 @@ export class SinistreReglementService {
 
   findAll(): Promise<SinistreReglement[]> {
     return this.sinistreReglementRepository.find({
-      relations: ['sinistreDeclaration', 'details', 'cessions'],
+      relations: ['sinistre', 'details', 'cessions'],
     });
   }
 
@@ -20,7 +20,7 @@ export class SinistreReglementService {
     return this.sinistreReglementRepository.findOneOrFail({
       where: { id },
       relations: [
-        'sinistreDeclaration',
+        'sinistre',
         'details', 'details.sinistreEvaluation',
         'cessions', 'cessions.details',
       ],

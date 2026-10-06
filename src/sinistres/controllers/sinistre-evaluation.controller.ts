@@ -7,7 +7,7 @@ import { SinistreEvaluationService } from '../services/sinistre-evaluation.servi
 import { SinistreEvaluation } from '../entities/sinistre-evaluation.entity';
 
 @ApiTags('Sinistres - Évaluations')
-@Controller('sinistres-evaluations')
+@Controller('sinistre-evaluation')
 export class SinistreEvaluationController {
   constructor(private readonly sinistreEvaluationService: SinistreEvaluationService) {}
 

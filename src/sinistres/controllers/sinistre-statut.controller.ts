@@ -7,7 +7,7 @@ import { CreateSinistreStatutDto } from '../dto/create-sinistre-statut.dto';
 import { UpdateSinistreStatutDto } from '../dto/update-sinistre-statut.dto';
 
 @ApiTags('SinistreStatut')
-@Controller('sinistre-statuts')
+@Controller('sinistre-statut')
 export class SinistreStatutController extends CrudController<SinistreStatut, CreateSinistreStatutDto, UpdateSinistreStatutDto> {
   constructor(service: SinistreStatutService) {
     super(service);

@@ -7,7 +7,7 @@ import { SinistreTypeEvaluationService } from '../services/sinistre-type-evaluat
 import { SinistreTypeEvaluation } from '../entities/sinistre-type-evaluation.entity';
 
 @ApiTags('Sinistres - Types d\'évaluation')
-@Controller('sinistres-types-evaluation')
+@Controller('sinistre-type-evaluation')
 export class SinistreTypeEvaluationController {
   constructor(private readonly sinistreTypeEvaluationService: SinistreTypeEvaluationService) {}
 

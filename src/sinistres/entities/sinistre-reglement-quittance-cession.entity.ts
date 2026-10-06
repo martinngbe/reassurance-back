@@ -10,7 +10,7 @@ import { QuittanceCession } from 'src/quittances/entities/quittance-cession.enti
  * La table QuittanceCession contient les infos sur l'Acteur
  * Cela déclenche une NoteDebitCredit
 */
-@Entity('sinistre_reglement_cession')
+@Entity('sinistre_reglement_quittance_cession')
 @Unique(["sinistreId", "sinistreReglementId", "quitanceId" ,"quitanceCessionId"]) // évite les doublons
 export class SinistreReglementQuittanceCession extends BaseEntity {
 

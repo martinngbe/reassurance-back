@@ -7,7 +7,7 @@ import { SinistreReglement } from '../entities/sinistre-reglement.entity';
 import { SinistreReglementService } from '../services/sinistre-reglement.service';
 
 @ApiTags('Sinistres - Règlements')
-@Controller('sinistres-reglements')
+@Controller('sinistre-reglement')
 export class SinistreReglementController {
   constructor(private readonly sinistreReglementService: SinistreReglementService) {}
 
