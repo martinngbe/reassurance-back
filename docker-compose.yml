@@ -12,7 +12,7 @@ services:
       # Base de données
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
-      - DB_USERNAME=${DB_USER}
+      - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=reass
       # ✅ JWT Secret (à changer en production !)
