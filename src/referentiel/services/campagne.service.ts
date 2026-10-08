@@ -19,8 +19,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { 
   CrudService, 
-  PaginatedResult, 
-  PaginationParams 
 } from '../../common/crud/crud.service';
 import { Campagne } from '../entities/campagne.entity';
 

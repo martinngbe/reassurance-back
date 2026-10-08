@@ -7,7 +7,7 @@ import { CreateCompteTypeDto } from '../dto/create-compte-type.dto';
 import { UpdateCompteTypeDto } from '../dto/update-compte-type.dto';
 
 @ApiTags('CompteType')
-@Controller('compte-types')
+@Controller('compte-type')
 export class CompteTypeController extends CrudController<CompteType, CreateCompteTypeDto, UpdateCompteTypeDto> {
   constructor(service: CompteTypeService) {
     super(service);

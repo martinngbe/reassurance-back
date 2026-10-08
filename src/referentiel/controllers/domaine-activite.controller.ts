@@ -7,7 +7,7 @@ import { CreateDomaineActiviteDto } from '../dto/create-domaine-activite.dto';
 import { UpdateDomaineActiviteDto } from '../dto/update-domaine-activite.dto';
 
 @ApiTags('DomaineActivite')
-@Controller('domaines-activite')
+@Controller('domaine-activite')
 export class DomaineActiviteController extends CrudController<DomaineActivite, CreateDomaineActiviteDto, UpdateDomaineActiviteDto> {
   constructor(service: DomaineActiviteService) {
     super(service);

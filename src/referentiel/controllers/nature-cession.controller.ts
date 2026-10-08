@@ -7,7 +7,7 @@ import { NatureCession } from '../entities/nature-cession.entity';
 import { NatureCessionService } from '../services/nature-cession.service';
 
 @ApiTags('NatureCession')
-@Controller('natureCessions')
+@Controller('nature-cession')
 export class NatureCessionController extends CrudController<NatureCession, CreateNatureCessionDto, UpdateNatureCessionDto> {
   constructor(service: NatureCessionService) {
     super(service);

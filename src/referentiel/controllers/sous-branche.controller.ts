@@ -7,7 +7,7 @@ import { CreateSousBrancheDto } from '../dto/create-sous-branche.dto';
 import { UpdateSousBrancheDto } from '../dto/update-sous-branche.dto';
 
 @ApiTags('SousBranche')
-@Controller('sous-branches')
+@Controller('sous-branche')
 export class SousBrancheController extends CrudController<SousBranche, CreateSousBrancheDto, UpdateSousBrancheDto> {
   constructor(service: SousBrancheService) {
     super(service);

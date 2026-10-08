@@ -13,6 +13,8 @@ import { Role } from './entities/role.entity';
 import { Utilisateur } from './entities/utilisateur.entity';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
+import { RoleController } from './controllers/role.controller';
+import { RoleService } from './services/role.service';
 
 @Module({
   imports: [
@@ -29,8 +31,8 @@ import { AuthService } from './services/auth.service';
       }),
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService, JwtModule, PassportModule],
+  controllers: [AuthController, RoleController],
+  providers: [AuthService, RoleService, JwtStrategy],
+  exports: [AuthService,RoleService, JwtModule, PassportModule],
 })
 export class AuthModule {}

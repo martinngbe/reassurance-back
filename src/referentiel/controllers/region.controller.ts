@@ -7,7 +7,7 @@ import { CreateRegionDto } from '../dto/create-region.dto';
 import { UpdateRegionDto } from '../dto/update-region.dto';
 
 @ApiTags('Region')
-@Controller('regions')
+@Controller('region')
 export class RegionController extends CrudController<Region, CreateRegionDto, UpdateRegionDto> {
   constructor(service: RegionService) {
     super(service);

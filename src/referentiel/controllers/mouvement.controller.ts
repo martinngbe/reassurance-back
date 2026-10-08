@@ -7,7 +7,7 @@ import { CreateMouvementDto } from '../dto/create-mouvement.dto';
 import { UpdateMouvementDto } from '../dto/update-mouvement.dto';
 
 @ApiTags('Mouvement')
-@Controller('mouvements')
+@Controller('mouvement')
 export class MouvementController extends CrudController<Mouvement, CreateMouvementDto, UpdateMouvementDto> {
   constructor(service: MouvementService) {
     super(service);

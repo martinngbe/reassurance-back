@@ -7,7 +7,7 @@ export abstract class CrudController<T extends { id: number }, CreateDto, Update
   protected constructor(protected readonly service: CrudService<T>) {}
 
   @Get()
-  findAll(
+  async findAll(
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
@@ -16,8 +16,10 @@ export abstract class CrudController<T extends { id: number }, CreateDto, Update
       page: page ? parseInt(page, 10) : 1,
       limit: limit ? parseInt(limit, 10) : 10,
     };
-    
-    return this.service.findAllPaginated(pagination);
+    const resulat = await this.service.findAllPaginated(pagination);
+    console.log("_________ CrudController.findAll ___________")
+    console.log("resulat:",resulat)
+    return resulat;
   }
 
   @Get(':id')
