@@ -1,18 +1,23 @@
-import { Body, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { CrudService } from './crud.service';
+import { 
+  Body, Delete, Get, Param, ParseIntPipe, Post, Put, Query 
+} from '@nestjs/common';
+import { CrudService, PaginationParams } from './crud.service';
 
-/**
- * Contrôleur CRUD générique. Les contrôleurs d'entité étendent cette
- * classe et fournissent uniquement leur route (@Controller) et leur
- * service, ce qui évite de dupliquer les 5 routes REST standards
- * (GET liste, GET détail, POST, PUT, DELETE) sur chaque module.
- */
 export abstract class CrudController<T extends { id: number }, CreateDto, UpdateDto> {
   protected constructor(protected readonly service: CrudService<T>) {}
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    // Conversion des strings de l'URL en nombres avec des valeurs par défaut
+    const pagination: PaginationParams = {
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 10,
+    };
+    
+    return this.service.findAllPaginated(pagination);
   }
 
   @Get(':id')

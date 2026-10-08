@@ -1,7 +1,7 @@
 services:
   reassurance-back:
     # build: .
-    image: reassusrance-back:0.0.1
+    image: reassurance-back:0.0.1
     container_name: reassurance-back
     restart: unless-stopped
     ports:

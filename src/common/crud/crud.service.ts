@@ -6,17 +6,55 @@ import {
   Repository,
 } from 'typeorm';
 
-/**
- * Service CRUD générique réutilisé par les modules du domaine.
- * Chaque entité expose son propre service qui étend celui-ci afin
- * d'ajouter, si besoin, des règles métier spécifiques.
- */
+// --- Interfaces pour la pagination ---
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export abstract class CrudService<T extends { id: number }> {
   protected constructor(protected readonly repository: Repository<T>) {}
 
+
   findAll(options?: FindManyOptions<T>): Promise<T[]> {
-    return this.repository.find(options);
-  }
+  return this.repository.find(options);
+}
+  /**
+   * Récupère les entités avec pagination.
+   * @param pagination Objet contenant page et limit
+   * @param options Options TypeORM classiques (where, relations, order...)
+   */
+ async findAllPaginated(
+  pagination: PaginationParams = {},
+  options: FindManyOptions<T> = {},
+  ): Promise<PaginatedResult<T>> {
+  const page = pagination.page && pagination.page > 0 ? pagination.page : 1;
+  const limit = pagination.limit && pagination.limit > 0 ? pagination.limit : 10;
+  const skip = (page - 1) * limit;
+
+  const [data, total] = await this.repository.findAndCount({
+    ...options,
+    skip,
+    take: limit,
+  });
+
+  return {
+    data,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
+}
+
 
   async findOne(id: number): Promise<T> {
     const entity = await this.repository.findOne({
