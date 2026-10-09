@@ -17,6 +17,7 @@ import { RegisterDto } from '../dto/register.dto';
 import { Utilisateur } from '../entities/utilisateur.entity';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
+import { Public } from '../decorators/public.decorator';
 
 @ApiTags('Authentification')
 @Controller('auth')
@@ -24,6 +25,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @Public()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: "Inscription d'un nouvel utilisateur" })
   register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
@@ -31,6 +33,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Connexion utilisateur' })
   login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
@@ -38,6 +41,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Rafraîchir le token' })
   refresh(@Body('refreshToken') refreshToken: string): Promise<AuthResponseDto> {

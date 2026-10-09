@@ -12,5 +12,5 @@ export class AuthResponseDto {
   expiresIn!: number;
 
   @ApiProperty()
-  utilisateur!: Utilisateur;
+  utilisateurId!: number;
 }

@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -7,6 +7,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AppLogger } from './common/logger/app-logger.service';
 import { DataSource } from 'typeorm';
 import { seedAuth } from './auth/seed/seed-auth';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 
 async function bootstrap() {
@@ -15,8 +16,6 @@ async function bootstrap() {
   });
    // On remplace le logger interne de NestJS par le nôtre
   app.useLogger(app.get(AppLogger)); 
-  
-
   // 1. Enregistrer l'intercepteur globalement
   app.useGlobalInterceptors(new FormatResponseInterceptor());
   // 2. Enregistrer le filtre d'exception globalement
@@ -29,8 +28,15 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-
+  // CORS
   app.enableCors();
+  // ⬇️ Récupérez le Reflector injecté par NestJS
+  const reflector = app.get(Reflector);
+
+  // ⬇️ Passez-le au constructeur du Guard
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
+
+
 
   const config = new DocumentBuilder()
     .setTitle('Réassurance Back API')
@@ -54,5 +60,7 @@ async function bootstrap() {
   await app.listen(port);
   // eslint-disable-next-line no-console
   console.log(`reassurance-back démarré sur http://localhost:${port} (docs: /docs)`);
+  console.log(`🚀 Application running on port ${port}`);
+  console.log(`🔐 Toutes les routes sont protégées sauf celles marquées @Public()`);
 }
 bootstrap();

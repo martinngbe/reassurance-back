@@ -165,7 +165,9 @@ export class AuthService {
       email: utilisateur.email,
       roles: utilisateur.roles?.map((r) => r.code) || [],
     };
-
+    //console.log("__________________________________________")
+    //console.log("       AuthService.generateTokens")
+    //console.log("__________________________________________")
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.get('JWT_SECRET'),
@@ -176,15 +178,18 @@ export class AuthService {
         expiresIn: this.configService.get('JWT_REFRESH_EXPIRATION', '7d'),
       }),
     ]);
+    //console.log("accessToken, refreshToken", accessToken, refreshToken)
 
     utilisateur.refreshToken = await bcrypt.hash(refreshToken, 10);
     await this.utilisateurRepository.save(utilisateur);
-
+    const expiresIn = parseInt(this.configService.get('JWT_EXPIRATION', '15m'))
+    //console.log("expiresIn", expiresIn)
+    //console.log("__________________________________________")
     return {
       accessToken,
       refreshToken,
-      expiresIn: parseInt(this.configService.get('JWT_EXPIRATION', '900')),
-      utilisateur,
+      expiresIn,
+      utilisateurId : utilisateur.id,
     };
   }
 }
