@@ -60,8 +60,8 @@ export abstract class CrudService<T extends { id: number }> {
     skip,
     take: limit,
   });
-  console.log("_______CrudService.findAllPaginated_______")
-  console.log("data:",data,"total:",total)
+ // console.log("_______CrudService.findAllPaginated_______")
+ // console.log("data:",data,"total:",total)
   return {
     success: true,
     data,

@@ -16,11 +16,6 @@ import { RegisterDto } from '../dto/register.dto';
 import { AuthResponseDto } from '../dto/auth-response.dto';
 import { LoginDto } from '../dto/login.dto';
 
-// import { Utilisateur } from './entities/utilisateur.entity';
-// import { Role } from './entities/role.entity';
-// import { RegisterDto } from './dto/register.dto';
-// import { LoginDto } from './dto/login.dto';
-// import { AuthResponseDto } from './dto/auth-response.dto';
 
 @Injectable()
 export class AuthService {

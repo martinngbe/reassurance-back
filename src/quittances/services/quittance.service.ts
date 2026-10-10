@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Quittance } from '../entities/quittance.entity';
 import { Transactional } from '@nestjs-cls/transactional';
 import { BordereauService } from 'src/flux-financier/services/bordereau.service';
-import { EcheancePmdService } from './echeance-pmd.service';
+import { EcheancePmdService } from '../../flux-financier/services/echeance-pmd.service';
 import { CompteTraiteService } from 'src/flux-financier/services/compte-traite.service';
 
 @Injectable()

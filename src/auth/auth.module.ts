@@ -13,6 +13,8 @@ import { RoleService } from './services/role.service';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { UtilisateurController } from './controllers/utilisatteur.controller';
+import { UtilisateurService } from './services/utilisateur.service';
 
 @Module({
   imports: [
@@ -29,8 +31,8 @@ import { RolesGuard } from './guards/roles.guard';
       }),
     }),
   ],
-  controllers: [AuthController, RoleController],
-  providers: [AuthService, RoleService, JwtStrategy,
+  controllers: [AuthController, UtilisateurController, RoleController],
+  providers: [AuthService, UtilisateurService, RoleService, JwtStrategy,
      // ⬇️ Enregistrez le guard globalement ici
     {
       provide: APP_GUARD,
@@ -40,6 +42,6 @@ import { RolesGuard } from './guards/roles.guard';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },],
-  exports: [AuthService,RoleService, JwtModule, PassportModule],
+  exports: [AuthService,UtilisateurService,RoleService, JwtModule, PassportModule],
 })
 export class AuthModule {}

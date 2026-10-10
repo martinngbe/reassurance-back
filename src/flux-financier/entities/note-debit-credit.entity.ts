@@ -4,10 +4,10 @@ import { Quittance } from '../../quittances/entities/quittance.entity';
 import { QuittanceCession } from '../../quittances/entities/quittance-cession.entity';
 import { Bordereau } from './bordereau.entity';
 import { CompteTraite } from './compte-traite.entity';
-import { EcheancePmd } from '../../quittances/entities/echeance-pmd.entity';
 import { ReglementDetail } from './reglement-detail.entity';
 import { SinistreReglementQuittance } from 'src/sinistres/entities/sinistre-reglement-quittance.entity';
 import { SinistreReglementQuittanceCession } from 'src/sinistres/entities/sinistre-reglement-quittance-cession.entity';
+import { EcheancePmd } from './echeance-pmd.entity';
 
 /**
  * Note de débit / crédit : pièce comptable générée à partir d'une
@@ -38,19 +38,20 @@ export class NoteDebitCredit extends BaseEntity {
   @Column({ name: 'bordereau_id', nullable: true })
   bordereauId?: number;
   //////////////////////////////
+  // Relation PMD
+  @ManyToOne(() => EcheancePmd, { nullable: true })
+  @JoinColumn({ name: 'echeance_pmd_id' })
+  echeancePmd?: EcheancePmd;
+  @Column({ name: 'echeance_pmd_id', nullable: true })
+  echeancePmdId?: number;
+  //////////////////////////////
   // Relation CompteTraite
   @ManyToOne(() => CompteTraite, { nullable: true })
   @JoinColumn({ name: 'compte_traite_id' })
   compteTraite?: CompteTraite;
   @Column({ name: 'compte_traite_id', nullable: true })
   compteTraiteId?: number;
-  //////////////////////////////
-  // Relation EcheancePmd
-  @ManyToOne(() => EcheancePmd, { nullable: true })
-  @JoinColumn({ name: 'echeance_pmd_id' })
-  echeancePmd?: EcheancePmd;
-  @Column({ name: 'echeance_pmd_id', nullable: true })
-  echeancePmdId?: number;
+
   //////////////  SINISTRE /////////////////////////////////
   // Relation SinistreReglementQuittance
   @ManyToOne(() => SinistreReglementQuittance, { nullable: true })

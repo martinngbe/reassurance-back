@@ -15,10 +15,11 @@ import { SinistreQuittance } from '../../sinistres/entities/sinistre-quittance.e
 import { QuittanceCession } from './quittance-cession.entity';
 import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
 import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
-import { EcheancePmd } from './echeance-pmd.entity';
+//import { EcheancePmd } from './echeance-pmd.entity';
 import { ObjetAssure } from './objet-assure.entity';
 import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
 import { Acteur } from 'src/acteurs/entities/acteur.entity';
+import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 
 /**
  * Quittance d'acceptation ou de cession de réassurance (proportionnelle,
@@ -209,7 +210,7 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque Bordereau est annulé
    * (ainsi que ses NotesDebitCredit et Reglements).
    */
-  @OneToMany(() => Bordereau, (b) => b.quittance)
+  @OneToMany(() => Bordereau, (b) => b.quittance, {cascade: true,})
   bordereaux!: Bordereau[];
 
   /**
@@ -217,7 +218,7 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque EcheancePmd est annulée
    * (ainsi que ses NotesDebitCredit).
    */
-  @OneToMany(() => EcheancePmd, (ep) => ep.quittance)
+  @OneToMany(() => EcheancePmd, (ep) => ep.quittance, {cascade: true,})
   echeancesPmd!: EcheancePmd[];
 
   /**

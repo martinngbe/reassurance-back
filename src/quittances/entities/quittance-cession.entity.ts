@@ -4,7 +4,10 @@ import { Quittance } from './quittance.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { NatureCession } from '../../referentiel/entities/nature-cession.entity';
 import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
-import { EcheancePmd } from './echeance-pmd.entity';
+import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
+import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
+import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
+import { SinistreQuittance } from 'src/sinistres/entities/sinistre-quittance.entity';
 
 /**
  * Rétrocession d'une quittance vers un autre réassureur ("autres
@@ -67,4 +70,31 @@ export class QuittanceCession extends BaseEntity {
    */
   @OneToMany(() => EcheancePmd, (b) => b.quittanceCession, {cascade: true,})
   echeancesPmd!: EcheancePmd[];
+
+
+    /**
+     * Échéances PMD liées à cette quittance.
+     * Lors de l'annulation, chaque EcheancePmd est annulée
+     * (ainsi que ses NotesDebitCredit).
+     */
+    @OneToMany(() => CompteTraite, (ep) => ep.quittanceCession, {cascade: true,})
+    ComptesTraite!: CompteTraite[];
+  
+  
+    /**
+     * Notes de débit/crédit générées directement depuis cette quittanceCession.
+     * Lors de l'annulation, chaque NoteDebitCredit est annulée
+     * (ainsi que ses Reglements et ReglementDetails).
+     */
+    @OneToMany(() => NoteDebitCredit, (ndc) => ndc.quittanceCession, {cascade: true,})
+    notesDebitCredit!: NoteDebitCredit[];
+  
+ 
+    /**
+     * Liens entre cette quittance et les déclarations de sinistre.
+     * Lors de l'annulation, une copie miroir est créée pour la traçabilité.
+     */
+    @OneToMany(() => SinistreQuittance, (sq) => sq.quittance, {cascade: true,})
+    sinistreQuittances!: SinistreQuittance[];
+   
 }

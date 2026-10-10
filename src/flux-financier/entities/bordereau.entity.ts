@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Quittance } from '../../quittances/entities/quittance.entity';
 import { QuittanceCession } from '../../quittances/entities/quittance-cession.entity';

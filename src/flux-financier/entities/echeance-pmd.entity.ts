@@ -1,9 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
-import { Quittance } from './quittance.entity';
-import { QuittanceCession } from './quittance-cession.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
+import { QuittanceCession } from 'src/quittances/entities/quittance-cession.entity';
+import { Quittance } from 'src/quittances/entities/quittance.entity';
+
 
 /** Échéance de prime à terme (traités non proportionnels). */
 @Entity('echeance_pmd')
