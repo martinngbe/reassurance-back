@@ -7,7 +7,7 @@ import { QuittanceCessionService } from '../services/quittance-cession.service';
 import { QuittanceCession } from '../entities/quittance-cession.entity';
 
 @ApiTags('Métier Affaires - Quittances Cession')
-@Controller('quittances-cession')
+@Controller('quittance-cession')
 export class QuittanceCessionController {
   constructor(private readonly quittanceCessionService: QuittanceCessionService) {}
 

@@ -28,6 +28,20 @@ export class UtilisateurService {
     ...options,
     skip,
     take: limit,
+     select: {
+          id: true,
+          nom: true,
+          prenoms: true,
+          email: true,
+          isActive: true,
+          // relations si besoin
+          // roles: {
+          //   id: true,
+          //   code: true,
+          //   label:true
+          // },
+  },
+ // relations: ['roles'],
     order: {
     nom: 'ASC',
     prenoms: 'ASC',
@@ -53,10 +67,31 @@ export class UtilisateurService {
   //   });
   // }
  async findOne(id: number): Promise<IResponse> {
-    const utilisateur = await this.utilisateurRepository.findOneOrFail({
-      where: { id },
-      relations: ['roles'],
-    });
+    // const utilisateur = await this.utilisateurRepository.findOneOrFail({
+    //   where: { id },
+    //   relations: ['roles'],
+    //   select: ['id', 'nom', 'prenoms','email' ,'isActive'], // uniquement ces champs
+    // });
+    
+const utilisateur = await this.utilisateurRepository.findOneOrFail({
+  where: { id },
+ // relations: ['roles'],
+  select: {
+    // champs de l'utilisateur
+    id: true,
+    nom: true,
+    prenoms: true,
+    email: true,
+    isActive: true,
+    // champs de la relation roles
+    // roles: {
+    //   id: true,
+    //   code: true,
+    //   label:true,        // adapte selon ta colonne (nom, libelle, code...)
+    //   // description: true,
+    // },
+  },
+});
     if(!utilisateur)
       return {
         success:false,

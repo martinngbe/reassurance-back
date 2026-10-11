@@ -53,11 +53,11 @@ export class CompteTraite extends BaseEntity {
   @Column({ name: 'devise_id' })
   deviseId!: number;
 
-  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 6 , default: 0})
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 , default: 0})
   coursDevise: number=0;
 
   // provient de CompteTraiteDetail.
-  @Column({ type: 'decimal', precision: 18, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 18, scale: 5, default: 0 })
   solde: number=0;
 
   

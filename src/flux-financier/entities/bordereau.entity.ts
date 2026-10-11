@@ -25,7 +25,14 @@ export class Bordereau extends BaseEntity {
   @OneToMany(() => NoteDebitCredit, (b) => b.bordereau)
   notesDebitCredit!: NoteDebitCredit[];
 
-  @Column({ type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'devise_id' })
+  deviseId!: number;
+
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
+  coursDevise: number = 0;
+
+
+  @Column({ type: 'decimal', precision: 18, scale: 5 })
   montant: number=0;
 
   @Column({ name: 'is_cession', default: false })

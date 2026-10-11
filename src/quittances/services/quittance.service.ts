@@ -58,6 +58,7 @@ export class QuittanceService {
     const result = await this.quittanceRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException(`Quittance ${id} not found`);
   }
+  /*
   /////////////////////////////////////
   @Transactional()
   async annuler(id: number): Promise<Quittance> {
@@ -114,4 +115,5 @@ export class QuittanceService {
 
     return quittanceAnnulation;
   }
+  */
 }

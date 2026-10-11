@@ -47,7 +47,7 @@ export class Utilisateur {
   @Exclude()
   refreshToken?: string
 
-  @ManyToMany(() => Role, { eager: true })
+  @ManyToMany(() => Role) //, { eager: true }
   @JoinTable({
     name: 'role_utilisateur',
     joinColumn: { name: 'utilisateur_id' },

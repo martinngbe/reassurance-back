@@ -20,17 +20,17 @@ export class CompteTraiteDetail extends BaseEntity {
   @Column({ name: 'compte_traite_rubrique_id' })
   compteTraiteRubriqueId!: number;
   
-  // @Column({ name: 'code_rubrique' })
-  // codeRubrique!: string;
+  @Column({ name: 'devise_id' })
+  deviseId!: number;
 
-  // @Column({ name: 'libelle_rubrique' })
-  // libelleRubrique!: string;
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
+  coursDevise: number = 0;
 
 
-  @Column({ type: 'decimal', precision: 18, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 18, scale: 5, default: 0 })
   debit: number=0;
 
-  @Column({ type: 'decimal', precision: 18, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 18, scale: 5, default: 0 })
   credit: number=0;
 
 

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
+import { PaginationParams, IResponse, OPERATION_SUCCES, OPERATION_ECHEC } from 'src/common/crud/crud.service';
 import { CompteTraite } from '../entities/compte-traite.entity';
 
 @Injectable()
@@ -10,70 +11,86 @@ export class CompteTraiteService {
     private compteTraiteRepository: Repository<CompteTraite>,
   ) {}
 
-  findAll(): Promise<CompteTraite[]> {
-    return this.compteTraiteRepository.find({
-      relations: ['compteType', 'acteur', 'details', 'notesDebitCredit'],
+ 
+    /**
+     * Récupère les entités avec pagination.
+     * @param pagination Objet contenant page et limit
+     * @param options Options TypeORM classiques (where, relations, order...)
+     */
+  async findAll(
+    pagination: PaginationParams = {},
+    options: FindManyOptions<CompteTraite> = {},
+    ): Promise<IResponse> {
+    const page = pagination.page && pagination.page > 0 ? pagination.page : 1;
+    const limit = pagination.limit && pagination.limit > 0 ? pagination.limit : 10;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await this.compteTraiteRepository.findAndCount({
+      ...options,
+      skip,
+      take: limit,
+      order: {
+      createdAt: 'DESC',
+    },
     });
+
+    return {
+      success: true,
+      data,
+      pageInfo: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        }
+    } ;
+  }
+ async  findOne(id: number): Promise<IResponse> {
+    const compteTraite = await  this.compteTraiteRepository.findOneOrFail({
+      where: { id } });
+    if(!compteTraite)  
+      return {
+        success:false,
+        message: `CompteTraite N° ${id} est introuvable`
+    }
+     return {
+        success:true,
+        data:compteTraite,
+        message: OPERATION_SUCCES
+    }
   }
 
-  findOne(id: number): Promise<CompteTraite> {
-    return this.compteTraiteRepository.findOneOrFail({
-      where: { id },
-      relations: ['compteType', 'acteur', 'details', 'notesDebitCredit'],
-    });
+
+  async create(compteTraite: Partial<CompteTraite>): Promise<IResponse> {
+    const newEval = this.compteTraiteRepository.create(compteTraite);
+    const save = await this.compteTraiteRepository.save(newEval);
+    if(!save) return{
+      success:false,
+      message:OPERATION_ECHEC
+    }
+    return {
+      success:true,
+      data:save,
+      message:OPERATION_SUCCES
+    }
   }
 
-  findByActeur(acteurId: number): Promise<CompteTraite[]> {
-    return this.compteTraiteRepository.find({
-      where: { acteurId },
-      relations: ['compteType', 'details'],
-    });
-  }
-
-  async create(compteTraite: Partial<CompteTraite>): Promise<CompteTraite> {
-    const newCT = this.compteTraiteRepository.create(compteTraite);
-    return this.compteTraiteRepository.save(newCT);
-  }
-
-  async update(id: number, compteTraite: Partial<CompteTraite>): Promise<CompteTraite> {
+  async update(id: number, compteTraite: Partial<CompteTraite>): Promise<IResponse> {
     const existing = await this.findOne(id);
-    if (!existing) throw new NotFoundException(`CompteTraite ${id} not found`);
-    Object.assign(existing, compteTraite);
-    return this.compteTraiteRepository.save(existing);
+    if (!existing.success)  return existing;
+      //throw new NotFoundException(`CompteTraite ${id} not found`);
+    Object.assign(existing.data, compteTraite);
+    const save = await this.compteTraiteRepository.save(existing.data);
+    return {
+      success:true,
+      data: save,
+      message:OPERATION_SUCCES
+    }
   }
 
   async remove(id: number): Promise<void> {
-    const result = await this.compteTraiteRepository.delete(id);
-    if (result.affected === 0) throw new NotFoundException(`CompteTraite ${id} not found`);
+    await this.compteTraiteRepository.delete(id);
+    //const result = await this.compteTraiteRepository.delete(id);
+   // if (result.affected === 0) throw new NotFoundException(`CompteTraite ${id} not found`);
   }
-
-  async annuler(id: number): Promise<void> {
-      const compte = await  this.compteTraiteRepository.findOne( {
-        where: { id },
-        relations: ['notesDebitCredit'],
-      });
-  
-      if (!compte || compte.isAnnule) return;
-  
-/*      // Annuler les NDC liées à ce bordereau
-      for (const ndc of bordereau.notesDebitCredit || []) {
-        await this.annulerNoteDebitCredit(ndc.id, queryRunner, now);
-      }
-*/  
-      // Créer la copie d'annulation
-      const annulation = this.compteTraiteRepository.create({
-        ...compte,
-        id: undefined,
-        solde: - compte.solde,
-        isAnnule: true,
-        compteTraiteIdAnnule: compte.id,
-        createdAt: undefined,
-        updatedAt: undefined,
-      });
-      const compteAnnulation= await  this.compteTraiteRepository.save( annulation);
-  
-      compte.isAnnule = true;
-      compte.compteTraiteIdAnnule=compteAnnulation.id
-      await  this.compteTraiteRepository.save(compte);
-    }
 }

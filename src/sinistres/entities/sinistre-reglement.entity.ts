@@ -33,10 +33,10 @@ export class SinistreReglement extends BaseEntity {
   @Column({ name: 'devise_id' })
   deviseId!: number;
 
-  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 6 })
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
   coursDevise: number=0;
 
-  @Column({ type: 'decimal', precision: 18, scale: 2 })
+  @Column({ type: 'decimal', precision: 18, scale: 5 })
   montant: number=0;
 
   // Annulation

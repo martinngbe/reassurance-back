@@ -58,6 +58,8 @@ export class Quittance extends BaseEntity {
   @Column({ name: 'devise_id' })
   deviseId!: number;
 
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
+  coursDevise: number = 0;
   // True si cession, false si acceptation
   @Column({ name: 'is_cession', default: false })
   isCession: boolean = false;
@@ -79,46 +81,45 @@ export class Quittance extends BaseEntity {
   @Column({ name: 'date_echeance', type: 'date' })
   dateEcheance?: Date;
 
-  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 6 })
-  coursDevise: number = 0;
+
 
   // Nombre de jours avant l'échéance pour l'envoi de mail
   @Column({ name: 'avis_echeance', type: 'int' })
   avisEcheance: number = 0;
 
   // Capitaux souscrits
-  @Column({ name: 'capitaux', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'capitaux', type: 'decimal', precision: 18, scale: 5 })
   capitaux: number = 0;
 
-  @Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 5 })
   limiteCapitauxImpliques: number = 0;
 
   // Sinistre Ici (Intérêt le plus important)
-  @Column({ name: 'ici', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'ici', type: 'decimal', precision: 18, scale: 5 })
   ici: number = 0;
 
   // Sinistre Maximum Possible
-  @Column({ name: 'smp', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'smp', type: 'decimal', precision: 18, scale: 5 })
   smp: number = 0;
 
   // Plafond du réassureur
-  @Column({ name: 'limite', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'limite', type: 'decimal', precision: 18, scale: 5 })
   limite: number = 0;
 
   // Autoconservation de la cédante
-  @Column({ name: 'retention', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'retention', type: 'decimal', precision: 18, scale: 5 })
   retention: number = 0;
 
   // Conservation du réassureur
-  @Column({ name: 'conservation', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'conservation', type: 'decimal', precision: 18, scale: 5 })
   conservation: number = 0;
 
   // Capacité totale du traité
-  @Column({ name: 'capacite', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'capacite', type: 'decimal', precision: 18, scale: 5 })
   capacite: number = 0;
 
   // Prime théorique estimée
-  @Column({ name: 'estimation_prime', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'estimation_prime', type: 'decimal', precision: 18, scale: 5 })
   estimationPrime: number = 0;
 
   // % de la police cédée
@@ -138,11 +139,11 @@ export class Quittance extends BaseEntity {
   taxeSurCommission: number = 0;
 
   // Prime brute avant commission
-  @Column({ name: 'prime_brute', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'prime_brute', type: 'decimal', precision: 18, scale: 5 })
   primeBrute: number = 0;
 
   // Prime nette après commission
-  @Column({ name: 'prime_nette', type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'prime_nette', type: 'decimal', precision: 18, scale: 5 })
   primeNette: number = 0;
 
   // Taxe sur prime brute
@@ -154,15 +155,15 @@ export class Quittance extends BaseEntity {
   nombreEcheancePmd: number = 0;
 
   // Sinistres payés par cédante
-  @Column({ name: 'sinistre_au_comptant', type: 'decimal', precision: 18, scale: 2, default: 0 })
+  @Column({ name: 'sinistre_au_comptant', type: 'decimal', precision: 18, scale: 5, default: 0 })
   sinistreAuComptant: number = 0;
 
   // Sinistres déclarés
-  @Column({ name: 'avis_sinistre', type: 'decimal', precision: 18, scale: 2, default: 0 })
+  @Column({ name: 'avis_sinistre', type: 'decimal', precision: 18, scale: 5, default: 0 })
   avisSinistre: number = 0;
 
   // Sinistres provisionnés
-  @Column({ name: 'aliment', type: 'decimal', precision: 18, scale: 2, default: 0 })
+  @Column({ name: 'aliment', type: 'decimal', precision: 18, scale: 5, default: 0 })
   aliment: number = 0;
 
   @Column({ name: 'is_annule', default: false })

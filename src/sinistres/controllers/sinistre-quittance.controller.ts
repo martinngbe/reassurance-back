@@ -1,22 +1,21 @@
-// import { Controller } from '@nestjs/common';
-// import { ApiTags } from '@nestjs/swagger';
-// import { CrudController } from '../../common/crud/crud.controller';
-// // import { SinistreDeclarationService } from '../services/sinistre-declaration.service';
-// // import { CreateSinistreDeclarationDto } from '../dto/create-sinistre-declaration.dto';
-// // import { UpdateSinistreDeclarationDto } from '../dto/update-sinistre-declaration.dto';
-// import { Sinistre } from '../entities/sinistre.entity';
-// import { CreateSinistreDto } from '../dto/create-sinistre.dto';
-// import { UpdateSinistreDto } from '../dto/update-sinistre.dto';
-// import { SinistreService } from '../services/sinistre.service';
+import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CrudController } from '../../common/crud/crud.controller';
+import { SinistreQuittanceService } from '../services/sinistre-quittance.service';
+import { CreateSinistreQuittanceDto } from '../dto/create-sinistre-quittance.dto';
+import { SinistreQuittance } from '../entities/sinistre-quittance.entity';
+import { UpdateSinistreQuittanceDto } from '../dto/update-sinistre-quittance.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
-// @ApiTags('Sinistre Quittance')
-// @Controller('sinistre-quittance')
-// export class SinistreQuittanceController extends CrudController<
-//   Sinistre,
-//   CreateSinistreDto,
-//   UpdateSinistreDto
-// > {
-//   constructor(service: SinistreService) {
-//     super(service);
-//   }
-// }
+@ApiTags('Sinistre Quittance')
+@Controller('sinistre-quittance')
+@Roles('GESTIONNAIRE-SINSITRE') // seul le gestionnaire sinistre est habillité
+export class SinistreQuittanceController extends CrudController<
+  SinistreQuittance,
+  CreateSinistreQuittanceDto,
+  UpdateSinistreQuittanceDto
+> {
+  constructor(service: SinistreQuittanceService) {
+    super(service);
+  }
+}

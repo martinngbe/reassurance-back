@@ -18,13 +18,10 @@ import { BordereauService } from './services/bordereau.service';
 import { CompteTraiteService } from './services/compte-traite.service';
 import { NoteDebitCreditService } from './services/note-debit-credit.service';
 import { ReglementService } from './services/reglement.service';
+import { ReglementDetailController } from './controllers/reglement-detail.controller';
+import { ReglementDetailService } from './services/reglement-detail.service';
 
-/**
- * Flux financiers : bordereaux, comptes traités (+ détail), notes de
- * débit/crédit et règlements (+ détail). CompteTraiteDetail et
- * ReglementDetail sont enregistrés comme sous-ressources (pas de route
- * REST dédiée) : ils sont créés/consultés via leur agrégat parent.
- */
+
 @Module({
   imports: [
     ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module      
@@ -42,18 +39,21 @@ import { ReglementService } from './services/reglement.service';
     CompteTraiteController,
     NoteDebitCreditController,
     ReglementController,
+    ReglementDetailController
   ],
   providers: [
     BordereauService,
     CompteTraiteService,
     NoteDebitCreditService,
     ReglementService,
+    ReglementDetailService
   ],
   exports: [
     BordereauService,
     CompteTraiteService,
     NoteDebitCreditService,
     ReglementService,
+    ReglementDetailService
   ],
 })
 export class FluxFinancierModule {}

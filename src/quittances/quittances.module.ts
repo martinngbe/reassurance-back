@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Quittance } from './entities/quittance.entity';
 import { QuittanceCession } from './entities/quittance-cession.entity';
 import { ObjetAssure } from './entities/objet-assure.entity';
-import { EcheancePmd } from './entities/echeance-pmd.entity';
 
 import { QuittanceService } from './services/quittance.service';
 import { QuittanceController } from './controllers/quittance.controller';
@@ -15,6 +14,7 @@ import { EcheancePmdController } from '../flux-financier/controllers/echeance-pm
 //import { QuittanceAnnulationService } from './services/quittance-annulation.service';
 import { ClsModule } from 'nestjs-cls';
 import { FluxFinancierModule } from 'src/flux-financier/flux-financier.module';
+import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions

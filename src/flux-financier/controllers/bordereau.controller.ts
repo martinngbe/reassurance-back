@@ -5,34 +5,39 @@ import {
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { BordereauService } from '../services/bordereau.service';
 import { Bordereau } from '../entities/bordereau.entity';
+import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('Métier Flux Financier - Bordereaux')
-@Controller('bordereaux')
+@Controller('bordereau')
 export class BordereauController {
   constructor(private readonly bordereauService: BordereauService) {}
 
   @Get()
   @ApiOperation({ summary: 'Liste tous les bordereaux' })
-  findAll(): Promise<Bordereau[]> {
-    return this.bordereauService.findAll();
+  findAll(
+        pagination: PaginationParams = {},
+        options: FindManyOptions<Bordereau> = {},
+  ): Promise<IResponse> {
+    return this.bordereauService.findAll(pagination,options);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Récupère un bordereau par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Bordereau> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
     return this.bordereauService.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Crée un nouveau bordereau' })
-  create(@Body() bordereau: Partial<Bordereau>): Promise<Bordereau> {
+  create(@Body() bordereau: Partial<Bordereau>): Promise<IResponse> {
     return this.bordereauService.create(bordereau);
   }
 
   @Put(':id')
   @ApiOperation({ summary: 'Met à jour un bordereau' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() bordereau: Partial<Bordereau>): Promise<Bordereau> {
+  update(@Param('id', ParseIntPipe) id: number, @Body() bordereau: Partial<Bordereau>): Promise<IResponse> {
     return this.bordereauService.update(id, bordereau);
   }
 

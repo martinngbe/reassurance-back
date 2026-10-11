@@ -12,7 +12,6 @@ import { SinistreReglementDetail } from './entities/sinistre-reglement-detail.en
 import { SinistreStatutService } from './services/sinistre-statut.service';
 import { SinistreStatutController } from './controllers/sinistre-statut.controller';
 import { SinistreTypeEvaluationService } from './services/sinistre-type-evaluation.service';
-import { SinistreTypeEvaluationController } from './controllers/sinistre-type-evaluation.controller';
 import { SinistreService } from './services/sinistre.service';
 import { SinistreEvaluationService } from './services/sinistre-evaluation.service';
 import { SinistreEvaluationController } from './controllers/sinistre-evaluation.controller';
@@ -22,6 +21,14 @@ import { ClsModule } from 'nestjs-cls';
 import { SinistreController } from './controllers/sinistre.controller';
 import { SinistreReglementQuittance } from './entities/sinistre-reglement-quittance.entity';
 import { SinistreReglementQuittanceCession } from './entities/sinistre-reglement-quittance-cession.entity';
+import { SinistreTypeEValuationController } from './controllers/sinistre-type-evaluation.controller';
+import { SinistreReglementDetailController } from './controllers/sinistre-reglement-detail.controller';
+import { SinistreReglementDetailService } from './services/sinistre-reglement-detail.service';
+import { SinistreQuittanceService } from './services/sinistre-quittance.service';
+import { SinistreQuittanceController } from './controllers/sinistre-quittance.controller';
+import { SinistreActeur } from './entities/sinistre-acteur.entity';
+import { SinistreActeurController } from './controllers/sinistre-acteur.controller';
+import { SinistreActeurService } from './services/sinistre-acteur.service';
 
 /**
  * Module sinistres : statuts, types d'évaluation, déclaration,
@@ -38,6 +45,7 @@ import { SinistreReglementQuittanceCession } from './entities/sinistre-reglement
       SinistreStatut,
       SinistreTypeEvaluation,
       Sinistre,
+      SinistreActeur,
       SinistreEvaluation,
       SinistreQuittance,
       SinistreReglement,
@@ -48,24 +56,33 @@ import { SinistreReglementQuittanceCession } from './entities/sinistre-reglement
   ],
   controllers: [
     SinistreStatutController,
-    SinistreTypeEvaluationController,
+    SinistreTypeEValuationController,
     SinistreController,
+    SinistreActeurController,
     SinistreEvaluationController,
     SinistreReglementController,
+    SinistreReglementDetailController,
+    SinistreQuittanceController
   ],
   providers: [
     SinistreStatutService,
     SinistreTypeEvaluationService,
     SinistreService,
+    SinistreActeurService,
     SinistreEvaluationService,
     SinistreReglementService,
+    SinistreReglementDetailService,
+    SinistreQuittanceService
   ],
   exports: [
     SinistreStatutService,
     SinistreTypeEvaluationService,
     SinistreService,
+    SinistreActeurService,
     SinistreEvaluationService,
     SinistreReglementService,
+    SinistreReglementDetailService,
+    SinistreQuittanceService
   ],
 })
 export class SinistresModule {}

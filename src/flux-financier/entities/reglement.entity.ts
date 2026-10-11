@@ -1,9 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
-import { NoteDebitCredit } from './note-debit-credit.entity';
 import { ReglementDetail } from './reglement-detail.entity';
-
+/**  Préparation d'un reglement pour un Acteur donnée.
+ *  Ce règlement sera rattaché à une ou plusieurs NoteDebitCredit.
+ *  Le Reglment peut être partiel
+ */
 @Entity('reglement')
 export class Reglement extends BaseEntity {
   @ManyToOne(() => Acteur)
@@ -13,10 +15,13 @@ export class Reglement extends BaseEntity {
   @Column({ name: 'acteur_id' })
   acteurId!: number;
 
-  @Column({ name: 'is_courtier', default: false })
-  isCourtier: boolean=false;
+  @Column({ name: 'devise_id' })
+  deviseId!: number;
 
-  @Column({ type: 'decimal', precision: 18, scale: 2 })
+  @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
+  coursDevise: number = 0;
+  
+  @Column({ type: 'decimal', precision: 18, scale: 5 })
   montant: number=0;
 
   @Column({ name: 'is_annule', default: false })

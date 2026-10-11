@@ -40,7 +40,8 @@ export class QuittanceController {
   @Patch(':id/annuler')
   @ApiOperation({ summary: 'Annule une quittance' })
   annuler(@Param('id', ParseIntPipe) id: number): Promise<Quittance> {
-    return this.quittanceService.annuler(id);
+    //return this.quittanceService.annuler(id);
+    return this.quittanceService.findOne(0)
   }
 
   @Delete(':id')
