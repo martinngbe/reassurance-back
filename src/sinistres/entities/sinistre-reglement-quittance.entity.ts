@@ -11,7 +11,6 @@ import { Quittance } from 'src/quittances/entities/quittance.entity';
  * La table Quittance contient les infos sur l'Acteur
 */
 @Entity('sinistre_reglement_quittance')
-@Unique(["sinistreId", "sinistreReglementId", "quitanceId"]) // évite les doublons
 export class SinistreReglementQuittance extends BaseEntity {
  ////////  Relation Sinistre
   @ManyToOne(() => Sinistre)

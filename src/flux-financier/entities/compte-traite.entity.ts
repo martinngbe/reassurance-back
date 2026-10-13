@@ -36,7 +36,7 @@ export class CompteTraite extends BaseEntity {
 
 
   @ManyToOne(() => CompteType)
-  @JoinColumn({ name: 'id_compte_type' })
+  @JoinColumn({ name: 'compte_type_id' })
   compteType!: CompteType;
 
   @Column({ name: 'compte_type_id' })

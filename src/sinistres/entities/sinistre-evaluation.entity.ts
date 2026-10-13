@@ -3,7 +3,9 @@ import { BaseEntity } from '../../common/entities/base.entity';
 import { Sinistre } from './sinistre.entity';
 import { SinistreTypeEvaluation } from './sinistre-type-evaluation.entity';
 
-/** Évaluation (montant) d'un sinistre pour un type d'évaluation donné. */
+/** Évaluation (montant) d'un sinistre pour un type d'évaluation donné. 
+ * Pour annuler une évaluation, on crée une nouvelle évaluation avec le même type d'évaluation et le même sinistre mais avec un montant négatif.
+*/
 
 @Entity('sinistre_evaluation')
 export class SinistreEvaluation extends BaseEntity {

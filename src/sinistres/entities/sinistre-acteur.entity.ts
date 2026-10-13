@@ -11,7 +11,7 @@ import { Acteur } from "src/acteurs/entities/acteur.entity";
 import { Sinistre } from "./sinistre.entity";
 
 @Entity("sinistre_acteur")
-@Unique(["sinistreId", "acteurId"]) // évite les doublons
+//@Unique(["sinistreId", "acteurId"]) // évite les doublons
 export class SinistreActeur extends BaseEntity {
  
   @Column({ name: "numero_reference" })
@@ -22,11 +22,16 @@ export class SinistreActeur extends BaseEntity {
   sinistre!: Sinistre;
   @Column({ name: "sinistre_id" })
   sinistreId!: number;
+
  // Relations Acteur
   @Column({ name: "acteur_id" })
   acteurId!: number;
   @ManyToOne(() => Acteur, (acteur) => acteur.sinistreActeurs, {cascade: true})
   @JoinColumn({ name: "acteur_id" })
   acteur!: Acteur;
+
+  // Annulation
+  @Column({ name: 'is_annule', default: false })
+  isAnnule: boolean=false;
 
 }

@@ -11,7 +11,6 @@ import { QuittanceCession } from 'src/quittances/entities/quittance-cession.enti
  * Cela déclenche une NoteDebitCredit
 */
 @Entity('sinistre_reglement_quittance_cession')
-@Unique(["sinistreId", "sinistreReglementId", "quitanceId" ,"quitanceCessionId"]) // évite les doublons
 export class SinistreReglementQuittanceCession extends BaseEntity {
 
   ////////  Relation Sinistre

@@ -31,4 +31,12 @@ export class SinistreReglementDetail extends BaseEntity {
   @Column({ type: 'decimal', precision: 20, scale: 5 })
   montant: number=0;
 
+
+  // Annulation
+  @Column({ name: 'is_annule', default: false })
+  isAnnule: boolean=false;
+
+  @Column({ name: 'sinistre_reglement_detail_id_annule', nullable: true })
+  sinistreReglementDetailIdAnnule?: number;
+
 }

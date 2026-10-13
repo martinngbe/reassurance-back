@@ -1,11 +1,9 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { SinistreStatut } from './sinistre-statut.entity';
-import { QuittanceCession } from 'src/quittances/entities/quittance-cession.entity';
 import { SinistreQuittance } from './sinistre-quittance.entity';
 import { SinistreEvaluation } from './sinistre-evaluation.entity';
 import { SinistreReglement } from './sinistre-reglement.entity';
-import { Acteur } from 'src/acteurs/entities/acteur.entity';
 import { SinistreActeur } from './sinistre-acteur.entity';
 
 @Entity('sinistre')
