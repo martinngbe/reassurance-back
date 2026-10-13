@@ -20,3 +20,10 @@ echo Push image
 docker push %FULL_IMAGE%
 echo "________________________"
 echo Terminee
+echo "________________________"
+echo Arrêt du container
+docker compose down
+echo "________________________"
+echo Demarrage du container
+docker compose up -d --force-recreate
+echo "________________________"

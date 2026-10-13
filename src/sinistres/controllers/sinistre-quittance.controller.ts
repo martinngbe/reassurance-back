@@ -9,7 +9,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @ApiTags('Sinistre Quittance')
 @Controller('sinistre-quittance')
-@Roles('GESTIONNAIRE-SINSITRE') // seul le gestionnaire sinistre est habillité
+@Roles('SINSITRE') // seul le gestionnaire sinistre est habillité
 export class SinistreQuittanceController extends CrudController<
   SinistreQuittance,
   CreateSinistreQuittanceDto,

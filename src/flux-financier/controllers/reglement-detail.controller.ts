@@ -1,52 +1,57 @@
 import {
   Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
   HttpCode, HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
 import { FindManyOptions } from 'typeorm';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { CrudController } from 'src/common/crud/crud.controller';
+import { IResponse } from 'src/common/interfaces/response.interface';
+import { OPERATION_SUCCES, success } from 'src/common/helper/response.helper';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ReglementDetail } from '../entities/reglement-detail.entity';
 import { ReglementDetailService } from '../services/reglement-detail.service';
+import { CreateReglementDetailDto } from '../dto/create-reglement-detail.dto';
+import { UpdateReglementDetailDto } from '../dto/update-reglement-detail.dto';
 
 @ApiTags('Métier Flux Financier - Règlements')
 @Controller('reglement-detail')
-export class ReglementDetailController {
-  constructor(private readonly reglementDetailService: ReglementDetailService) {}
+@UseGuards(RolesGuard)
+export class ReglementDetailController extends CrudController<ReglementDetail, CreateReglementDetailDto, UpdateReglementDetailDto> {
+  constructor(private readonly reglementDetailService: ReglementDetailService) {super(reglementDetailService);}
 
-  @Get()
-  @ApiOperation({ summary: 'Liste tous les règlements' })
-  findAll( pagination: PaginationParams = {},
-      options: FindManyOptions<ReglementDetail> = {},): Promise<IResponse> {
-    return this.reglementDetailService.findAll(pagination,options);
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Récupère un règlement par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
-    return this.reglementDetailService.findOne(id);
+  protected buildOptions(query: any): FindManyOptions<ReglementDetail> {
+    const options: FindManyOptions<ReglementDetail> = {
+      where: {},
+      order: { createdAt: 'DESC' }, // Tri par défaut
+    };
+    return options;
   }
 
   @Post()
   @Roles('COMPTABILITE')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Crée un nouveau règlement' })
-  create(@Body() reglementDetailDetail: Partial<ReglementDetail>): Promise<IResponse> {
-    return this.reglementDetailService.create(reglementDetailDetail);
+ async  create(@Body() reglementDetail: Partial<ReglementDetail>): Promise<IResponse> {
+    const resultat = await this.reglementDetailService.create(reglementDetail);
+    return success(resultat)
   }
 
   @Put(':id')
   @Roles('COMPTABILITE')
   @ApiOperation({ summary: 'Met à jour un règlement' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() reglementDetailDetail: Partial<ReglementDetail>): Promise<IResponse> {
-    return this.reglementDetailService.update(id, reglementDetailDetail);
+ async update(@Param('id', ParseIntPipe) id: number, @Body() reglementDetail: Partial<ReglementDetail>): Promise<IResponse> {
+    const resultat = await this.reglementDetailService.update(id, reglementDetail);
+    return success(resultat)
   }
 
   @Delete(':id')
   @Roles('COMPTABILITE')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK) // ✅ 200 au lieu de 204 (car on renvoie un body)
   @ApiOperation({ summary: 'Supprime un règlement' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.reglementDetailService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    await this.reglementDetailService.remove(id);
+    return {success: true , message: OPERATION_SUCCES}
   }
 }

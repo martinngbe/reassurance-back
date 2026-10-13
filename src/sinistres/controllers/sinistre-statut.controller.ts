@@ -6,12 +6,26 @@ import { SinistreStatutService } from '../services/sinistre-statut.service';
 import { CreateSinistreStatutDto } from '../dto/create-sinistre-statut.dto';
 import { UpdateSinistreStatutDto } from '../dto/update-sinistre-statut.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('SinistreStatut')
-@Roles('GESTIONNAIRE-SINSITRE', 'ADMIN') // seul ADMIN et le gestionnaire sinistre est habillité
+@Roles('SINSITRE', 'ADMIN') // seul ADMIN et le gestionnaire sinistre est habillité
 @Controller('sinistre-statut')
 export class SinistreStatutController extends CrudController<SinistreStatut, CreateSinistreStatutDto, UpdateSinistreStatutDto> {
   constructor(service: SinistreStatutService) {
     super(service);
   }
+      /**
+       * 
+       * @param query 
+       * @returns 
+       */
+      protected buildOptions(query: any): FindManyOptions<SinistreStatut> {
+        const options: FindManyOptions<SinistreStatut> = {
+          where: {},
+          order: { code: 'ASC' }, // Tri par défaut
+        };
+    
+        return options;
+      }
 }

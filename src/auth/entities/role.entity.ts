@@ -7,7 +7,7 @@ import {
 import { Utilisateur } from './utilisateur.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 
-@Entity('roles')
+@Entity('role')
 export class Role extends BaseEntity {
  
   @Column({ unique: true })

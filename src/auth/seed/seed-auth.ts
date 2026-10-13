@@ -11,19 +11,13 @@ export async function seedAuth(dataSource: DataSource): Promise<void> {
 
   // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
   const rolesData = [
-    { code: 'ADMIN', label: 'Administrateur', description: 'Accès complet au système' },
-    { code: 'GESTIONNAIRE-SINISTRE', label: 'Gestionnaire sinistre', description: 'Gestion des sinistres' },
-    { code: 'GESTIONNAIRE', label: 'Gestionnaire', description: 'Gestion des quittances et sinistres' },
+    { code: 'ADMIN', label: 'Administrateur système', description: 'Accès complet au système' },
+    { code: 'SINISTRE', label: 'Gestionnaire sinistre', description: 'Gestion des sinistres' },
     { code: 'COMPTABILITE', label: 'Comptabilité', description: 'Responsable comptabilité' },
-    { code: 'PRODUCTEUR-FAC', label: 'Producteur FAC', description: 'Producteur Fac' },
-    { code: 'PRODUCTEUR-TRAITE', label: 'Producteur Traité', description: 'Producteur Traité' },
+    { code: 'FACULTAIVE', label: 'Producteur FAC', description: 'Producteur Fac' },
+    { code: 'TRAITE', label: 'Producteur Traité', description: 'Producteur Traité' },
     { code: 'CONSULTATION', label: 'Consultation', description: 'Lecture seule' },
 
-
-
-    // { code: 'COURTIER', label: 'Courtier', description: 'Gestion des polices' },   
-    // { code: 'REASSUREUR', label: 'Réassureur', description: 'Consultation des données de réassurance' },
-    
   ];
 
   for (const roleData of rolesData) {

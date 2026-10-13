@@ -70,16 +70,16 @@ export class AuthService {
     });
 
     if (!utilisateur) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Mot de passe invalide');
     }
 
     if (!utilisateur.isActive) {
-      throw new UnauthorizedException('Account is deactivated');
+      throw new UnauthorizedException('Compte désactivé');
     }
 
     if (utilisateur.lockedUntil && utilisateur.lockedUntil > new Date()) {
       throw new UnauthorizedException(
-        `Account locked until ${utilisateur.lockedUntil.toISOString()}`,
+        `Compte véroullé jusqu'au ${utilisateur.lockedUntil.toISOString()}`,
       );
     }
 

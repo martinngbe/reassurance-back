@@ -1,49 +1,29 @@
 import {
   Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
   HttpCode, HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { EcheancePmdService } from '../services/echeance-pmd.service';
-import { EcheancePmd } from '../entities/echeance-pmd.entity';
-import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
+import { ApiTags } from '@nestjs/swagger';
 import { FindManyOptions } from 'typeorm';
+import { CrudController } from 'src/common/crud/crud.controller';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { CreateEcheancePmdDto } from 'src/quittances/dto/create-echeance-pmd.dto';
+import { UpdateEcheancePmdDto } from 'src/quittances/dto/update-echeance-pmd.dto';
+import { EcheancePmd } from '../entities/echeance-pmd.entity';
+import { EcheancePmdService } from '../services/echeance-pmd.service';
 
-@ApiTags('Métier Flux Financier - Échéances PMD')
-@Controller('echeances-pmd')
-export class EcheancePmdController {
-  constructor(private readonly echeancePmdService: EcheancePmdService) {}
+@ApiTags('Métier Flux Financier - EcheancePmd')
+@Controller('echeance-pmd')
+@UseGuards(RolesGuard)
+export class EcheancePmdController extends CrudController<EcheancePmd, CreateEcheancePmdDto, UpdateEcheancePmdDto> {
+  constructor(private readonly echeancePmdService: EcheancePmdService) {super(echeancePmdService);}
 
-  @Get()
-  @ApiOperation({ summary: 'Liste toutes les échéances PMD' })
-  findAll( 
-      pagination: PaginationParams = {},
-      options: FindManyOptions<EcheancePmd> = {},): Promise<IResponse> {
-    return this.echeancePmdService.findAll(pagination,options);
+  protected buildOptions(query: any): FindManyOptions<EcheancePmd> {
+    const options: FindManyOptions<EcheancePmd> = {
+      where: {},
+      order: { createdAt: 'DESC' }, // Tri par défaut
+    };
+    return options;
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Récupère une échéance PMD par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
-    return this.echeancePmdService.findOne(id);
-  }
-
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crée une nouvelle échéance PMD' })
-  create(@Body() echeancePmd: Partial<EcheancePmd>): Promise<IResponse> {
-    return this.echeancePmdService.create(echeancePmd);
-  }
-
-  @Put(':id')
-  @ApiOperation({ summary: 'Met à jour une échéance PMD' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() echeancePmd: Partial<EcheancePmd>): Promise<IResponse> {
-    return this.echeancePmdService.update(id, echeancePmd);
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Supprime une échéance PMD' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.echeancePmdService.remove(id);
-  }
 }

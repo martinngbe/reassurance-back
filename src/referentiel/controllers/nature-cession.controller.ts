@@ -5,6 +5,7 @@ import { CreateNatureCessionDto } from '../dto/create-nature-cession.dto';
 import { UpdateNatureCessionDto } from '../dto/update-nature-cession.dto';
 import { NatureCession } from '../entities/nature-cession.entity';
 import { NatureCessionService } from '../services/nature-cession.service';
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('NatureCession')
 @Controller('nature-cession')
@@ -12,4 +13,12 @@ export class NatureCessionController extends CrudController<NatureCession, Creat
   constructor(service: NatureCessionService) {
     super(service);
   }
+     protected buildOptions(query: any): FindManyOptions<NatureCession> {
+                const options: FindManyOptions<NatureCession> = {
+                  where: {},
+                  order: { code: 'ASC' }, // Tri par défaut
+                };
+            
+                return options;
+              }
 }

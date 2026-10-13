@@ -5,6 +5,7 @@ import { Region } from '../entities/region.entity';
 import { RegionService } from '../services/region.service';
 import { CreateRegionDto } from '../dto/create-region.dto';
 import { UpdateRegionDto } from '../dto/update-region.dto';
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('Region')
 @Controller('region')
@@ -12,4 +13,12 @@ export class RegionController extends CrudController<Region, CreateRegionDto, Up
   constructor(service: RegionService) {
     super(service);
   }
+   protected buildOptions(query: any): FindManyOptions<Region> {
+                    const options: FindManyOptions<Region> = {
+                      where: {},
+                      order: { code: 'ASC' }, // Tri par défaut
+                    };
+                
+                    return options;
+                  }
 }

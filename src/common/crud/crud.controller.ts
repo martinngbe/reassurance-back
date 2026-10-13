@@ -1,44 +1,101 @@
-import { 
-  Body, Delete, Get, Param, ParseIntPipe, Post, Put, Query 
+import {
+  Body,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
 } from '@nestjs/common';
-import { CrudService, PaginationParams } from './crud.service';
+import { CrudService} from './crud.service';
+import { FindManyOptions } from 'typeorm';
+import {  IResponse,  PaginationParams } from '../interfaces/response.interface';
+import { successPaginated, successList, success } from '../helper/response.helper';
 
-export abstract class CrudController<T extends { id: number }, CreateDto, UpdateDto> {
+
+/**
+ * Contrôleur CRUD générique avec pagination automatique.
+ */
+export abstract class CrudController<
+  T extends { id: number },
+  CreateDto,
+  UpdateDto,
+> {
   protected constructor(protected readonly service: CrudService<T>) {}
 
+  /**
+   * Méthode protégée pour construire les options TypeORM.
+   * À surcharger dans les contrôleurs enfants pour ajouter des filtres dynamiques.
+   */
+  protected buildOptions(query: any): FindManyOptions<T> {
+    return {}; // Par défaut, pas de filtres
+  }
+
+  /**
+   * GET / - Liste paginée (par défaut)
+   */
   @Get()
   async findAll(
     @Query('page') page?: string,
     @Query('limit') limit?: string,
-  ) {
-    // Conversion des strings de l'URL en nombres avec des valeurs par défaut
+  ): Promise<IResponse<T[]>> {
     const pagination: PaginationParams = {
       page: page ? parseInt(page, 10) : 1,
       limit: limit ? parseInt(limit, 10) : 10,
     };
-    const resulat = await this.service.findAllPaginated(pagination);
-    console.log("_________ CrudController.findAll ___________")
-    console.log("resulat:",resulat)
-    return resulat;
+
+    const result = await this.service.findAllPaginated(pagination);
+    return successPaginated(result);
   }
 
+  /**
+   * GET /all - Liste complète (sans pagination, pour dropdowns)
+   */
+  @Get('all')
+  async findAllWithoutPagination(): Promise<IResponse<T[]>> {
+    const data = await this.service.findAll();
+    return successList(data);
+  }
+
+  /**
+   * GET /:id - Détail d'une entité
+   */
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.service.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse<T>> {
+    const entity = await this.service.findOne(id);
+    return success(entity);
   }
 
+  /**
+   * POST / - Création
+   */
   @Post()
-  create(@Body() dto: CreateDto) {
-    return this.service.create(dto as any);
+  async create(@Body() dto: CreateDto): Promise<IResponse<T>> {
+    const entity = await this.service.create(dto as any);
+    return success(entity, 'Création effectuée avec succès');
   }
 
+  /**
+   * PUT /:id - Modification
+   */
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDto) {
-    return this.service.update(id, dto as any);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateDto,
+  ): Promise<IResponse<T>> {
+    const entity = await this.service.update(id, dto as any);
+    return success(entity, 'Modification effectuée avec succès');
   }
 
+  /**
+   * DELETE /:id - Suppression
+   */
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.service.remove(id);
+  @HttpCode(200)
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse<null>> {
+    await this.service.remove(id);
+    return { success: true, message: 'Suppression effectuée avec succès' };
   }
 }

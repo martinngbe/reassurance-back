@@ -6,58 +6,61 @@ import { Transactional } from '@nestjs-cls/transactional';
 import { BordereauService } from 'src/flux-financier/services/bordereau.service';
 import { EcheancePmdService } from '../../flux-financier/services/echeance-pmd.service';
 import { CompteTraiteService } from 'src/flux-financier/services/compte-traite.service';
+import { failure } from 'src/common/helper/response.helper';
+import { CrudService } from 'src/common/crud/crud.service';
 
 @Injectable()
-export class QuittanceService {
+export class QuittanceService  extends CrudService<Quittance>{
   constructor(
     @InjectRepository(Quittance)
     private quittanceRepository: Repository<Quittance>,
     private readonly bordereauService: BordereauService,
     private readonly echeancePmdService: EcheancePmdService,
     private readonly compteService: CompteTraiteService
-  ) {}
+  ) {super(quittanceRepository);}
 
-  findAll(): Promise<Quittance[]> {
-    return this.quittanceRepository.find({
-      relations: ['police', 'acteur', 'mouvement', 'bordereaux', 'echeancesPmd', 'notesDebitCredit'],
-    });
-  }
+  // findAll(): Promise<Quittance[]> {
+  //   return this.quittanceRepository.find({
+  //     relations: ['police', 'acteur', 'mouvement', 'bordereaux', 'echeancesPmd', 'notesDebitCredit'],
+  //   });
+  // }
 
-  findOne(id: number): Promise<Quittance> {
-    return this.quittanceRepository.findOneOrFail({
-      where: { id },
-      relations: [
-        'police', 'police.branche', 'police.sousBranche',
-        'acteur',  'mouvement',
-        'bordereaux', 'echeancesPmd', 'notesDebitCredit',
-        'quittancesCession', 'objetsAssures',
-      ],
-    });
-  }
+  // findOne(id: number): Promise<Quittance> {
+  //   return this.quittanceRepository.findOneOrFail({
+  //     where: { id },
+  //     relations: [
+  //       'police', 'police.branche', 'police.sousBranche',
+  //       'acteur',  'mouvement',
+  //       'bordereaux', 'echeancesPmd', 'notesDebitCredit',
+  //       'quittancesCession', 'objetsAssures',
+  //     ],
+  //   });
+  // }
 
-  findByPolice(policeId: number): Promise<Quittance[]> {
-    return this.quittanceRepository.find({
-      where: { policeId },
-      relations: ['police', 'acteur'],
-    });
-  }
+  // findByPolice(policeId: number): Promise<Quittance[]> {
+  //   return this.quittanceRepository.find({
+  //     where: { policeId },
+  //     relations: ['police', 'acteur'],
+  //   });
+  // }
 
-  async create(quittance: Partial<Quittance>): Promise<Quittance> {
-    const newQuittance = this.quittanceRepository.create(quittance);
-    return this.quittanceRepository.save(newQuittance);
-  }
+  // async create(quittance: Partial<Quittance>): Promise<Quittance> {
+  //   const newQuittance = this.quittanceRepository.create(quittance);
+  //   return this.quittanceRepository.save(newQuittance);
+  // }
 
-  async update(id: number, quittance: Partial<Quittance>): Promise<Quittance> {
-    const existing = await this.findOne(id);
-    if (!existing) throw new NotFoundException(`Quittance ${id} not found`);
-    Object.assign(existing, quittance);
-    return this.quittanceRepository.save(existing);
-  }
+  // async update(id: number, quittance: Partial<Quittance>): Promise<Quittance> {
+  //   const existing = await this.findOne(id);
+  //   if (!existing) throw new NotFoundException(failure(`Quittance ${id} not found`));
+  //   Object.assign(existing, quittance);
+  //   return this.quittanceRepository.save(existing);
+  // }
 
-  async remove(id: number): Promise<void> {
-    const result = await this.quittanceRepository.delete(id);
-    if (result.affected === 0) throw new NotFoundException(`Quittance ${id} not found`);
-  }
+  // async remove(id: number): Promise<void> {
+  //   const result = await this.quittanceRepository.delete(id);
+  //   if (result.affected === 0) throw new NotFoundException(  failure(`Quittance ${id} not found`));
+  // }
+
   /*
   /////////////////////////////////////
   @Transactional()

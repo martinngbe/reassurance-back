@@ -1,52 +1,28 @@
 import {
-  Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
-  HttpCode, HttpStatus, Query,
+  Controller,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { CompteTraiteDetailService } from '../services/compte-traite-detail.service';
-import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
+import { ApiTags } from '@nestjs/swagger';
 import { FindManyOptions } from 'typeorm';
+import { CrudController } from 'src/common/crud/crud.controller';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { CompteTraiteDetail } from '../entities/compte-traite-detail.entity';
+import { CompteTraiteDetailService } from '../services/compte-traite-detail.service';
+import { CreateCompteTraiteDetailDto } from '../dto/create-compte-traite-detail.dto';
+import { UpdateCompteTraiteDetailDto } from '../dto/update-compte-traite-detail.dto';
 
-@ApiTags('Métier Flux Financier - Comptes Traité')
+@ApiTags('Métier Flux Financier - CompteTraiteDetail')
 @Controller('compte-traite-detail')
-export class compteTraiteDetailController {
-  constructor(private readonly compteTraiteDetailService: CompteTraiteDetailService) {}
+@UseGuards(RolesGuard)
+export class CompteTraiteDetailController extends CrudController<CompteTraiteDetail, CreateCompteTraiteDetailDto, UpdateCompteTraiteDetailDto> {
+  constructor(private readonly compteTraiteDetailService: CompteTraiteDetailService) {super(compteTraiteDetailService);}
 
-  @Get()
-  @ApiOperation({ summary: 'Liste tous les comptes traité' })
-  //findAll(@Query('acteurId') acteurId?: number): Promise<IResponse> {
-  findAll(
-        pagination: PaginationParams = {},
-        options: FindManyOptions<CompteTraiteDetail> = {},): Promise<IResponse> {
-      
-    //if (acteurId) return this.compteTraiteDetailService.findByActeur(acteurId);
-    return this.compteTraiteDetailService.findAll(pagination,options);
+  protected buildOptions(query: any): FindManyOptions<CompteTraiteDetail> {
+    const options: FindManyOptions<CompteTraiteDetail> = {
+      where: {},
+      order: { createdAt: 'DESC' }, // Tri par défaut
+    };
+    return options;
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Récupère un compte traité par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
-    return this.compteTraiteDetailService.findOne(id);
-  }
-
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crée un nouveau compte traité' })
-  create(@Body() compteTraiteDetail: Partial<CompteTraiteDetail>): Promise<IResponse> {
-    return this.compteTraiteDetailService.create(compteTraiteDetail);
-  }
-
-  @Put(':id')
-  @ApiOperation({ summary: 'Met à jour un compte traité' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() compteTraiteDetail: Partial<CompteTraiteDetail>): Promise<IResponse> {
-    return this.compteTraiteDetailService.update(id, compteTraiteDetail);
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Supprime un compte traité' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.compteTraiteDetailService.remove(id);
-  }
 }

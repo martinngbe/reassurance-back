@@ -1,48 +1,29 @@
 import {
   Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
   HttpCode, HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { NoteDebitCreditService } from '../services/note-debit-credit.service';
-import { NoteDebitCredit } from '../entities/note-debit-credit.entity';
-import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
+import { ApiTags } from '@nestjs/swagger';
 import { FindManyOptions } from 'typeorm';
+import { CrudController } from 'src/common/crud/crud.controller';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { CreateNoteDebitCreditDto } from '../dto/create-note-debit-credit.dto';
+import { UpdateNoteDebitCreditDto } from '../dto/update-note-debit-credit.dto';
+import { NoteDebitCredit } from '../entities/note-debit-credit.entity';
+import { NoteDebitCreditService } from '../services/note-debit-credit.service';
 
-@ApiTags('Métier Flux Financier - Notes Débit/Crédit')
-@Controller('notes-debit-credit')
-export class NoteDebitCreditController {
-  constructor(private readonly ndcService: NoteDebitCreditService) {}
+@ApiTags('Métier Flux Financier - NoteDebitCredit')
+@Controller('note-debit-credit')
+@UseGuards(RolesGuard)
+export class NoteDebitCreditController extends CrudController<NoteDebitCredit, CreateNoteDebitCreditDto, UpdateNoteDebitCreditDto> {
+  constructor(private readonly noteDebitCreditService: NoteDebitCreditService) {super(noteDebitCreditService);}
 
-  @Get()
-  @ApiOperation({ summary: 'Liste toutes les notes débit/crédit' })
-  findAll(pagination: PaginationParams = {},
-      options: FindManyOptions<NoteDebitCredit> = {},): Promise<IResponse> {
-    return this.ndcService.findAll(pagination,options);
+  protected buildOptions(query: any): FindManyOptions<NoteDebitCredit> {
+    const options: FindManyOptions<NoteDebitCredit> = {
+      where: {},
+      order: { createdAt: 'DESC' }, // Tri par défaut
+    };
+    return options;
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Récupère une note débit/crédit par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
-    return this.ndcService.findOne(id);
-  }
-
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crée une nouvelle note débit/crédit' })
-  create(@Body() ndc: Partial<NoteDebitCredit>): Promise<IResponse> {
-    return this.ndcService.create(ndc);
-  }
-
-  @Put(':id')
-  @ApiOperation({ summary: 'Met à jour une note débit/crédit' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() ndc: Partial<NoteDebitCredit>): Promise<IResponse> {
-    return this.ndcService.update(id, ndc);
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Supprime une note débit/crédit' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.ndcService.remove(id);
-  }
 }

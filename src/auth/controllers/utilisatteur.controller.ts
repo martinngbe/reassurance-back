@@ -1,15 +1,19 @@
 import {
   Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
   HttpCode, HttpStatus, Query, Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UtilisateurService } from '../services/utilisateur.service';
 import { Utilisateur } from '../entities/utilisateur.entity';
-import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
 import { FindManyOptions } from 'typeorm';
 import { Roles } from '../decorators/roles.decorator';
+import { IResponse, PaginationParams } from 'src/common/interfaces/response.interface';
+import { OPERATION_SUCCES, success } from 'src/common/helper/response.helper';
+import { RolesGuard } from '../guards/roles.guard';
 
 @ApiTags('Utilisateurs')
+@UseGuards(RolesGuard)
 @Controller('utilisateur')
 export class UtilisateurController {
   constructor(private readonly utilisateurService: UtilisateurService) {}
@@ -24,31 +28,73 @@ export class UtilisateurController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Récupère une utilisateur par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
-    return this.utilisateurService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse<Utilisateur>> {
+    const resultat = await this.utilisateurService.findOne(id);
+    return success(resultat);
   }
 
   @Post()
-  @Roles('admin') // Seuls les admins peuvent accéder ici
+  @Roles('ADMIN') // Seuls les admins peuvent accéder ici
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Crée une nouvelle utilisateur' })
-  create(@Body() utilisateur: Partial<Utilisateur>): Promise<IResponse> {
-    return this.utilisateurService.create(utilisateur);
+  async create(@Body() utilisateur: Partial<Utilisateur>): Promise<IResponse> {
+    const resultat = await this.utilisateurService.create(utilisateur);     
+    return success(resultat);
   }
 
   @Put(':id')
-  @Roles('admin') // Seuls les admins peuvent accéder ici
+  @Roles('ADMIN') // Seuls les admins peuvent accéder ici
   @ApiOperation({ summary: 'Met à jour une utilisateur' })
-  update(@Param('id', ParseIntPipe) id: number, 
+  async update(@Param('id', ParseIntPipe) id: number, 
         @Body() utilisateur: Partial<Utilisateur>): Promise<IResponse> {
-    return this.utilisateurService.update(id, utilisateur);
+    // return this.utilisateurService.update(id, utilisateur);
+    const resultat = await this.utilisateurService.update(id, utilisateur);
+    return success(resultat);
+  }
+  @Patch(':id')
+  @Roles('ADMIN') // Seuls les admins peuvent accéder ici
+  @ApiOperation({ summary: 'Met à jour une utilisateur' })
+  async patch(@Param('id', ParseIntPipe) id: number, 
+        @Body() utilisateur: Partial<Utilisateur>): Promise<IResponse> {
+    
+    return this.update(id,utilisateur);
   }
 
   @Delete(':id')
-  @Roles('admin') // Seuls les admins peuvent accéder ici
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles('ADMIN') // Seuls les admins peuvent accéder ici
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Supprime une utilisateur' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.utilisateurService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    await this.utilisateurService.remove(id);
+    return {success:true , message: OPERATION_SUCCES}
+  }
+
+
+
+
+  /**
+   * GET /utilisateurs/:id/roles
+   * Retourne tous les rôles avec indication de ceux attribués à l'utilisateur
+   */
+  @Get(':id/roles')
+  async getRolesForUser(@Param('id', ParseIntPipe) id: number) {
+    const roles = await this.utilisateurService.findRolesForUser(id);
+    return {
+      success: true,
+      data: roles,
+    };
+  }
+
+  /**
+   * GET /utilisateurs/:id/roles/assigned
+   * Retourne uniquement les rôles attribués à l'utilisateur
+   */
+  @Get(':id/roles/assigned')
+  async getAssignedRoles(@Param('id', ParseIntPipe) id: number) {
+    const roles = await this.utilisateurService.getUserRoles(id);
+    return {
+      success: true,
+      data: roles,
+    };
   }
 }

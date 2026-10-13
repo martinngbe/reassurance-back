@@ -1,53 +1,62 @@
 import {
   Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
-  HttpCode, HttpStatus,
+  HttpCode, HttpStatus, Query, Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { IResponse, PaginationParams } from 'src/common/crud/crud.service';
 import { FindManyOptions } from 'typeorm';
-import { SinistreReglementDetailService } from '../services/sinistre-reglement-detail.service';
-import { SinistreReglementDetail } from '../entities/sinistre-reglement-detail.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { IResponse,   PaginationParams } from 'src/common/interfaces/response.interface';
+import { OPERATION_SUCCES, success, successPaginated } from 'src/common/helper/response.helper';
+import { SinistreReglementDetail } from '../entities/sinistre-reglement-detail.entity';
+import { SinistreReglementDetailService } from '../services/sinistre-reglement-detail.service';
 
-@ApiTags('Sinistres - Règlements')
+@ApiTags('SinistreReglementDetail')
 @Controller('sinistre-reglement-detail')
 export class SinistreReglementDetailController {
-  constructor(private readonly sinistreReglementDetailService: SinistreReglementDetailService) {}
+  constructor(private readonly sinistreReglementService: SinistreReglementDetailService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Liste tous les règlements de sinistre' })
+  @ApiOperation({ summary: 'Liste tous les sinistreReglementDetails par page' })
   async findAll(  
     pagination: PaginationParams = {},
-    options: FindManyOptions<SinistreReglementDetail> = {}): Promise<IResponse> {   
-    return this.sinistreReglementDetailService.findAll(pagination,options);
+    options: FindManyOptions<SinistreReglementDetail> = {}): Promise<IResponse<SinistreReglementDetail[]>> {   
+    const result= await this.sinistreReglementService.findAllPaginated(pagination,options);
+    return successPaginated<SinistreReglementDetail>(result)
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Récupère un règlement de sinistre par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
-    return this.sinistreReglementDetailService.findOne(id);
+  @ApiOperation({ summary: 'Récupère un sinistreReglement par ID' })
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise< IResponse<SinistreReglementDetail>> {
+    const result= await this.sinistreReglementService.findOne(id);
+    return success(result)
   }
 
   @Post()
-  @Roles('GESTIONNAIRE-SINSITRE') // Seul le gestionnaire sinistre est habillité
+  @Roles('SINISTRE') // Seuls les gestionnaires sinistreReglements peuvent accéder ici
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crée un nouveau règlement de sinistre' })
-  create(@Body() reglement: Partial<SinistreReglementDetail>): Promise<IResponse> {
-    return this.sinistreReglementDetailService.create(reglement);
+  @ApiOperation({ summary: 'Crée une nouvelle sinistreReglement' })
+  async create(@Body() sinistreReglement: Partial<SinistreReglementDetail>): Promise<IResponse> {
+    // return this.sinistreReglementService.create(sinistreReglement);
+    const result= await this.sinistreReglementService.create(sinistreReglement);
+    return success(result)
   }
 
   @Put(':id')
-  @Roles('GESTIONNAIRE-SINSITRE') // seul le gestionnaire sinistre est habillité
-  @ApiOperation({ summary: 'Met à jour un règlement de sinistre' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() reglement: Partial<SinistreReglementDetail>): Promise<IResponse> {
-    return this.sinistreReglementDetailService.update(id, reglement);
+  @Roles('SINISTRE') // Seuls les gestionnaires sinistreReglements peuvent accéder ici
+  @ApiOperation({ summary: 'Met à jour une sinistreReglement' })
+  async update(@Param('id', ParseIntPipe) id: number, 
+        @Body() sinistreReglement: Partial<SinistreReglementDetail>): Promise<IResponse> {
+    // return this.sinistreReglementService.update(id, sinistreReglement);
+     const result= await this.sinistreReglementService.create(sinistreReglement);
+    return success(result)
   }
 
   @Delete(':id')
-  @Roles('GESTIONNAIRE-SINSITRE') // seul le gestionnaire sinistre est habillité
+  @Roles('SINISTRE') // Seuls les gestionnaires sinistreReglements peuvent accéder ici
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Supprime un règlement de sinistre' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.sinistreReglementDetailService.remove(id);
+  @ApiOperation({ summary: 'Supprime une sinistreReglement' })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<IResponse> {
+    await this.sinistreReglementService.remove(id);
+    return { success: true, message: OPERATION_SUCCES };
   }
 }

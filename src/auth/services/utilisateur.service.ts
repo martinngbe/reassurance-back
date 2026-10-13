@@ -2,13 +2,17 @@ import {  Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Utilisateur } from '../entities/utilisateur.entity';
-import { PaginationParams, IResponse, OPERATION_ECHEC, OPERATION_SUCCES } from 'src/common/crud/crud.service';
+import { failure, OPERATION_SUCCES } from 'src/common/helper/response.helper';
+import { PaginationParams, IResponse } from 'src/common/interfaces/response.interface';
+import { RoleService } from './role.service';
+import { Role } from '../entities/role.entity';
 
 @Injectable()
 export class UtilisateurService {
   constructor(
     @InjectRepository(Utilisateur)
     private utilisateurRepository: Repository<Utilisateur>,
+    private readonly roleService: RoleService, 
   ) {}
 
   /**
@@ -60,18 +64,7 @@ export class UtilisateurService {
   } ;
 }
 
-
-  // findAll(): Promise<Utilisateur[]> {
-  //   return this.utilisateurRepository.find({
-  //     relations: ['roles'],
-  //   });
-  // }
- async findOne(id: number): Promise<IResponse> {
-    // const utilisateur = await this.utilisateurRepository.findOneOrFail({
-    //   where: { id },
-    //   relations: ['roles'],
-    //   select: ['id', 'nom', 'prenoms','email' ,'isActive'], // uniquement ces champs
-    // });
+ async findOne(id: number): Promise<Utilisateur> {
     
 const utilisateur = await this.utilisateurRepository.findOneOrFail({
   where: { id },
@@ -83,68 +76,79 @@ const utilisateur = await this.utilisateurRepository.findOneOrFail({
     prenoms: true,
     email: true,
     isActive: true,
-    // champs de la relation roles
-    // roles: {
-    //   id: true,
-    //   code: true,
-    //   label:true,        // adapte selon ta colonne (nom, libelle, code...)
-    //   // description: true,
-    // },
+   
   },
 });
-    if(!utilisateur)
-      return {
-        success:false,
-        message: `Aucun utilisateur pour id: ${id} `
+   if (!utilisateur) {
+        throw new NotFoundException(
+          failure(`${this.utilisateurRepository.metadata.name} #${id} introuvable`)
+        );
       }
-    return   {
-        success:true,
-        data: utilisateur,
-        message: OPERATION_SUCCES
-      }
+      return utilisateur;
   }
-  async create(utilisateur: Partial<Utilisateur>): Promise<IResponse> {
+  async create(utilisateur: Partial<Utilisateur>): Promise<Utilisateur> {
+    // Récupérer le rôle ADMIN (il est garanti d'exister maintenant)
+    const consultationRole = await this.roleService.findOneByCode('CONSULTATION' );
+    // l"utilisateur créer avec un rol par defaut : CONSULTATION
+    utilisateur.roles =consultationRole ? [consultationRole] : [];   
+    if(!utilisateur.password){
+      // ajout d'un mot de passe par défaut
+      utilisateur.password ="Reass123";
+    }
     const newUtilisateur = this.utilisateurRepository.create(utilisateur);
-    const save =this.utilisateurRepository.save(newUtilisateur);
-      if(!save)
-      return {
-        success:false,
-        message: `Echec de création de utilisateur `
-      }
-    return   {
-        success:true,
-        data: save,
-        message: OPERATION_SUCCES
-      }
+    const user =  await this.utilisateurRepository.save(newUtilisateur);
+    return user;
+
     
   }
 
-  async update(id: number, utilisateur: Partial<Utilisateur>): Promise<IResponse> {
-    const existing = await this.findOne(id);
-    //if (!existing) throw new NotFoundException(`Utilisateur ${id} not found`);
-    if(!existing.success)
-      return {
-        success:false,
-        message: `Aucun utilisateur pour id: ${id} `
-      }
-    Object.assign(existing, utilisateur);
-    const save= await  this.utilisateurRepository.save(existing.data);
-
-      if(!save)
-      return {
-        success:false,
-        message: `Echec de mise à jour pour utilisateur  id: ${id}`
-      }
-    return   {
-        success:true,
-        data: save,
-        message: OPERATION_SUCCES
-      }
+  async update(id: number, utilisateur: Partial<Utilisateur>): Promise<Utilisateur> {
+     const entity = await this.findOne(id);
+    const merged = this.utilisateurRepository.merge(entity, utilisateur);
+    return this.utilisateurRepository.save(merged);
   }
 
   async remove(id: number): Promise<void> {
-    const result = await this.utilisateurRepository.delete(id);
-   // if (result.affected === 0) throw new NotFoundException(`Utilisateur ${id} not found`);
+    const entity = await this.findOne(id);
+    await this.utilisateurRepository.remove(entity);
   }
  
+
+
+
+   /**
+   * Récupère tous les rôles avec indication de ceux attribués à un utilisateur
+   */
+  async findRolesForUser(userId: number): Promise<any[]> {
+    // Vérifier que l'utilisateur existe
+    const user = await this.utilisateurRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException(
+        failure(`Utilisateur #${userId} introuvable`)
+      );
+    }
+
+    return this.roleService.findAllWithUserAssignment(userId);
+  }
+
+  /**
+   * Récupère les rôles attribués à un utilisateur
+   */
+  async getUserRoles(userId: number): Promise<Role[]> {
+    const user = await this.utilisateurRepository.findOne({
+      where: { id: userId },
+      relations: ['roles'],
+    });
+
+    if (!user) {
+      throw new NotFoundException(
+        failure(`Utilisateur #${userId} introuvable`)
+      );
+    }
+
+    return user.roles || [];
+  }
 }

@@ -8,8 +8,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-// import { JwtAuthGuard } from './guards/jwt-auth.guard';
-// import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthService } from '../services/auth.service';
 import { AuthResponseDto } from '../dto/auth-response.dto';
 import { LoginDto } from '../dto/login.dto';

@@ -5,6 +5,7 @@ import { CompteType } from '../entities/compte-type.entity';
 import { CompteTypeService } from '../services/compte-type.service';
 import { CreateCompteTypeDto } from '../dto/create-compte-type.dto';
 import { UpdateCompteTypeDto } from '../dto/update-compte-type.dto';
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('CompteType')
 @Controller('compte-type')
@@ -12,4 +13,12 @@ export class CompteTypeController extends CrudController<CompteType, CreateCompt
   constructor(service: CompteTypeService) {
     super(service);
   }
+   protected buildOptions(query: any): FindManyOptions<CompteType> {
+          const options: FindManyOptions<CompteType> = {
+            where: {},
+            order: { code: 'ASC' }, // Tri par défaut
+          };
+      
+          return options;
+        }
 }

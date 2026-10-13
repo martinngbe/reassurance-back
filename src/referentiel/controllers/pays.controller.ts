@@ -5,6 +5,7 @@ import { Pays } from '../entities/pays.entity';
 import { PaysService } from '../services/pays.service';
 import { CreatePaysDto } from '../dto/create-pays.dto';
 import { UpdatePaysDto } from '../dto/update-pays.dto';
+import { FindManyOptions } from 'typeorm';
 
 @ApiTags('Pays')
 @Controller('pays')
@@ -12,4 +13,12 @@ export class PaysController extends CrudController<Pays, CreatePaysDto, UpdatePa
   constructor(service: PaysService) {
     super(service);
   }
+   protected buildOptions(query: any): FindManyOptions<Pays> {
+                  const options: FindManyOptions<Pays> = {
+                    where: {},
+                    order: { code: 'ASC' }, // Tri par défaut
+                  };
+              
+                  return options;
+                }
 }

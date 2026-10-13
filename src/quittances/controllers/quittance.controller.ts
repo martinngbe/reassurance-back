@@ -1,53 +1,35 @@
 import {
-  Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe,
-  HttpCode, HttpStatus, Query, Patch,
+  Controller, Get,  Param,  ParseIntPipe,  Patch,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { QuittanceService } from '../services/quittance.service';
 import { Quittance } from '../entities/quittance.entity';
 
+import { CrudController } from 'src/common/crud/crud.controller';
+import { CreateQuittanceDto } from '../dto/create-quittance.dto';
+import { UpdateQuittanceDto } from '../dto/update-quittance.dto';
+import { FindManyOptions } from 'typeorm';
+
 @ApiTags('Métier Affaires - Quittances')
-@Controller('quittances')
-export class QuittanceController {
-  constructor(private readonly quittanceService: QuittanceService) {}
+@Controller('quittance')
+export class QuittanceController extends CrudController<Quittance, CreateQuittanceDto, UpdateQuittanceDto> {
+  constructor(private readonly quittanceService: QuittanceService) 
+  {  super(quittanceService);}
 
-  @Get()
-  @ApiOperation({ summary: 'Liste toutes les quittances' })
-  findAll(@Query('policeId') policeId?: number): Promise<Quittance[]> {
-    if (policeId) return this.quittanceService.findByPolice(policeId);
-    return this.quittanceService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Récupère une quittance par ID' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Quittance> {
-    return this.quittanceService.findOne(id);
-  }
-
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crée une nouvelle quittance' })
-  create(@Body() quittance: Partial<Quittance>): Promise<Quittance> {
-    return this.quittanceService.create(quittance);
-  }
-
-  @Put(':id')
-  @ApiOperation({ summary: 'Met à jour une quittance' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() quittance: Partial<Quittance>): Promise<Quittance> {
-    return this.quittanceService.update(id, quittance);
-  }
+   // les quittances seront affichées par ordre de la plus récentes
+   protected buildOptions(query: any): FindManyOptions<Quittance> {
+      const options: FindManyOptions<Quittance> = {
+        where: {},
+        order: { createdAt: 'DESC' }, // Tri par défaut
+      };
+      return options;
+    }
+  
 
   @Patch(':id/annuler')
   @ApiOperation({ summary: 'Annule une quittance' })
   annuler(@Param('id', ParseIntPipe) id: number): Promise<Quittance> {
     //return this.quittanceService.annuler(id);
     return this.quittanceService.findOne(0)
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Supprime une quittance' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.quittanceService.remove(id);
   }
 }
