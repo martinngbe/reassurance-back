@@ -72,19 +72,29 @@ export class UtilisateurController {
 
 
 
-  /**
-   * GET /utilisateurs/:id/roles
-   * Retourne tous les rôles avec indication de ceux attribués à l'utilisateur
+ 
+/**
+   * GET /utilisateur/:id/roles
+   * Retourne tous les rôles (paginés) avec le booléen "assigned"
    */
   @Get(':id/roles')
-  async getRolesForUser(@Param('id', ParseIntPipe) id: number) {
-    const roles = await this.utilisateurService.findRolesForUser(id);
-    return {
-      success: true,
-      data: roles,
-    };
+  @ApiOperation({ summary: 'Liste tous les rôles et marque ceux assignés à l\'utilisateur' })
+  async getRolesForUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('search') search?: string,
+    @Query('sortKey') sortKey?: string,
+    @Query('sortDirection') sortDirection?: 'ASC' | 'DESC',
+  ) {
+    return this.utilisateurService.findRolesForUser(id, {
+      page: page ? Number(page) : 1,
+      limit: limit ? Number(limit) : 10,
+      search,
+      sortKey,
+      sortDirection,
+    });
   }
-
   /**
    * GET /utilisateurs/:id/roles/assigned
    * Retourne uniquement les rôles attribués à l'utilisateur
@@ -95,6 +105,20 @@ export class UtilisateurController {
     return {
       success: true,
       data: roles,
+    };
+  }
+  
+  @Patch(':id/roles')
+  @HttpCode(HttpStatus.OK)
+  async assignRolesToUser(
+    @Param('id') id: string,
+    @Body() body: { roleIds: number[] },
+  ) {
+    const userId = parseInt(id, 10);
+    await this.utilisateurService.assignRoles(userId, body.roleIds);
+    return {
+      success: true,
+      message: 'Rôles assignés avec succès',
     };
   }
 }

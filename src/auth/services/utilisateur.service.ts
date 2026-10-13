@@ -6,6 +6,7 @@ import { failure, OPERATION_SUCCES } from 'src/common/helper/response.helper';
 import { PaginationParams, IResponse } from 'src/common/interfaces/response.interface';
 import { RoleService } from './role.service';
 import { Role } from '../entities/role.entity';
+import { LogMethod } from 'src/common/decorateur/log-method.decorator';
 
 @Injectable()
 export class UtilisateurService {
@@ -116,22 +117,28 @@ const utilisateur = await this.utilisateurRepository.findOneOrFail({
 
 
 
-   /**
+
+  /**
    * Récupère tous les rôles avec indication de ceux attribués à un utilisateur
+   * Supporte la pagination et la recherche
    */
-  async findRolesForUser(userId: number): Promise<any[]> {
+  async findRolesForUser(
+    userId: number, 
+    pagination: { page?: number; limit?: number; search?: string; sortKey?: string; sortDirection?: 'ASC' | 'DESC' } = {}
+  ) {
     // Vérifier que l'utilisateur existe
     const user = await this.utilisateurRepository.findOne({
       where: { id: userId },
     });
-
+    
     if (!user) {
       throw new NotFoundException(
-        failure(`Utilisateur #${userId} introuvable`)
+        failure( `Utilisateur #${userId} introuvable`)
       );
     }
-
-    return this.roleService.findAllWithUserAssignment(userId);
+    
+    // On transmet la pagination au RoleService
+    return this.roleService.findAllWithUserAssignment(userId, pagination);
   }
 
   /**
@@ -150,5 +157,27 @@ const utilisateur = await this.utilisateurRepository.findOneOrFail({
     }
 
     return user.roles || [];
+  }
+  @LogMethod()
+  async assignRoles(userId: number, roleIds: number[]): Promise<void> {
+    // 1. Vérifier que l'utilisateur existe
+    const utilisateur = await this.utilisateurRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!utilisateur) {
+      throw new NotFoundException(failure(`Utilisateur avec l'ID ${userId} non trouvé`) );
+    }
+
+    // 2. Récupérer les rôles correspondants
+    const roles = await this.roleService.findByIds(roleIds);
+
+    if (roles.length !== roleIds.length) {
+      throw new NotFoundException(failure('Un ou plusieurs rôles n\'existent pas'));
+    }
+
+    // 3. Assigner les rôles à l'utilisateur
+    utilisateur.roles = roles;
+    await this.utilisateurRepository.save(utilisateur);
   }
 }

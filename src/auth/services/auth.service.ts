@@ -15,6 +15,7 @@ import { Role } from '../entities/role.entity';
 import { RegisterDto } from '../dto/register.dto';
 import { AuthResponseDto } from '../dto/auth-response.dto';
 import { LoginDto } from '../dto/login.dto';
+import { failure } from 'src/common/helper/response.helper';
 
 
 @Injectable()
@@ -119,12 +120,12 @@ export class AuthService {
       });
 
       if (!utilisateur || utilisateur.refreshToken !== refreshToken) {
-        throw new UnauthorizedException('Invalid refresh token');
+        throw new UnauthorizedException(failure('Invalid refresh token'));
       }
 
       return this.generateTokens(utilisateur);
     } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException( failure('Invalid refresh token') );
     }
   }
 

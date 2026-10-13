@@ -12,18 +12,18 @@ set LOCAL_IMAGE=%IMAGE_NAME%:%IMAGE_TAG%
 echo "________________________"
 echo Construction image
 docker build -t %LOCAL_IMAGE% .
-echo "________________________"
-echo Tag image
-docker tag %LOCAL_IMAGE% %FULL_IMAGE%
-echo "________________________"
-echo Push image
-docker push %FULL_IMAGE%
-echo "________________________"
-echo Terminee
-echo "________________________"
-echo Arrêt du container
-docker compose down
-echo "________________________"
-echo Demarrage du container
-docker compose up -d --force-recreate
-echo "________________________"
+REM echo "________________________"
+REM echo Tag image
+REM docker tag %LOCAL_IMAGE% %FULL_IMAGE%
+REM echo "________________________"
+REM echo Push image
+REM docker push %FULL_IMAGE%
+REM echo "________________________"
+REM echo Terminee
+REM echo "________________________"
+REM echo Arrêt du container
+REM docker compose down
+REM echo "________________________"
+REM echo Demarrage du container
+REM docker compose up -d --force-recreate
+REM echo "________________________"
