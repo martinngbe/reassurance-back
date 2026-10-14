@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -89,6 +90,16 @@ export abstract class CrudController<
     return success(entity, 'Modification effectuée avec succès');
   }
 
+    /**
+   * Patch / - Création
+   */
+  @Patch(':id')
+   async patch(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateDto,
+  ): Promise<IResponse<T>> {   
+    return this.update(id,dto);
+  }
   /**
    * DELETE /:id - Suppression
    */
