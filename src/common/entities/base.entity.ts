@@ -19,6 +19,10 @@ export abstract class BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @Column({ name: 'utilisateurId' , nullable: true})
-  utilisateurId?: number;
+  
+  @Column({ name: 'created_by' , nullable: true , default: null})
+  createdBy?: number;
+
+  @Column({ name: 'updated_by' , nullable: true, default: null})
+  updatedBy?: number;
 }

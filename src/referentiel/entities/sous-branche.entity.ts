@@ -10,10 +10,9 @@ export class SousBranche extends BaseEntity {
   @Column()
   libelle!: string;
 
-  @ManyToOne(() => Branche, (branche) => branche.sousBranches)
+  @ManyToOne(() => Branche, (branche) => branche.sousBranches , {eager:true})
   @JoinColumn({ name: 'branche_id' })
   branche!: Branche;
-
   @Column({ name: 'branche_id' })
-  brancheid!: number;
+  brancheId!: number;
 }

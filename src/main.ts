@@ -8,6 +8,7 @@ import { AppLogger } from './common/logger/app-logger.service';
 import { DataSource } from 'typeorm';
 import { seedAuth } from './auth/seed/seed-auth';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { seedReferentiel } from './referentiel/seed/seed-refentiel';
 
 
 async function bootstrap() {
@@ -53,6 +54,7 @@ async function bootstrap() {
   if (process.env.NODE_ENV !== 'production') {
     const dataSource = app.get(DataSource);
     await seedAuth(dataSource);
+    await seedReferentiel(dataSource);
   }
 
 

@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDeviseDto {
   
@@ -9,5 +9,10 @@ export class CreateDeviseDto {
   @IsString()
   @IsNotEmpty()
   libelle!: string;
+
+
+  @IsString()
+  @IsOptional()
+  cours!: number;
 
 }

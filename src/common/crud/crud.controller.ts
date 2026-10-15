@@ -38,7 +38,8 @@ export abstract class CrudController<
    * GET / - Liste paginée (par défaut)
    */
   @Get()
-  async findAll(
+  async findAll(  
+    @Query() query: any, // <-- Récupère tous les paramètres d'URL (?brancheId=X)
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ): Promise<IResponse<T[]>> {
@@ -47,8 +48,14 @@ export abstract class CrudController<
       limit: limit ? parseInt(limit, 10) : 10,
     };
 
-    const result = await this.service.findAllPaginated(pagination);
-    return successPaginated(result);
+    // <-- Appel de votre méthode de filtre
+    const options = this.buildOptions(query); 
+    
+    // <-- Passage des options au service
+    const result = await this.service.findAllPaginated(pagination, options);
+    return successPaginated(result);     
+    // const result = await this.service.findAllPaginated(pagination);
+    // return successPaginated(result);
   }
 
   /**

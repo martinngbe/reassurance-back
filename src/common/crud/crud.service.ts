@@ -8,6 +8,7 @@ import {
 import { PaginationParams, PaginatedResult } from '../interfaces/response.interface';
 import { failure } from '../helper/response.helper';
 import { Role } from 'src/auth/entities/role.entity';
+import { LogMethod } from '../decorateur/log-method.decorator';
 
 
 /**
@@ -21,6 +22,7 @@ export abstract class CrudService<T extends { id: number }> {
    * Récupère toutes les entités (sans pagination).
    * Utile pour les dropdowns, selects, etc.
    */
+  @LogMethod()
   findAll(options?: FindManyOptions<T>): Promise<T[]> {
     return this.repository.find(options);
   }
@@ -28,6 +30,7 @@ export abstract class CrudService<T extends { id: number }> {
   /**
    * Récupère les entités avec pagination.
    */
+  @LogMethod()
   async findAllPaginated(
     pagination: PaginationParams = {},
     options: FindManyOptions<T> = {},
@@ -57,6 +60,7 @@ export abstract class CrudService<T extends { id: number }> {
   /**
    * Récupère une entité par son ID.
    */
+  @LogMethod()
   async findOne(id: number, options?: FindManyOptions<T>): Promise<T> {
     const entity = await this.repository.findOne({
       where: { id } as unknown as FindOptionsWhere<T>,
@@ -74,6 +78,7 @@ export abstract class CrudService<T extends { id: number }> {
   /**
    * Crée une nouvelle entité.
    */
+   @LogMethod()
   async create(dto: DeepPartial<T>): Promise<T> {
     const entity = this.repository.create(dto);
     return this.repository.save(entity);
@@ -81,7 +86,8 @@ export abstract class CrudService<T extends { id: number }> {
 
   /**
    * Met à jour une entité existante.
-   */
+   */ 
+  @LogMethod()
   async update(id: number, dto: DeepPartial<T>): Promise<T> {
     const entity = await this.findOne(id);
     const merged = this.repository.merge(entity, dto);
@@ -91,6 +97,7 @@ export abstract class CrudService<T extends { id: number }> {
   /**
    * Supprime une entité.
    */
+   @LogMethod()
   async remove(id: number): Promise<void> {
     const entity = await this.findOne(id);
     await this.repository.remove(entity);
