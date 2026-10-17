@@ -1,16 +1,22 @@
 import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateActeurDto {
+
   @IsString()
-  @IsNotEmpty()
-  sigle: string;
+  @IsOptional()
+  numero!: string;
+
+  @IsString()
+  @IsOptional()
+  sigle!: string;
 
   @IsString()
   @IsNotEmpty()
-  raisonSociale: string;
+  raisonSociale!: string;
 
   @IsEmail()
-  email: string;
+  @IsOptional()
+  email!: string;
 
   @IsBoolean()
   @IsOptional()
@@ -25,10 +31,7 @@ export class CreateActeurDto {
   isReassureur?: boolean;
 
   @IsInt()
-  @IsOptional()
+  @IsNotEmpty()
   idPays?: number;
 
-  @IsInt()
-  @IsOptional()
-  idDomaineActivite?: number;
 }

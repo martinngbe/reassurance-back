@@ -22,7 +22,7 @@ export class PaysController extends CrudController<Pays, CreatePaysDto, UpdatePa
  
          // 1. Initialisation de base
          const options: FindManyOptions<Pays> = {
-           order: { code: 'ASC' }, // Tri par défaut
+           order: { libelle: 'ASC' }, // Tri par défaut
          };
          // 2. Construction dynamique du where (évite les erreurs de typage TS strict)
          const whereCondition: any = {};

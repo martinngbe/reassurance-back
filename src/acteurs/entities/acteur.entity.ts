@@ -13,6 +13,9 @@ import { SinistreActeur } from 'src/sinistres/entities/sinistre-acteur.entity';
  */
 @Entity('acteur')
 export class Acteur extends BaseEntity {
+  @Column({ nullable: true })
+  numero!: string
+
   @Column()
   sigle!: string 
 
@@ -31,10 +34,9 @@ export class Acteur extends BaseEntity {
   @Column({ name: 'is_reassureur', default: false })
   isReassureur: boolean=false;
 
-  @ManyToOne(() => Pays, { nullable: true })
+  @ManyToOne(() => Pays, { nullable: true  , eager:true})
   @JoinColumn({ name: 'pays_id' })
   pays?: Pays;
-
   @Column({ name: 'pays_id', nullable: true })
   paysId?: number;
 
@@ -44,9 +46,6 @@ export class Acteur extends BaseEntity {
   contacts!: Contact[];
 
   // la liste des sinistres d'un acteur
-  // @OneToMany(() => Sinistre, (s) => s.acteurs)
-  // sinsitres!: Contact[];
-    // Relation Many-to-Many via SinistreActeur
   @OneToMany(() => SinistreActeur, (sa) => sa.acteur)
   sinistreActeurs!: SinistreActeur[];
 }
