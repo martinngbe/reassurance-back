@@ -13,12 +13,26 @@ export class PaysController extends CrudController<Pays, CreatePaysDto, UpdatePa
   constructor(service: PaysService) {
     super(service);
   }
-   protected buildOptions(query: any): FindManyOptions<Pays> {
-                  const options: FindManyOptions<Pays> = {
-                    where: {},
-                    order: { code: 'ASC' }, // Tri par défaut
-                  };
-              
-                  return options;
-                }
+ // les diffentes options ou filtre pour 
+       protected buildOptions(query: any): FindManyOptions<Pays> {
+         console.log("________________________________");
+         console.log("PaysController.buildOptions");
+         console.log("query:", query);
+         console.log("________________________________");
+ 
+         // 1. Initialisation de base
+         const options: FindManyOptions<Pays> = {
+           order: { code: 'ASC' }, // Tri par défaut
+         };
+         // 2. Construction dynamique du where (évite les erreurs de typage TS strict)
+         const whereCondition: any = {};
+         if (query.regionId) {
+           // Ajout du radix 10 pour parseInt (bonne pratique)
+           whereCondition.region = { id: parseInt(query.regionId, 10) };
+         }
+         // 3. Assignation finale
+         options.where = whereCondition;        
+         console.log("options:", options);
+         return options;
+       }
 }

@@ -13,10 +13,9 @@ export class Pays extends BaseEntity {
   @Column()
   libelle!: string;
 
-  @ManyToOne(() => Region, (region) => region.pays)
+  @ManyToOne(() => Region, (region) => region.pays , {eager:true})
   @JoinColumn({ name: 'region_id' })
   region!: Region;
-
   @Column({ name: 'region_id' })
   regionId!: number;
 }

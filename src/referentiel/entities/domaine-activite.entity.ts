@@ -8,4 +8,7 @@ export class DomaineActivite extends BaseEntity {
 
   @Column()
   libelle!: string;
+
+  @Column()
+  description!: string;
 }

@@ -11,7 +11,8 @@ export class Devise extends BaseEntity {
   @Column()
   libelle!: string;
 
-   @Column({default:1})
+
+  @Column({default:1})
   cours: number=1;
   
 }
