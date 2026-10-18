@@ -11,7 +11,7 @@ export async function seedReferentiel(dataSource: DataSource): Promise<void> {
    const paysRepo = dataSource.getRepository(Pays);
 
    await seedBranche(dataSource);
-   await seedBranche(dataSource);
+   await seedRegion(dataSource);
    await seedDevise(dataSource)
    await seedDomaineActivite(dataSource)
   console.log('✅ Referentiel seed terminé avec succès (Idempotent)');
