@@ -14,14 +14,14 @@ export class Assure extends BaseEntity {
   @Column()
   email!: string;
   
-  @ManyToOne(() => Pays, { nullable: true })
+  @ManyToOne(() => Pays, { nullable: true , eager:true})
   @JoinColumn({ name: 'pays_id' })
   pays?: Pays;
 
   @Column({ name: 'pays_id', nullable: true })
   paysId?: number;
 
-  @ManyToOne(() => DomaineActivite, { nullable: true })
+  @ManyToOne(() => DomaineActivite, { nullable: true , eager:true})
   @JoinColumn({ name: 'domaine_activite_id' })
   domaineActivite?: DomaineActivite;
 

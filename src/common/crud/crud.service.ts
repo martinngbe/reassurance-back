@@ -89,9 +89,21 @@ export abstract class CrudService<T extends { id: number }> {
    */ 
   @LogMethod()
   async update(id: number, dto: DeepPartial<T>): Promise<T> {
+    
+    console.log("CrudService.update");
     const entity = await this.findOne(id);
+    console.log("________________________________");
+    console.log("entity:",entity);
+    console.log("id:", id);
+    console.log("dto:", dto);
+    console.log("________________________________");
     const merged = this.repository.merge(entity, dto);
-    return this.repository.save(merged);
+    console.log("merged:",merged);
+    console.log("________________________________");
+    const saveResult = await this.repository.save(merged);
+    console.log("saveResult:",saveResult);
+    console.log("________________________________");    
+    return saveResult;
   }
 
   /**

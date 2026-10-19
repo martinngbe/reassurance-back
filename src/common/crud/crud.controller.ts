@@ -58,9 +58,7 @@ export abstract class CrudController<
       console.log("________________________________");
     // <-- Passage des options au service
     const result = await this.service.findAllPaginated(pagination, options);
-    return successPaginated(result);     
-    // const result = await this.service.findAllPaginated(pagination);
-    // return successPaginated(result);
+    return successPaginated(result);   
   }
 
   /**
