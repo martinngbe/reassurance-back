@@ -19,14 +19,18 @@ export class SousBrancheController extends CrudController<SousBranche, CreateSou
     // Ajoutez d'autres champs texte ici si votre entité en possède (ex: 'description')
   
     protected buildOptions(query: any): FindManyOptions<SousBranche> {
-      console.log("________________________________");
-      console.log("SousBrancheController.buildOptions");
-      console.log("query:", query);
-      console.log("________________________________");
-  
+      const baseSort: any = {libelle: 'ASC'};// Tri par défaut
       const options: FindManyOptions<SousBranche> = {
-        order: { libelle: 'ASC' }, // Tri par défaut
+        where: {},
+        order: {}, 
       };
+      
+      if( query.sortKey && query.sortDirection){
+          
+          options.order ={ [query.sortKey]: `${query.sortDirection}`}
+      }else {
+        options.order = baseSort
+      }
   
       // 3. Filtres exacts (AND)
       const baseWhere: any = {};

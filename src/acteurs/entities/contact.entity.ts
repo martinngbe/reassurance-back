@@ -10,11 +10,11 @@ export class Contact extends BaseEntity {
   @Column()
   prenoms!: string;
 
-  @Column({ name: 'e_mail' })
-  eMail!: string;
+  @Column({ name: 'email' })
+  email!: string;
 
-  @Column({ name: 'numero_telephone' })
-  numeroTelephone!: string;
+  @Column({ name: 'ttelephone' , nullable: true})
+  telephone!: string;
 
   @ManyToOne(() => Acteur, (acteur) => acteur.contacts)
   @JoinColumn({ name: 'acteur_id' })

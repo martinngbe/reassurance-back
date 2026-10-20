@@ -20,14 +20,18 @@ export class DeviseController extends CrudController<Devise, CreateDeviseDto, Up
   // Ajoutez d'autres champs texte ici si votre entité en possède (ex: 'description')
 
   protected buildOptions(query: any): FindManyOptions<Devise> {
-    console.log("________________________________");
-    console.log("DeviseController.buildOptions");
-    console.log("query:", query);
-    console.log("________________________________");
-
+    const baseSort: any = {libelle: 'ASC'};// Tri par défaut
     const options: FindManyOptions<Devise> = {
-      order: { libelle: 'ASC' }, // Tri par défaut
+      where: {},
+      order: {}, 
     };
+    
+    if( query.sortKey && query.sortDirection){
+        
+        options.order ={ [query.sortKey]: `${query.sortDirection}`}
+    }else {
+      options.order = baseSort
+    }
 
     // 3. Filtres exacts (AND)
     const baseWhere: any = {};
@@ -37,11 +41,10 @@ export class DeviseController extends CrudController<Devise, CreateDeviseDto, Up
     //   // Note: Si votre entité utilise une colonne directe et non une relation, utilisez :
     //   // baseWhere.brancheId = parseInt(query.brancheId, 10);
     // }
-
+   
     // 4. Filtre de recherche globale (LIKE avec OR)
     if (query.search) {
-      const searchTerm = `%${query.search}%`;
-      
+      const searchTerm = `%${query.search}%`;      
       // On génère un tableau de conditions : 
       // [{ branche: {id: 3}, code: Like('%x%') }, { branche: {id: 3}, libelle: Like('%x%') }]
       // TypeORM interprétera ce tableau comme : (branche=3 AND code LIKE '%x%') OR (branche=3 AND libelle LIKE '%x%')

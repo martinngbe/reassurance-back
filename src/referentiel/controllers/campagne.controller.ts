@@ -15,12 +15,20 @@ export class CampagneController extends CrudController<Campagne, CreateCampagneD
     super(service);
   }
 
-   protected buildOptions(query: any): FindManyOptions<Campagne> {
+     protected buildOptions(query: any): FindManyOptions<Campagne> {
+        const baseSort: any = {code: 'ASC'};// Tri par défaut
         const options: FindManyOptions<Campagne> = {
           where: {},
-          order: { code: 'DESC' }, // Tri par défaut
+          order: {}, 
         };
-    
+         
+         if( query.sortKey && query.sortDirection){
+            
+             options.order ={ [query.sortKey]: `${query.sortDirection}`}
+         }else {
+          options.order = baseSort
+         }
+         
         return options;
       }
 }

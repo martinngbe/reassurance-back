@@ -14,11 +14,19 @@ export class RegionController extends CrudController<Region, CreateRegionDto, Up
     super(service);
   }
    protected buildOptions(query: any): FindManyOptions<Region> {
-        const options: FindManyOptions<Region> = {
-          where: {},
-          order: { code: 'ASC' }, // Tri par défaut
-        };
+      const baseSort: any = {libelle: 'ASC'};// Tri par défaut
+      const options: FindManyOptions<Region> = {
+        where: {},
+        order: {}, 
+      };
+      
+      if( query.sortKey && query.sortDirection){
+          
+          options.order ={ [query.sortKey]: `${query.sortDirection}`}
+      }else {
+        options.order = baseSort
+      }
     
         return options;
-      }
+  }
 }

@@ -16,10 +16,17 @@ export class AssureController extends CrudController<Assure, CreateAssureDto, Up
 
    // les diffentes options ou filtre pour 
       protected buildOptions(query: any): FindManyOptions<Assure> {
-        const options: FindManyOptions<Assure> = {
-          where: {},
-          order: { raisonSociale: 'ASC' }, // Tri par défaut
-        };
+       const baseSort: any = {raisonSociale: 'ASC'};// Tri par défaut
+       const options: FindManyOptions<Assure> = {
+         where: {},
+         order: {}, 
+       };
+       
+       if( query.sortKey && query.sortDirection){           
+           options.order ={ [query.sortKey]: `${query.sortDirection}`}
+       }else {
+         options.order = baseSort
+       }
     
         return options;
       }

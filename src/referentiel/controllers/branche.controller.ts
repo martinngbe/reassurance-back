@@ -16,11 +16,19 @@ export class BrancheController extends CrudController<Branche, CreateBrancheDto,
   }
    // les diffentes options ou filtre pour 
     protected buildOptions(query: any): FindManyOptions<Branche> {
+      const baseSort: any = {code: 'ASC'};// Tri par défaut
       const options: FindManyOptions<Branche> = {
         where: {},
-        order: { code: 'ASC' }, // Tri par défaut
+        order: {}, 
       };
-  
+       
+       if( query.sortKey && query.sortDirection){
+          
+           options.order ={ [query.sortKey]: `${query.sortDirection}`}
+       }else {
+        options.order = baseSort
+       }
+       
       return options;
     }
   

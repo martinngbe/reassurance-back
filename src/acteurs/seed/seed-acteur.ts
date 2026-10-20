@@ -149,6 +149,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
   // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
   const acteursData = [
   {
+    "isReassureur": true,
     "raisonSociale": "AFRICA RE",
     "sigle": "AFRICA RE",
     "adresse": "COCODY",
@@ -159,6 +160,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 1,
   },
   {
+    "isReassureur": true,
     "raisonSociale": "CICA RE LOME",
     "sigle": "CICA RE LOME",
     "adresse": "07 BP 12410, CITÉ OUA LOMÉ 2, LOMÉ - TOGO",
@@ -168,6 +170,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 2,
   },
   {
+    "isReassureur": true,
     "raisonSociale": "CONTINENTAL RE",
     "sigle": "CONTINENTAL RE",
     "adresse": "4E ÉTAGE, IMM. CONTINENTAL RE, ANGLE DE LA RUE PIERRE & MARIE CURIE & DE LA RUE DOCTEUR CALMETTE , ZONE 4 C MARCORY",
@@ -178,6 +181,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 1,
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES BENIN",
     "sigle": "NSIA BEN",
     "adresse": "VOIR DOCUMENT",
@@ -187,6 +191,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 19,
    },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES CAMEROUN",
     "sigle": "NSIA CAM",
     "adresse": "VOIR DOCUMENT",
@@ -196,6 +201,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 26,
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES CONGO",
     "sigle": "NSIA RDC",
     "adresse": "VOIR DOCUMENT",
@@ -205,6 +211,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 30,
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES COTE D'IVOIRE",
     "sigle": "NSIA CIV",
     "adresse": "VOIR DOCUMENT",
@@ -212,6 +219,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "email": "",
     },
   {    
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES GABON",
     "sigle": "NSIA GAB",
     "adresse": "VOIR DOCUMENT",
@@ -220,6 +228,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 29,
   },
   {    
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES GUINEE",
     "sigle": "NSIA GUI",
     "adresse": "VOIR DOCUMENT",
@@ -229,6 +238,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 15,
    },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES GUINEE BISSAU( VIE & NON VIE)",
     "sigle": "NSIA BIS",
     "adresse": "VOIR DOCUMENT",
@@ -238,6 +248,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 17,
    },
   {    
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES MALI",
     "sigle": "NSIA MAL",
     "adresse": "VOIR DOCUMENT",
@@ -246,7 +257,8 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "coordonneesBancaire": "VOIR DOCUMENT",
     "paysId": 14,
   },
-  {   
+  {  
+    "isCompagnieAssurance":true, 
     "raisonSociale": "NSIA ASSURANCES SENEGAL",
     "sigle": "NSIA SEN",
     "adresse": "VOIR DOCUMENT",
@@ -256,6 +268,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 12,
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES TOGO",
     "sigle": "NSIA TGO",
     "adresse": "VOIR DOCUMENT",
@@ -265,6 +278,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 15,
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES VIE CAMEROUN",
     "sigle": "NSIA VIE CAM",
     "adresse": "VOIR DOCUMENT",
@@ -274,15 +288,17 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 26,
    },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES VIE CONGO",
     "sigle": "NSIA VIE RDC",
     "adresse": "VOIR DOCUMENT",
     "telephone": "",
-     "email": "",
+    "email": "",
     "coordonneesBancaire": "VOIR DOCUMENT",
     "paysId": 30,
    },
   { 
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES VIE COTE D'IVOIRE",
     "sigle": "NSIA VIE CI",
     "adresse": "VOIR DOCUMENT",
@@ -290,6 +306,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "email": "",
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES VIE GABON",
     "sigle": "NSIA VIE GAB",
     "adresse": "VOIR DOCUMENT",
@@ -299,6 +316,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 29,
   },
   {
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES VIE GUINEE",
     "sigle": "NSIA VIE GUI",
     "adresse": "VOIR DOCUMENT",
@@ -308,6 +326,7 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "paysId": 15,
    },
   {    
+    "isCompagnieAssurance":true,
     "raisonSociale": "NSIA ASSURANCES VIE MALI",
     "sigle": "NSIA VIE MAL",
     "adresse": "VOIR DOCUMENT",
@@ -316,7 +335,8 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "coordonneesBancaire": "VOIR DOCUMENT",
     "paysId": 14,
    },
-  {    
+  {   
+    "isCompagnieAssurance":true, 
     "raisonSociale": "NSIA ASSURANCES VIE SENEGAL",
     "sigle": "NSIA VIE SEN",
     "adresse": "VOIR DOCUMENT",
@@ -325,7 +345,8 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "coordonneesBancaire": "VOIR DOCUMENT",
     "paysId": 12,
    },
-  {    
+  {  
+    "isCompagnieAssurance":true,  
     "raisonSociale": "NSIA ASSURANCES VIE TOGO",
     "sigle": "NSIA VIE TGO",
     "adresse": "VOIR DOCUMENT",
@@ -334,7 +355,8 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
     "coordonneesBancaire": "VOIR DOCUMENT",
     "paysId": 15,
   },
-  {    
+  {   
+    "isCompagnieAssurance":true, 
     "raisonSociale": "WAICA RE",
     "sigle": "WAICA RE",
     "adresse": "4A ALSHEK CRESCEN HILL STATION FREETOWN, WESTERN AREA, SIERRA LEONNE",

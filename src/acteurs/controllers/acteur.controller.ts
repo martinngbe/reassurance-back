@@ -16,11 +16,20 @@ export class ActeurController extends CrudController<Acteur, CreateActeurDto, Up
 
    // les diffentes options ou filtre pour 
       protected buildOptions(query: any): FindManyOptions<Acteur> {
-        const options: FindManyOptions<Acteur> = {
-          where: {},
-          order: { raisonSociale: 'ASC' }, // Tri par défaut
-        };
+       const options: FindManyOptions<Acteur> = {
+         where: {},
+         order: {}, 
+       };
+       // tri
+       const baseSort: any = {raisonSociale: 'ASC'};// Tri par défaut
+       if( query.sortKey && query.sortDirection){
+           options.order ={ [query.sortKey]: `${query.sortDirection}`}
+       }else {
+         options.order = baseSort
+       }
     
+
+
         return options;
       }
 }

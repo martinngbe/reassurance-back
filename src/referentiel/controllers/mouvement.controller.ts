@@ -15,11 +15,19 @@ export class MouvementController extends CrudController<Mouvement, CreateMouveme
   }
 
      protected buildOptions(query: any): FindManyOptions<Mouvement> {
-              const options: FindManyOptions<Mouvement> = {
-                where: {},
-                order: { code: 'ASC' }, // Tri par défaut
-              };
+          const baseSort: any = {libelle: 'ASC'};// Tri par défaut
+          const options: FindManyOptions<Mouvement> = {
+            where: {},
+            order: {}, 
+          };
           
-              return options;
-            }
+          if( query.sortKey && query.sortDirection){
+              
+              options.order ={ [query.sortKey]: `${query.sortDirection}`}
+          }else {
+            options.order = baseSort
+          }
+        
+          return options;
+      }
 }
