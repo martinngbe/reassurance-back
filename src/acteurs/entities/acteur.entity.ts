@@ -16,14 +16,27 @@ export class Acteur extends BaseEntity {
   @Column({ nullable: true })
   numero!: string
 
-  @Column()
+  @Column({ nullable: true })
   sigle!: string 
 
-  @Column({ name: 'raison_sociale' })
+  @Column({ name: 'raison_sociale' ,nullable: true })
   raisonSociale!: string;
 
-  @Column()
+  @Column({nullable:true})
   email!: string;
+
+  @Column({nullable:true})
+  adresse!: string;
+
+  @Column({nullable:true})
+  telephone!: string;
+
+  @Column({nullable:true})
+  siteweb!: string;
+
+  @Column({nullable:true})
+  coordonneesBancaire!: string;
+
 
   @Column({ name: 'is_courtier', default: false })
   isCourtier: boolean=false;

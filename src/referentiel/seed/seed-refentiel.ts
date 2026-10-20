@@ -7,9 +7,7 @@ import { Devise } from '../entities/devise.entity';
 import { DomaineActivite } from '../entities/domaine-activite.entity';
 
 export async function seedReferentiel(dataSource: DataSource): Promise<void> {
-   const regionRepo = dataSource.getRepository(Region);
-   const paysRepo = dataSource.getRepository(Pays);
-
+   
    await seedBranche(dataSource);
    await seedRegion(dataSource);
    await seedDevise(dataSource)
@@ -100,12 +98,31 @@ async function seedRegion(dataSource: DataSource): Promise<void>{
 
     // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
   const regionsData = [
-        {code:'AF',libelle:'Afrique'},
-        {code:'EU',libelle:'Europe'},
-        {code:'AS',libelle:'Asie'},
-        {code:'AM',libelle:'Amérique'},
-       
-  ];
+    // 1-5
+      { code: "AF-01",  libelle: "AFRIQUE DE L'OUEST",continent: "AFRIQUE"},
+      { code: "AF-02",  libelle: "AFRIQUE DE L'EST",  continent: "AFRIQUE"},
+      { code: "AF-03",  libelle: "AFRIQUE DU SUD",    continent: "AFRIQUE"},
+      { code: "AF-04",  libelle: "AFRIQUE DU NORD",   continent: "AFRIQUE"},
+      { code: "AF-05",  libelle: "AFRIQUE CENTRALE",  continent: "AFRIQUE"},
+      // 6-9
+      { code: "EU-01",  libelle: "EUROPE DE L'OUEST", continent: "EUROPE"},
+      { code: "EU-02",  libelle: "EUROPE DE L'EST",   continent: "EUROPE"},
+      { code: "EU-03",  libelle: "EUROPE DU SUD",     continent: "EUROPE"},
+      { code: "EU-04",  libelle: "EUROPE DU NORD",    continent: "EUROPE"},
+      // 10-13
+      { code: "AS-01",  libelle: "ASIE DE L'OUEST",   continent: "ASIE"},
+      { code: "AS-02",  libelle: "ASIE DE L'EST",     continent: "ASIE"},
+      { code: "AS-03",  libelle: "ASIE DU SUD",       continent: "ASIE"},
+      { code: "AS-04",  libelle: "ASIE DU NORD",      continent: "ASIE"},
+       // 14 - 16
+      { code: "AS-07",  libelle: "AMERIQUE DU NORD",  continent: "ASIE"},
+      { code: "AS-05",  libelle: "AMERIQUE CENTRALE", continent: "ASIE"},
+      { code: "AS-06",  libelle: "AMERIQUE DU SUD",   continent: "ASIE"},
+      //17
+      { code: "OC-01",  libelle: "OCEANIE",   continent: "OCEANIE"},
+     
+    ];
+
   console.log('🔄 La liste des regions ....');
   for (const regionData of regionsData) {
     const existing = await regionRepo.findOne({ where: { code: regionData.code } });
@@ -114,39 +131,293 @@ async function seedRegion(dataSource: DataSource): Promise<void>{
     }
   }
 console.log('🔄 La liste des pays ....')
-   const listePaysData = [
-    /// AFRIQUE
-    {indicatif:'225' ,  code:'CI',libelle:"Côte d'Ivoire",regionId:1},
-    {indicatif:'226' ,  code:'BF',libelle:"Burkina Faso",regionId:1},    
-    {indicatif:'20' ,   code:'EG',libelle:"Egypte",regionId:1},
-    {indicatif:'212' ,  code:'MA',libelle:"Maroc",regionId:1},
-    {indicatif:'213' ,  code:'AL',libelle:"Algérie",regionId:1},
-    {indicatif:'216' ,  code:'TU',libelle:"Tunisie",regionId:1},
-    {indicatif:'218' ,  code:'LB',libelle:"Libye",regionId:1},
-    {indicatif:'220' ,  code:'GA',libelle:"Gambie",regionId:1},
-    {indicatif:'221' ,  code:'SN',libelle:"Sénégal",regionId:1},
-    {indicatif:'222' ,  code:'MR',libelle:"Mauritanie",regionId:1},
-    {indicatif:'223' ,  code:'ML',libelle:"Mali",regionId:1},
-    {indicatif:'224' ,  code:'GN',libelle:"Guinée",regionId:1},
+   const listePaysData =[
+  // ===== AFRIQUE =====
+  // Afrique de l'Ouest
+  { "code": "BEN", "libelle": "BENIN", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "BFA", "libelle": "BURKINA FASO", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "CIV", "libelle": "COTE D'IVOIRE", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "CPV", "libelle": "CAP VERT", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "GHA", "libelle": "GHANA", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "GIN", "libelle": "GUINEE CONAKRY", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "GMB", "libelle": "GAMBIE", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "GNB", "libelle": "GUINEE BISSAU", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "LBR", "libelle": "LIBERIA", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MLI", "libelle": "MALI", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "MRT", "libelle": "MAURITANIE", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "NER", "libelle": "NIGER", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "NGA", "libelle": "NIGERIA", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "SEN", "libelle": "SENEGAL", regionId: 1, "continent": "AFRIQUE", "isCima": true },
+  { "code": "SLE", "libelle": "SIERRA LEONE", regionId: 1, "continent": "AFRIQUE", "isCima": false },
+  { "code": "TGO", "libelle": "TOGO", regionId: 1, "continent": "AFRIQUE", "isCima": true },
 
-    {indicatif:'227' ,  code:'NG',libelle:"Niger",regionId:1},
-    {indicatif:'228' ,  code:'TG',libelle:"Togo",regionId:1},
-    {indicatif:'229' ,  code:'BN',libelle:"Bénin",regionId:1},
-    {indicatif:'230' ,  code:'MU',libelle:"Maurice",regionId:1},
-    {indicatif:'231' ,  code:'LR',libelle:"Liberia",regionId:1},
-    {indicatif:'232' ,  code:'SL',libelle:"Sierra-Leone",regionId:1},
-      ////// EUROPE    
-    {indicatif:'30' ,  code:'GR',libelle:"Grèce",regionId:2},
-    {indicatif:'31' ,  code:'NL',libelle:"Pays-Bas",regionId:2},
-    {indicatif:'32' ,  code:'BE',libelle:"Belgique",regionId:2},
-    {indicatif:'34' ,  code:'SP',libelle:"Espagne",regionId:2},
-    {indicatif:'350' ,  code:'GI',libelle:"Gibraltar",regionId:2},
-    {indicatif:'351' ,  code:'PG',libelle:"Portugal",regionId:2},
-    {indicatif:'351' ,  code:'AC',libelle:"Açores",regionId:2},
-    {indicatif:'352' ,  code:'LX',libelle:"Luxembourg",regionId:2},
-    {indicatif:'353' ,  code:'IE',libelle:"Irlande",regionId:2},
-    
-  ];
+  // Afrique Centrale
+  { "code": "CAF", "libelle": "CENTRAFRIQUE",regionId: 5, "continent": "AFRIQUE", "isCima": true },
+  { "code": "CMR", "libelle": "CAMEROUN", regionId: 5, "continent": "AFRIQUE", "isCima": true },
+  { "code": "COD", "libelle": "REPUBLIQUE DEMOCRATIQUE DU CONGO", regionId: 5, "continent": "AFRIQUE", "isCima": false },
+  { "code": "COG", "libelle": "CONGO BRAZZAVILLE", regionId: 5, "continent": "AFRIQUE", "isCima": true },
+  { "code": "GAB", "libelle": "GABON", regionId: 5, "continent": "AFRIQUE", "isCima": true },
+  { "code": "GNQ", "libelle": "GUINEE EQUATORIALE", regionId: 5, "continent": "AFRIQUE", "isCima": true },
+  { "code": "STP", "libelle": "SAO TOME", regionId: 5, "continent": "AFRIQUE", "isCima": false },
+  { "code": "TCD", "libelle": "TCHAD", regionId: 5, "continent": "AFRIQUE", "isCima": true },
+
+  // Afrique de l'Est
+  { "code": "BDI", "libelle": "BURUNDI", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "COM", "libelle": "UNION DES COMORES", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "DJI", "libelle": "DJIBOUTI", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "ERI", "libelle": "ERYTHREE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "ETH", "libelle": "ETHIOPIE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "KEN", "libelle": "KENYA", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MDG", "libelle": "MADAGASCAR", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MUS", "libelle": "ILES MAURICE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MWI", "libelle": "MALAWI", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MOZ", "libelle": "MOZAMBIQUE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MYT", "libelle": "MAYOTTE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "REU", "libelle": "REUNION", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "RWA", "libelle": "RWANDA", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "SYC", "libelle": "SEYCHELLES", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "SOM", "libelle": "SOMALIE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "SSD", "libelle": "SOUDAN DU SUD", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "TZA", "libelle": "TANZANIE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "UGA", "libelle": "OUGANDA", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "ZMB", "libelle": "ZAMBIE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+  { "code": "ZWE", "libelle": "ZIMBABWE", regionId: 2, "continent": "AFRIQUE", "isCima": false },
+
+  // Afrique du Nord
+  { "code": "DZA", "libelle": "ALGERIE", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+  { "code": "EGY", "libelle": "EGYPTE", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+  { "code": "ESH", "libelle": "SAHARA OCCIDENTAL", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+  { "code": "LBY", "libelle": "LIBYE", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+  { "code": "MAR", "libelle": "MAROC", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+  { "code": "SDN", "libelle": "SOUDAN KHARTOUM", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+  { "code": "TUN", "libelle": "TUNISIE", regionId: 4, "continent": "AFRIQUE", "isCima": false },
+
+  // Afrique du Sud (Australe)
+  { "code": "AGO", "libelle": "ANGOLA", regionId: 3, "continent": "AFRIQUE", "isCima": false },
+  { "code": "BWA", "libelle": "BOTSWANA", regionId: 3, "continent": "AFRIQUE", "isCima": false },
+  { "code": "LSO", "libelle": "LESOTHO", regionId: 3, "continent": "AFRIQUE", "isCima": false },
+  { "code": "NAM", "libelle": "NAMIBIE", regionId: 3, "continent": "AFRIQUE", "isCima": false },
+  { "code": "SWZ", "libelle": "ESWATINI", regionId: 3, "continent": "AFRIQUE", "isCima": false },
+  { "code": "ZAF", "libelle": "AFRIQUE DU SUD", regionId: 3, "continent": "AFRIQUE", "isCima": false },
+
+  // ===== EUROPE =====
+  // Europe de l'Ouest
+  { "code": "AUT", "libelle": "AUTRICHE", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "BEL", "libelle": "BELGIQUE", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "CHE", "libelle": "SUISSE", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "DEU", "libelle": "ALLEMAGNE", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "FRA", "libelle": "FRANCE", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "LIE", "libelle": "LIECHTENSTEIN", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "LUX", "libelle": "LUXEMBOURG", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "MCO", "libelle": "MONACO", regionId: 6, "continent": "EUROPE", "isCima": false },
+  { "code": "NLD", "libelle": "PAYS-BAS", regionId: 6, "continent": "EUROPE", "isCima": false },
+
+  // Europe de l'Est
+  { "code": "BGR", "libelle": "BULGARIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "BLR", "libelle": "BIELORUSSIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "CZE", "libelle": "REPUBLIQUE TCHEQUE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "HUN", "libelle": "HONGRIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "MDA", "libelle": "MOLDAVIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "POL", "libelle": "POLOGNE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "ROU", "libelle": "ROUMANIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "RUS", "libelle": "RUSSIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "SVK", "libelle": "SLOVAQUIE", regionId: 7, "continent": "EUROPE", "isCima": false },
+  { "code": "UKR", "libelle": "UKRAINE", regionId: 7, "continent": "EUROPE", "isCima": false },
+
+  // Europe du Nord
+  { "code": "ALA", "libelle": "ILES ALAND", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "DNK", "libelle": "DANEMARK", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "EST", "libelle": "ESTONIE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "FIN", "libelle": "FINLANDE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "FRO", "libelle": "ILES FEROE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "GBR", "libelle": "ROYAUME-UNI", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "GGY", "libelle": "GUERNESEY", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "IMN", "libelle": "ILE DE MAN", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "IRL", "libelle": "IRLANDE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "ISL", "libelle": "ISLANDE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "JEY", "libelle": "JERSEY", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "LTU", "libelle": "LITUANIE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "LVA", "libelle": "LETTONIE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "NOR", "libelle": "NORVEGE", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "SJM", "libelle": "SVALBARD ET JAN MAYEN", regionId: 9, "continent": "EUROPE", "isCima": false },
+  { "code": "SWE", "libelle": "SUEDE", regionId: 9, "continent": "EUROPE", "isCima": false },
+
+  // Europe du Sud
+  { "code": "ALB", "libelle": "ALBANIE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "AND", "libelle": "ANDORRE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "BIH", "libelle": "BOSNIE-HERZEGOVINE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "ESP", "libelle": "ESPAGNE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "GIB", "libelle": "GIBRALTAR", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "GRC", "libelle": "GRECE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "HRV", "libelle": "CROATIE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "ITA", "libelle": "ITALIE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "MKD", "libelle": "MACEDOINE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "MLT", "libelle": "MALTE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "MNE", "libelle": "MONTENEGRO", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "PRT", "libelle": "PORTUGAL", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "SMR", "libelle": "SAINT-MARIN", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "SRB", "libelle": "SERBIE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "SVN", "libelle": "SLOVENIE", regionId: 8, "continent": "EUROPE", "isCima": false },
+  { "code": "VAT", "libelle": "SAINT-SIEGE (VATICAN)", regionId: 8, "continent": "EUROPE", "isCima": false },
+
+  // ===== ASIE =====
+  // Asie de l'Ouest
+  { "code": "AEA", "libelle": "EMIRATS ARABES UNIS - AJMAN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AED", "libelle": "EMIRATS ARABES UNIS - DUBAI", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AEF", "libelle": "EMIRATS ARABES UNIS - FUJAIRAH", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AEK", "libelle": "EMIRATS ARABES UNIS - RAS EL KHAIMAH", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AES", "libelle": "EMIRATS ARABES UNIS - SHARJAH", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AEZ", "libelle": "EMIRATS ARABES UNIS - ABOU DHABI", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "ARM", "libelle": "ARMENIE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AUQ", "libelle": "EMIRATS ARABES UNIS - OUMN AL QAIWAIN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "AZE", "libelle": "AZERBAIJAN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "BHR", "libelle": "BAHREIN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "CYP", "libelle": "CHYPRE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "GEO", "libelle": "GEORGIE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "IRN", "libelle": "IRAN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "IRQ", "libelle": "IRAQ", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "ISR", "libelle": "ISRAEL", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "JOR", "libelle": "JORDANIE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "KWT", "libelle": "KOWEIT", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "LBN", "libelle": "LIBAN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "OMN", "libelle": "OMAN", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "PSE", "libelle": "PALESTINE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "QAT", "libelle": "QATAR", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "SAU", "libelle": "ARABIE SAOUDITE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "SYR", "libelle": "SYRIE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "TUR", "libelle": "TURQUIE", regionId: 10, "continent": "ASIE", "isCima": false },
+  { "code": "YEM", "libelle": "YEMEN", regionId: 10, "continent": "ASIE", "isCima": false },
+
+  // Asie de l'Est
+  { "code": "CHN", "libelle": "CHINE", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "HKG", "libelle": "HONG KONG", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "JPN", "libelle": "JAPON", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "KOR", "libelle": "COREE DU SUD", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "MAC", "libelle": "MACAO", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "MNG", "libelle": "MONGOLIE", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "PRK", "libelle": "COREE DU NORD", regionId: 11, "continent": "ASIE", "isCima": false },
+  { "code": "TWN", "libelle": "TAIWAN", regionId: 11, "continent": "ASIE", "isCima": false },
+
+  // Asie du Sud
+  { "code": "AFG", "libelle": "AFGHANISTAN", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "BGD", "libelle": "BANGLADESH", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "BTN", "libelle": "BHOUTAN", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "IND", "libelle": "INDE", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "LKA", "libelle": "SRI LANKA", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "MDV", "libelle": "MALDIVES", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "NPL", "libelle": "NEPAL", regionId: 12, "continent": "ASIE", "isCima": false },
+  { "code": "PAK", "libelle": "PAKISTAN", regionId: 12, "continent": "ASIE", "isCima": false },
+
+  // Asie Centrale
+  { "code": "KAZ", "libelle": "KAZAKHSTAN", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "KGZ", "libelle": "KIRGHIZISTAN", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "TJK", "libelle": "TADJIKISTAN", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "TKM", "libelle": "TURKMENIE", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "UZB", "libelle": "OUZBEKISTAN", regionId: 13, "continent": "ASIE", "isCima": false },
+
+  // Asie du Sud-Est
+  { "code": "BRN", "libelle": "BRUNEI DARUSSALAM", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "IDN", "libelle": "INDONESIE", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "KHM", "libelle": "CAMBODGE", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "LAO", "libelle": "LAOS", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "MMR", "libelle": "MYANMAR", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "MYS", "libelle": "MALAISIE", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "PHL", "libelle": "PHILIPPINES", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "SGP", "libelle": "SINGAPOUR", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "THA", "libelle": "THAILANDE", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "TLS", "libelle": "TIMOR-LESTE", regionId: 13, "continent": "ASIE", "isCima": false },
+  { "code": "VNM", "libelle": "VIETNAM", regionId: 13, "continent": "ASIE", "isCima": false },
+
+  // ===== AMERIQUE =====
+  // Amérique du Nord
+  { "code": "BMU", "libelle": "BERMUDES", regionId: 14, "continent": "AMERIQUE", "isCima": false },
+  { "code": "CAN", "libelle": "CANADA", regionId: 14, "continent": "AMERIQUE", "isCima": false },
+  { "code": "GRL", "libelle": "GROENLAND", regionId: 14, "continent": "AMERIQUE", "isCima": false },
+  { "code": "MEX", "libelle": "MEXIQUE", regionId: 14, "continent": "AMERIQUE", "isCima": false },
+  { "code": "SPM", "libelle": "SAINT-PIERRE-ET-MIQUELON", regionId: 14, "continent": "AMERIQUE", "isCima": false },
+  { "code": "USA", "libelle": "ETATS UNIS", regionId: 14, "continent": "AMERIQUE", "isCima": false },
+
+  // Amérique Centrale et Caraïbes
+  { "code": "ABW", "libelle": "ARUBA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "AIA", "libelle": "ANGUILLA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "ATG", "libelle": "ANTIGUA-ET-BARBUDA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "BHS", "libelle": "BAHAMAS", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "BLM", "libelle": "SAINT-BARTHELEMY", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "BLZ", "libelle": "BELIZE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "BRB", "libelle": "BARBADE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "CRI", "libelle": "COSTA RICA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "CUB", "libelle": "CUBA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "CYM", "libelle": "ILES CAYMAN", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "DMA", "libelle": "DOMINIQUE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "DOM", "libelle": "REPUBLIQUE DOMINICAINE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "GLP", "libelle": "GUADELOUPE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "GRD", "libelle": "GRENADE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "GTM", "libelle": "GUATEMALA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "HND", "libelle": "HONDURAS", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "HTI", "libelle": "HAITI", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "JAM", "libelle": "JAMAIQUE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "KNA", "libelle": "SAINT-KITTS-ET-NEVIS", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "LCA", "libelle": "SAINTE-LUCIE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "MAF", "libelle": "SAINT-MARTIN (PARTIE FRANÇAISE)", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "MSR", "libelle": "MONTSERRAT", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "MTQ", "libelle": "MARTINIQUE", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "NIC", "libelle": "NICARAGUA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "PAN", "libelle": "PANAMA", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "PRI", "libelle": "PUERTO RICO", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "SLV", "libelle": "SALVADOR", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "SXM", "libelle": "SAINT-MARTIN (PARTIE NEERLANDAISE)", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "TCA", "libelle": "ILES TURQUES-ET-CAIQUES", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "TTO", "libelle": "TRINITE ET TOBAGO", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "VCT", "libelle": "SAINT-VINCENT-ET-LES GRENADINES", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "VGB", "libelle": "BRITISH VIRGIN ISLANDS", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+  { "code": "VIR", "libelle": "ILES VIERGES AMERICAINES", regionId: 15, "continent": "AMERIQUE", "isCima": false },
+
+  // Amérique du Sud
+  { "code": "ARG", "libelle": "ARGENTINE", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "BOL", "libelle": "BOLIVIE", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "BRA", "libelle": "BRESIL", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "CHL", "libelle": "CHILI", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "COL", "libelle": "COLOMBIE", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "ECU", "libelle": "EQUATEUR", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "FLK", "libelle": "ILES FALKLAND", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "GUF", "libelle": "GUYANE FRANCAISE", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "GUY", "libelle": "GUYANE", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "PER", "libelle": "PEROU", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "PRY", "libelle": "PARAGUAY", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "SUR", "libelle": "SURINAME", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "URY", "libelle": "URUGUAY", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+  { "code": "VEN", "libelle": "VENEZUELA", regionId: 16, "continent": "AMERIQUE", "isCima": false },
+
+  // ===== OCEANIE ET AUTRES TERRITOIRES =====
+  { "code": "ASM", "libelle": "SAMOA AMERICAINES", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "AUS", "libelle": "AUSTRALIE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "CCK", "libelle": "ILES COCOS", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "COK", "libelle": "ILES COOK", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "CXR", "libelle": "ILE CHRISTMAS", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "FJI", "libelle": "FIDJI", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "FSM", "libelle": "MICRONESIE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "GUM", "libelle": "GUAM", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "KIR", "libelle": "KIRIBATI", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "MHL", "libelle": "ILES MARSHALL", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "MNP", "libelle": "ILES MARIANNES DU NORD", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "NCL", "libelle": "NOUVELLE-CALEDONIE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "NFK", "libelle": "ILE NORFOLK", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "NIU", "libelle": "NIUE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "NRU", "libelle": "NAURU", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "NZN", "libelle": "NOUVELLE ZELANDE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "PCN", "libelle": "PITCAIRN", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "PLW", "libelle": "PALAU", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "PNG", "libelle": "PAPOUASIE-NOUVELLE-GUINEE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "PYF", "libelle": "POLYNESIE FRANCAISE", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "SLB", "libelle": "ILES SALOMON", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "TKL", "libelle": "TOKELAU", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "TON", "libelle": "TONGA", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "TUV", "libelle": "TUVALU", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "UMI", "libelle": "ILES MINEURES ELOIGNEES DES ETATS-UNIS", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "VUT", "libelle": "VANUATU", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "WLF", "libelle": "WALLIS-ET-FUTUNA", regionId: 17, "continent": "OCEANIE", "isCima": false },
+  { "code": "WSM", "libelle": "SAMOA", regionId: 17, "continent": "OCEANIE", "isCima": false }
+];
 
   for (const paysData of listePaysData) {
     const existing = await paysRepo.findOne({ where: { code: paysData.code } });

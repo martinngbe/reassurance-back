@@ -15,7 +15,7 @@ export class PaysController extends CrudController<Pays, CreatePaysDto, UpdatePa
   }
 
    // 2. Définir les champs textuels recherchables (exclut id, created_at, branche_id, etc.)
-    private readonly SEARCHABLE_FIELDS: (keyof Pays)[] = ['code', 'libelle', 'indicatif']; 
+    private readonly SEARCHABLE_FIELDS: (keyof Pays)[] = ['code', 'libelle', 'continent']; 
     // Ajoutez d'autres champs texte ici si votre entité en possède (ex: 'description')
   
     protected buildOptions(query: any): FindManyOptions<Pays> {

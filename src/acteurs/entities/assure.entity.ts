@@ -5,14 +5,36 @@ import { Pays } from 'src/referentiel/entities/pays.entity';
 
 @Entity('assure')
 export class Assure extends BaseEntity {
-  @Column()
+  @Column({nullable: true})
+  numero!: string;
+
+  @Column({nullable: true})
   sigle!: string;
 
-  @Column({ name: 'raison_sociale' })
+  @Column({ name: 'raison_sociale' ,nullable: true})
   raisonSociale!: string;
 
-  @Column()
+  @Column({nullable: true})
   email!: string;
+
+  @Column({nullable: true})
+  adresse!: string;
+
+  @Column({nullable: true})
+  localite!: string;
+
+  @Column({nullable: true})
+  quartier!: string;
+
+  @Column({nullable: true})
+  rue!: string;
+
+  @Column({nullable: true})
+  description!: string;
+
+  @Column({nullable: true})
+  telephone!: string;
+
   
   @ManyToOne(() => Pays, { nullable: true , eager:true})
   @JoinColumn({ name: 'pays_id' })
@@ -28,3 +50,4 @@ export class Assure extends BaseEntity {
   @Column({ name: 'domaine_activite_id', nullable: true })
   domaineActiviteId?: number;
 }
+

@@ -7,6 +7,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AppLogger } from './common/logger/app-logger.service';
 import { DataSource } from 'typeorm';
 import { seedAuth } from './auth/seed/seed-auth';
+import { seedActeur, seedAssure } from './acteurs/seed/seed-acteur';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { seedReferentiel } from './referentiel/seed/seed-refentiel';
 
@@ -55,6 +56,8 @@ async function bootstrap() {
     const dataSource = app.get(DataSource);
     await seedAuth(dataSource);
     await seedReferentiel(dataSource);
+    await seedAssure(dataSource)
+    await seedActeur(dataSource)
   }
 
 
@@ -66,3 +69,5 @@ async function bootstrap() {
   console.log(`🔐 Toutes les routes sont protégées sauf celles marquées @Public()`);
 }
 bootstrap();
+
+

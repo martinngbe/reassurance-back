@@ -18,6 +18,23 @@ export class CreateActeurDto {
   @IsOptional()
   email!: string;
 
+
+  @IsString()
+  @IsOptional()
+  adresse!: string;
+
+  @IsString()
+  @IsOptional()
+  telephone!: string;
+
+  @IsString()
+  @IsOptional()
+  siteweb!: string;
+
+  @IsString()
+  @IsOptional()
+  coordonneesBancaire!: string;
+
   @IsBoolean()
   @IsOptional()
   isCourtier?: boolean;

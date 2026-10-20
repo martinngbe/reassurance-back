@@ -10,6 +10,9 @@ export class Region extends BaseEntity {
   @Column()
   libelle!: string;
 
+  @Column()
+  continent!:string
+
   @OneToMany(() => Pays, (pays) => pays.region)
   pays!: Pays[];
 }
