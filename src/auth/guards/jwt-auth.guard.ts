@@ -6,37 +6,53 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { Observable } from 'rxjs';
+import { ClsService } from 'nestjs-cls';
+import { isObservable, lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+    private cls: ClsService, // ⬅️ AJOUT
+  ) {
     super();
   }
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    // 1. Vérifier si la route est marquée comme publique
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    // 2. Si publique, laisser passer sans validation JWT
     if (isPublic) {
       return true;
     }
 
-    // 3. Sinon, appliquer la validation JWT normale
-    return super.canActivate(context);
+    const canActivateResult = super.canActivate(context);
+
+    let result: boolean;
+    if (isObservable(canActivateResult)) {
+      result = await lastValueFrom(canActivateResult);
+    } else {
+      result = await canActivateResult;
+    }
+
+    if (result) {
+      const request = context.switchToHttp().getRequest();
+      const userId = request.user?.sub ?? request.user?.id;
+
+      if (userId) {
+        this.cls.set('userId', String(userId));
+      }
+    }
+
+    return result;
   }
 
   handleRequest(err: any, user: any, info: any) {
     if (err || !user) {
-      // 👇 AJOUTE CES LOGS pour voir la raison exacte du rejet par Passport
       console.error("❌ [JwtAuthGuard] Erreur :", err);
-      console.error("❌ [JwtAuthGuard] Info Passport :", info); 
+      console.error("❌ [JwtAuthGuard] Info Passport :", info);
       throw err || new UnauthorizedException('Token invalide ou expiré');
     }
     return user;

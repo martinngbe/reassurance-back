@@ -11,10 +11,15 @@ import { QuittanceCessionService } from './services/quittance-cession.service';
 import { QuittanceCessionController } from './controllers/quittance-cession.controller';
 import { EcheancePmdService } from '../flux-financier/services/echeance-pmd.service';
 import { EcheancePmdController } from '../flux-financier/controllers/echeance-pmd.controller';
-//import { QuittanceAnnulationService } from './services/quittance-annulation.service';
 import { ClsModule } from 'nestjs-cls';
 import { FluxFinancierModule } from 'src/flux-financier/flux-financier.module';
 import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
+import { TempQuittance } from './entities/temp-quittance.entity';
+import { TempQuittanceController } from './controllers/temp-quittance.controller';
+import { TempQuittanceService } from './services/temp-quittance.service';
+import { TempObjetAssure } from './entities/temp-objet-assure.entity';
+import { TempObjetAssureController } from './controllers/temp-objet-assure.controller';
+import { TempObjetAssureService } from './services/temp-objet-assure.service';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
@@ -30,11 +35,33 @@ import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
     TypeOrmModule.forFeature([
       Quittance, 
       QuittanceCession, 
-      ObjetAssure, 
-      EcheancePmd]),
+      ObjetAssure,      
+      EcheancePmd,
+      TempQuittance,
+      TempObjetAssure
+    ]),
   ],
-  controllers: [QuittanceController, QuittanceCessionController, EcheancePmdController],
-  providers: [QuittanceService, QuittanceCessionService, EcheancePmdService],
-  exports: [QuittanceService, QuittanceCessionService, EcheancePmdService],
+  controllers: [
+    QuittanceController, 
+    QuittanceCessionController, 
+    EcheancePmdController,
+    TempQuittanceController,
+    TempObjetAssureController
+    
+  ],
+  providers: [
+    QuittanceService, 
+    QuittanceCessionService, 
+    EcheancePmdService,
+    TempQuittanceService,
+    TempObjetAssureService
+  ],
+  exports: [
+    QuittanceService, 
+    QuittanceCessionService, 
+    EcheancePmdService,
+    TempQuittanceService,
+    TempObjetAssureService
+  ],
 })
 export class QuittancesModule {}

@@ -11,7 +11,7 @@ import { Assure } from '../../acteurs/entities/assure.entity';
  */
 @Entity('police')
 export class Police extends BaseEntity {
-  @Column()
+  @Column({nullable:true})
   numero!: string;
 
   @Column({ name: 'is_cession', default: false })
@@ -19,6 +19,12 @@ export class Police extends BaseEntity {
 
   @Column({ name: 'is_reconduction_tacite', default: false })
   isReconductionTacite: boolean=false;
+
+  @Column({ name: 'is_iard', default: false })
+  isIard: boolean=false; // IARD | VIE 
+
+  @Column({ name: 'is_fac_pur', default: false })
+  isFacPure: boolean=false; // FAC PURE | FAC XLS 
 
   // Relation SousBranche
   @ManyToOne(() => SousBranche)

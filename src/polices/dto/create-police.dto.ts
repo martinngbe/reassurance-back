@@ -2,8 +2,8 @@ import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-valida
 
 export class CreatePoliceDto {
   @IsString()
-  @IsNotEmpty()
-  numero: string;
+  @IsOptional()
+  numero!: string;
 
   @IsBoolean()
   @IsOptional()
@@ -13,16 +13,27 @@ export class CreatePoliceDto {
   @IsOptional()
   isReconductionTacite?: boolean;
 
-  @IsInt()
-  idSousBranche: number;
+  @IsBoolean()
+  @IsOptional()
+  isIard?: boolean // IARD | VIE 
+  
+  @IsBoolean()
+  @IsOptional()
+  isFacPure?: boolean // FAC PURE | FAC XLS 
+
 
   @IsInt()
-  idActeurCedante: number;
+  @IsNotEmpty()
+  sousBrancheId!: number;
+
+  @IsInt()
+  acteurCedanteId!: number;
 
   @IsInt()
   @IsOptional()
-  idActeurCourtier?: number;
+  acteurCourtierId?: number;
 
   @IsInt()
-  idAssure: number;
+  @IsOptional()
+  assureId!: number;
 }

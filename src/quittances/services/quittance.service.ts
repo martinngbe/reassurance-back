@@ -18,50 +18,7 @@ export class QuittanceService  extends CrudService<Quittance>{
     private readonly echeancePmdService: EcheancePmdService,
     private readonly compteService: CompteTraiteService
   ) {super(quittanceRepository);}
-
-  // findAll(): Promise<Quittance[]> {
-  //   return this.quittanceRepository.find({
-  //     relations: ['police', 'acteur', 'mouvement', 'bordereaux', 'echeancesPmd', 'notesDebitCredit'],
-  //   });
-  // }
-
-  // findOne(id: number): Promise<Quittance> {
-  //   return this.quittanceRepository.findOneOrFail({
-  //     where: { id },
-  //     relations: [
-  //       'police', 'police.branche', 'police.sousBranche',
-  //       'acteur',  'mouvement',
-  //       'bordereaux', 'echeancesPmd', 'notesDebitCredit',
-  //       'quittancesCession', 'objetsAssures',
-  //     ],
-  //   });
-  // }
-
-  // findByPolice(policeId: number): Promise<Quittance[]> {
-  //   return this.quittanceRepository.find({
-  //     where: { policeId },
-  //     relations: ['police', 'acteur'],
-  //   });
-  // }
-
-  // async create(quittance: Partial<Quittance>): Promise<Quittance> {
-  //   const newQuittance = this.quittanceRepository.create(quittance);
-  //   return this.quittanceRepository.save(newQuittance);
-  // }
-
-  // async update(id: number, quittance: Partial<Quittance>): Promise<Quittance> {
-  //   const existing = await this.findOne(id);
-  //   if (!existing) throw new NotFoundException(failure(`Quittance ${id} not found`));
-  //   Object.assign(existing, quittance);
-  //   return this.quittanceRepository.save(existing);
-  // }
-
-  // async remove(id: number): Promise<void> {
-  //   const result = await this.quittanceRepository.delete(id);
-  //   if (result.affected === 0) throw new NotFoundException(  failure(`Quittance ${id} not found`));
-  // }
-
-  /*
+/*
   /////////////////////////////////////
   @Transactional()
   async annuler(id: number): Promise<Quittance> {

@@ -38,7 +38,7 @@ import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
  */
 @Entity('quittance')
 export class Quittance extends BaseEntity {
-  @Column()
+  @Column({nullable:true})
   numero!: string;
 
   @ManyToOne(() => Mouvement)

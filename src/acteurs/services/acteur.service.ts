@@ -19,12 +19,7 @@ export class ActeurService extends CrudService<Acteur> {
      */
     async update(id: number, dto: DeepPartial<Acteur> | UpdateActeurDto): Promise<Acteur> {
      
-     
-      console.log("________________________________");
-      console.log("ActeurService.update");
-      console.log("id:", id);
-      console.log("dto:", dto);
-      console.log("________________________________");   
+      
       // 1. Vérifier que l'entité existe
       const existingEntity = await this.repository.findOne({ where: { id } });
       if (!existingEntity) {

@@ -11,16 +11,19 @@ import {
 export class CreateQuittanceDto {
   @IsString()
   @IsNotEmpty()
-  numero: string;
+  numero!: string;
 
   @IsInt()
-  idMouvement: number;
+  @IsNotEmpty()
+  mouvementId!: number;
 
   @IsInt()
-  idPolice: number;
+  @IsNotEmpty()
+  policeId!: number;
 
   @IsInt()
-  deviseId: number;
+  @IsNotEmpty()
+  deviseId!: number;
 
   @IsBoolean()
   @IsOptional()
@@ -35,70 +38,72 @@ export class CreateQuittanceDto {
   isFac?: boolean;
 
   @IsDateString()
-  dateEmission: string;
+  dateEmission!: string;
 
   @IsDateString()
-  dateEffet: string;
+  dateEffet!: string;
 
   @IsDateString()
-  dateEcheance: string;
+  dateEcheance!: string;
 
   @IsNumber()
-  coursDevise: number;
+  @IsNotEmpty()
+  coursDevise: number=1;
 
   @IsInt()
-  avisEcheance: number;
+  @IsNotEmpty()
+  avisEcheance!: number;
 
   @IsNumber()
-  capitaux: number;
+  capitaux: number=0;
 
   @IsNumber()
-  limiteCapitauxImpliques: number;
+  limiteCapitauxImpliques: number=0;
 
   @IsNumber()
-  ici: number;
+  ici: number=0;
 
   @IsNumber()
-  smp: number;
+  smp: number=0;
 
   @IsNumber()
-  limite: number;
+  limite: number=0;
 
   @IsNumber()
-  retention: number;
+  retention: number=0;
 
   @IsNumber()
-  conservation: number;
+  conservation: number=0;
 
   @IsNumber()
-  capacite: number;
+  capacite: number=0;
 
   @IsNumber()
-  estimationPrime: number;
+  estimationPrime: number=0;
 
   @IsNumber()
-  tauxCedante: number;
+  tauxCedante: number=0;
 
   @IsNumber()
-  tauxAccepte: number;
+  tauxAccepte: number=0;
 
   @IsNumber()
-  tauxCommission: number;
+  tauxCommission: number=0;
 
   @IsNumber()
-  taxeSurCommission: number;
+  taxeSurCommission: number=0;
 
   @IsNumber()
-  primeBrute: number;
+  primeBrute: number=0;
 
   @IsNumber()
-  primeNette: number;
+  primeNette: number=0;
 
   @IsNumber()
-  taxeSurPrime: number;
+  taxeSurPrime: number=0;
 
   @IsInt()
-  nombreEcheancePmd: number;
+  nombreEcheancePmd: number=0;
 
   @IsNumber()
   @IsOptional()

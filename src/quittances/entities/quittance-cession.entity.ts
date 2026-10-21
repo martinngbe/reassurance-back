@@ -31,7 +31,7 @@ export class QuittanceCession extends BaseEntity {
 
   @ManyToOne(() => NatureCession)
   @JoinColumn({ name: 'nature_cession_id' })
-  natureCession!: NatureCession;
+  natureCession!: NatureCession; // LEGAL  CONVENTIONNELLE
 
   @Column({ name: 'nature_cession_id' })
   natureCessionId!: number;

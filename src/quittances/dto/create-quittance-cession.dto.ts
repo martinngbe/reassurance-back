@@ -1,17 +1,20 @@
-import { IsBoolean, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsNumber, IsNotEmpty,IsOptional, IsString } from 'class-validator';
 
 export class CreateQuittanceCessionDto {
   @IsInt()
-  quittanceId: number;
+  @IsNotEmpty()
+  quittanceId!: number;
 
   @IsInt()
-  acteurId: number;
+  @IsNotEmpty()
+  acteurId!: number;
 
   @IsInt()
-  natureCessionId: number;
+  @IsNotEmpty()
+  natureCessionId!: number;
 
   @IsNumber()
-  taux: number;
+  taux: number=0;
 
   @IsBoolean()
   @IsOptional()

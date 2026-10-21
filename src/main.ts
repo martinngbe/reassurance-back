@@ -8,19 +8,18 @@ import { AppLogger } from './common/logger/app-logger.service';
 import { DataSource } from 'typeorm';
 import { seedAuth } from './auth/seed/seed-auth';
 import { seedActeur, seedAssure } from './acteurs/seed/seed-acteur';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { seedReferentiel } from './referentiel/seed/seed-refentiel';
-
+import { ClsService } from 'nestjs-cls';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    bufferLogs: true, // Important pour que les logs de démarrage soient capturés
+    bufferLogs: true,
   });
-   // On remplace le logger interne de NestJS par le nôtre
-  app.useLogger(app.get(AppLogger)); 
-  // 1. Enregistrer l'intercepteur globalement
+
+  app.useLogger(app.get(AppLogger));
+
   app.useGlobalInterceptors(new FormatResponseInterceptor());
-  // 2. Enregistrer le filtre d'exception globalement
   app.useGlobalFilters(new AllExceptionsFilter());
 
   app.useGlobalPipes(
@@ -30,15 +29,13 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  // CORS
+
   app.enableCors();
-  // ⬇️ Récupérez le Reflector injecté par NestJS
+
   const reflector = app.get(Reflector);
 
-  // ⬇️ Passez-le au constructeur du Guard
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
-
+  app.useGlobalGuards(new JwtAuthGuard(reflector, app.get(ClsService)));
 
   const config = new DocumentBuilder()
     .setTitle('Réassurance Back API')
@@ -47,27 +44,23 @@ async function bootstrap() {
     )
     .setVersion('0.1.0')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-
- // Seed auth au démarrage (uniquement en développement)
   if (process.env.NODE_ENV !== 'production') {
     const dataSource = app.get(DataSource);
     await seedAuth(dataSource);
     await seedReferentiel(dataSource);
-    await seedAssure(dataSource)
-    await seedActeur(dataSource)
+    await seedAssure(dataSource);
+    await seedActeur(dataSource);
   }
-
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  // eslint-disable-next-line no-console
+
   console.log(`reassurance-back démarré sur http://localhost:${port} (docs: /docs)`);
   console.log(`🚀 Application running on port ${port}`);
   console.log(`🔐 Toutes les routes sont protégées sauf celles marquées @Public()`);
 }
 bootstrap();
-
-
