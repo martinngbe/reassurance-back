@@ -21,6 +21,7 @@ import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
 import { Acteur } from 'src/acteurs/entities/acteur.entity';
 import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 import { TempObjetAssure } from './temp-objet-assure.entity';
+import { TempPolice } from 'src/polices/entities/temp-police.entity';
 
 /**
  * Quittance d'acceptation ou de cession de réassurance (proportionnelle,
@@ -45,13 +46,12 @@ export class TempQuittance extends BaseEntity {
   @ManyToOne(() => Mouvement)
   @JoinColumn({ name: 'mouvement_id' })
   mouvement!: Mouvement;
-
   @Column({ name: 'mouvement_id' })
   mouvementId!: number;
 
-  @ManyToOne(() => Police)
+  @ManyToOne(() => TempPolice)
   @JoinColumn({ name: 'police_id' })
-  police!: Police;
+  police!: TempPolice;
 
   @Column({ name: 'police_id' })
   policeId!: number;

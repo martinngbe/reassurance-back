@@ -3,6 +3,7 @@ import { BaseEntity } from '../../common/entities/base.entity';
 import { SousBranche } from '../../referentiel/entities/sous-branche.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { Assure } from '../../acteurs/entities/assure.entity';
+import { NatureOffre } from 'src/referentiel/entities/nature-offre.entity';
 
 /**
  * Police d'assurance cédée en réassurance (acceptation ou cession selon
@@ -22,13 +23,16 @@ export class Police extends BaseEntity {
 
   @Column({ name: 'is_iard', default: false })
   isIard: boolean=false; // IARD | VIE 
-
-  @Column({ name: 'is_fac_pur', default: false })
-  isFacPure: boolean=false; // FAC PURE | FAC XLS 
-
+  
   // Relation SousBranche
+  @ManyToOne(() => NatureOffre)
+  @JoinColumn({ name: 'nature_offre_id' })
+  natureOffre!: NatureOffre;
+  @Column({ name: 'nature_offre_id' })
+  natureOffreId!: number;
+
   @ManyToOne(() => SousBranche)
-  @JoinColumn({ name: 'id_sous_branche' })
+  @JoinColumn({ name: 'sous_branche_id' })
   sousBranche!: SousBranche;
   @Column({ name: 'sous_branche_id' })
   sousBrancheId!: number;

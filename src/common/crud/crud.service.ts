@@ -87,16 +87,46 @@ export abstract class CrudService<T extends { id: number }> {
   /**
    * Met à jour une entité existante.
    */ 
+
+    /**
+   * Met à jour une entité existante.
+   */
   @LogMethod()
   async update(id: number, dto: DeepPartial<T>): Promise<T> {
+    const entity = await this.repository.findOne({
+      where: { id } as FindOptionsWhere<T>
+    });
+
+    if (!entity) {
+      throw new NotFoundException(failure(`Entity with id ${id} not found`));
+    }
+
+    // 🚨 FIX CRUCIAL : Supprimer les relations chargées (ex: eager: true) de l'entité.
+    // Sinon, TypeORM donne la priorité à l'objet relation (ex: sousBranche: {id: 11}) 
+    // par rapport à la clé étrangère (ex: sousBrancheId: 14) lors du save(), 
+    // ce qui empêche la mise à jour de la FK en base.
+    this.repository.metadata.relations.forEach(relation => {
+      delete entity[relation.propertyName];
+    });
+
+    const merged = this.repository.merge(entity, dto);
+    return this.repository.save(merged);
+  }
+  /*@LogMethod()
+  async update(id: number, dto: DeepPartial<T>): Promise<T> {
     
-    console.log("CrudService.update");
-    const entity = await this.findOne(id);
+    console.log(" -- CrudService.update --");
+    //const entity = await this.findOne(id);
+     const entity = await this.repository.findOne({
+        where: { id } as FindOptionsWhere<T>});
     console.log("________________________________");
     console.log("entity:",entity);
     console.log("id:", id);
     console.log("dto:", dto);
     console.log("________________________________");
+    if (!entity) {
+      throw new NotFoundException(failure(`Entity with id ${id} not found`) );
+    }
     const merged = this.repository.merge(entity, dto);
     console.log("merged:",merged);
     console.log("________________________________");
@@ -105,6 +135,7 @@ export abstract class CrudService<T extends { id: number }> {
     console.log("________________________________");    
     return saveResult;
   }
+  */
 
   /**
    * Supprime une entité.

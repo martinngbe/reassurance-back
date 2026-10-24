@@ -24,7 +24,27 @@ export class TempPoliceController extends CrudController<TempPolice, CreateTempP
               where: {},
               order: {}, 
             };
-          
+            const baseSort: any = { createdAt: 'DESC'  };// Tri par défaut
+            if( query.sortKey && query.sortDirection){
+                options.order ={ [query.sortKey]: `${query.sortDirection}`}
+            }else {
+              options.order = baseSort
+            }   
+
+            // filtre sur un champs spécifique; Tableau de conditions
+            const baseWhere: any = {};
+            if (query.acteurId) {
+              baseWhere.acteur = { id: parseInt(query.acteurId, 10) }; 
+            }
+            if (query.assureId) {
+              baseWhere.assure = { id: parseInt(query.assureId, 10) }; 
+            }
+            
+            options.where = baseWhere
+
+            console.log("options:",options)
+            console.log("_____________________________________")
+            
             return options;
       }
 }

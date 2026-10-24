@@ -24,24 +24,32 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
               where: {},
               order: {}, 
             };
-           /* const baseSort: any = { nom: 'ASC' , prenoms:'ASC' };// Tri par défaut
+      /*      const baseSort: any = { createdAt: 'desc'  };// Tri par défaut
             if( query.sortKey && query.sortDirection){
                 options.order ={ [query.sortKey]: `${query.sortDirection}`}
             }else {
               options.order = baseSort
             }   
 
-            // filtre sur un champs spécifique; Tableau de conditions
+            //  Filtres exacts (AND)
             const baseWhere: any = {};
-            if (query.acteurId) {
-              baseWhere.acteur = { id: parseInt(query.acteurId, 10) }; 
-            }
+            if (query.natureOffreId) {
+               baseWhere.natureOffre = { id: parseInt(query.natureOffreId, 10) };
+               // Note: Si votre entité utilise une colonne directe et non une relation, utilisez :
+               // baseWhere.brancheId = parseInt(query.brancheId, 10);
+             }
+             if (query.isFacultative) {
+               baseWhere.natureOffre = { isFacultative: query.isFacultative };
+               // Note: Si votre entité utilise une colonne directe et non une relation, utilisez :
+               // baseWhere.brancheId = parseInt(query.brancheId, 10);
+             }
+  
             
             options.where = baseWhere
 
             console.log("options:",options)
             console.log("_____________________________________")
-            */
+          */
             return options;
       }
 }

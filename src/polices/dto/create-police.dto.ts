@@ -17,9 +17,9 @@ export class CreatePoliceDto {
   @IsOptional()
   isIard?: boolean // IARD | VIE 
   
-  @IsBoolean()
-  @IsOptional()
-  isFacPure?: boolean // FAC PURE | FAC XLS 
+  @IsInt()
+  @IsNotEmpty()
+  natureOffreId?: number // FAC PURE | FAC XLS 
 
 
   @IsInt()

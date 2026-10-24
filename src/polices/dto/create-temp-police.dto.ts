@@ -13,9 +13,15 @@ export class CreateTempPoliceDto {
   @IsOptional()
   isReconductionTacite?: boolean;
 
+
   @IsInt()
   @IsNotEmpty()
-  idSousBranche!: number;
+  natureOffreId?: number // FAC PURE | FAC XLS 
+
+
+  @IsInt()
+  @IsNotEmpty()
+  sousBrancheId!: number;
 
   @IsInt()
   acteurCedanteId!: number;

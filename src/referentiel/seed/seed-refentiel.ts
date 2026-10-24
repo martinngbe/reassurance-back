@@ -5,6 +5,9 @@ import { Region } from '../entities/region.entity';
 import { Pays } from '../entities/pays.entity';
 import { Devise } from '../entities/devise.entity';
 import { DomaineActivite } from '../entities/domaine-activite.entity';
+import { Mouvement } from '../entities/mouvement.entity';
+import { NatureCession } from '../entities/nature-cession.entity';
+import { NatureOffre } from '../entities/nature-offre.entity';
 
 export async function seedReferentiel(dataSource: DataSource): Promise<void> {
    
@@ -12,6 +15,9 @@ export async function seedReferentiel(dataSource: DataSource): Promise<void> {
    await seedRegion(dataSource);
    await seedDevise(dataSource)
    await seedDomaineActivite(dataSource)
+   await seedMouvement(dataSource)
+   await seedNatureCession(dataSource)
+   await seedNatureOffre(dataSource)
   console.log('✅ Referentiel seed terminé avec succès (Idempotent)');
 }
 // //////////////////////////////////////////////////////
@@ -627,4 +633,125 @@ async function seedDomaineActivite(dataSource: DataSource): Promise<void>{
     }
   }
 }
+// //////////////////////////////////////////////////////
+//   MOUVEMENT 
+// //////////////////////////////////////////////////////
+async function seedMouvement(dataSource: DataSource): Promise<void>{
+   const mouvementRepo = dataSource.getRepository(Mouvement);
+   
+    // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
+  const mouvementsData =  [
+        { code: "AFN",      libelle: "AFFAIRE NOUVELLE"},
+        { code: "MOD",      libelle: "MODIFICATION"},
+        { code: "ANL",      libelle: "ANNULATION"},
+    ]
+    console.log('🔄 La liste des mouvements ....');
+  for (const mouvementData of mouvementsData) {
+    const existing = await mouvementRepo.findOne({ where: { code: mouvementData.code } });
+    if (!existing) {
+      await mouvementRepo.save(mouvementRepo.create(mouvementData));
+    }
+  }
+}
+// //////////////////////////////////////////////////////
+//   NATURE CESSION 
+// //////////////////////////////////////////////////////
+async function seedNatureCession(dataSource: DataSource): Promise<void>{
+   const natureCessionRepo = dataSource.getRepository(NatureCession);
+   
+    // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
+    //Légale, Conventionnelle, Facultative
+  const natureCessionsData =  [
+        { code: "LEG",      libelle: "LEGALE"},
+        { code: "CON",      libelle: "CONVENTIONNELLE"},
+        { code: "FAC",      libelle: "FACULTATIVE"},
+    ]
+    console.log('🔄 La liste des natures cessions ....');
+  for (const natureCessionData of natureCessionsData) {
+    const existing = await natureCessionRepo.findOne({ where: { code: natureCessionData.code } });
+    if (!existing) {
+      await natureCessionRepo.save(natureCessionRepo.create(natureCessionData));
+    }
+  }
+}
+// //////////////////////////////////////////////////////
+//   NATURE OFFRE 
+// //////////////////////////////////////////////////////
+async function seedNatureOffre(dataSource: DataSource): Promise<void>{
+   const natureOffreRepo = dataSource.getRepository(NatureOffre);
+   
+    // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
+  const natureOffresData =  [
+         {  libelle: "FACULTATIVE PURE",
+            code: "FAC PURE",
+            isFacultative: true,
+            isProportionnelle: true
+        },
+        { 
+            libelle: "FACULTATIVE EXCESS",
+            code: "FAC XS",
+            isFacultative: true,
+            isProportionnelle: false
+        },
+        {
+            libelle: "EXCEDENT DE PLEIN",
+            code: "EDP",
+            isFacultative: false,
+            isProportionnelle: true
+        },
+        {
+            libelle: "FACULTATIVE OBLIGATOIRE",
+            code: "FACOB",
+            isFacultative: true,
+            isFacObligatoire: true,
+            isProportionnelle: true
+        },
+        { 
+            libelle: "QUOTE PART",
+            code: "QP",
+           
+            isFacultative: false,
+            isProportionnelle: true
+        },
+        {
+            libelle: "EXCESS AGGREGATE",
+            code: "XS AGGREGATE",
+            isFacultative: false,
+            isProportionnelle: false
+        },
+        {
+            libelle: "EXCEDENT DE SINISTRE PAR EVENEMENT",
+            code: "XS\/EVENEMENT",
+            isFacultative: false,
+            isProportionnelle: false
+        },
+        {
+            libelle: "EXCEDENT DE PERTE ANNUELLE",
+            code: "XS\/PERTE ANNUELLE",
+            isFacultative: false,
+            isProportionnelle: false
+        },
+        {
+            libelle: "EXCEDENT DE SINISTRE PAR RISQUE",
+            code: "XS\/RISQUE",
+            isFacultative: false,
+            isProportionnelle: false
+        },
+        {
+            libelle: "EXCEDENT DE SINISTRE PAR RISQUE ET PAR EVENEMENT",
+            code: "XS\/RISQUE ET EVENEMENT",
+            isFacultative: false,
+            isProportionnelle: false
+        }
+    ]
+    console.log('🔄 La liste des natures offres ....');
+  for (const natureOffreData of natureOffresData) {
+    const existing = await natureOffreRepo.findOne({ where: { code: natureOffreData.code } });
+    if (!existing) {
+      await natureOffreRepo.save(natureOffreRepo.create(natureOffreData));
+    }
+  }
+}
+
+
 

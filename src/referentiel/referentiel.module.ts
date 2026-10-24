@@ -33,6 +33,9 @@ import { ClsModule } from 'nestjs-cls';
 import { Devise } from './entities/devise.entity';
 import { DeviseController } from './controllers/devise.controller';
 import { DeviseService } from './services/devise.service';
+import { NatureOffre } from './entities/nature-offre.entity';
+import { NatureOffreController } from './controllers/nature-offre.controller';
+import { NatureOffreService } from './services/nature-offre.service';
 
 /**
  * Regroupe les tables de référence communes ("Référentiel" et une partie
@@ -51,6 +54,7 @@ import { DeviseService } from './services/devise.service';
       Mouvement,
       CompteType,
       NatureCession,
+      NatureOffre,
       Region,
       Pays,
     ]),
@@ -64,6 +68,7 @@ import { DeviseService } from './services/devise.service';
     MouvementController,
     CompteTypeController,
     NatureCessionController,
+    NatureOffreController,
     RegionController,
     PaysController,
   ],
@@ -76,6 +81,7 @@ import { DeviseService } from './services/devise.service';
     MouvementService,
     CompteTypeService,
     NatureCessionService,
+    NatureOffreService,
     RegionService,
     PaysService,
   ],
@@ -88,6 +94,7 @@ import { DeviseService } from './services/devise.service';
     MouvementService,
     CompteTypeService,
     NatureCessionService,
+    NatureOffreService,
     RegionService,
     PaysService,
   ],
