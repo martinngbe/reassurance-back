@@ -112,30 +112,6 @@ export abstract class CrudService<T extends { id: number }> {
     const merged = this.repository.merge(entity, dto);
     return this.repository.save(merged);
   }
-  /*@LogMethod()
-  async update(id: number, dto: DeepPartial<T>): Promise<T> {
-    
-    console.log(" -- CrudService.update --");
-    //const entity = await this.findOne(id);
-     const entity = await this.repository.findOne({
-        where: { id } as FindOptionsWhere<T>});
-    console.log("________________________________");
-    console.log("entity:",entity);
-    console.log("id:", id);
-    console.log("dto:", dto);
-    console.log("________________________________");
-    if (!entity) {
-      throw new NotFoundException(failure(`Entity with id ${id} not found`) );
-    }
-    const merged = this.repository.merge(entity, dto);
-    console.log("merged:",merged);
-    console.log("________________________________");
-    const saveResult = await this.repository.save(merged);
-    console.log("saveResult:",saveResult);
-    console.log("________________________________");    
-    return saveResult;
-  }
-  */
 
   /**
    * Supprime une entité.

@@ -15,12 +15,28 @@ import { TempQuittance } from 'src/quittances/entities/temp-quittance.entity';
 export class TempPolice extends BaseEntity {
   @Column({nullable:true})
   numero!: string;
-
+/* TAF Info contenue dans la entite Police
   @Column({ name: 'is_cession', default: false })
   isCession: boolean=false;
 
+  @Column({ name: 'is_facultative', default: false })
+  isFacultative: boolean=false;  
+ 
+  @Column({ name: 'is_iard', default: false })
+  isIard: boolean=false; // IARD | VIE 
+
   @Column({ name: 'is_reconduction_tacite', default: false })
   isReconductionTacite: boolean=false;
+*/
+
+    // Relation Quittance
+  // On charge automatiquement toutes les tempsQuittance de la police
+  // On se rassure qu'il n'y aura pas plus de un. car saisie temporaire.
+  // la table sera vidée à la fin de la saisie
+  @OneToMany(() => TempQuittance, (quittance) => quittance.police , {eager: true,})
+  quittances!: TempQuittance[];
+
+
 
   @ManyToOne(() => NatureOffre , {eager:true})
   @JoinColumn({ name: 'nature_offre_id'  })
@@ -36,18 +52,8 @@ export class TempPolice extends BaseEntity {
   @Column({ name: 'sous_branche_id' })
   sousBrancheId!: number;
 
+
   // Relation Cedente
-
-  // On charge automatiquement toutes les tempsQuittance de la police
-  // On se rassure qu'il n'y aura pas plus de un. car saisie temporaire.
-  // la table sera vidée à la fin de la saisie
-  @OneToMany(() => TempQuittance, (quittance) => quittance.police , {
-  eager: true,
-})
-  quittances!: TempQuittance[];
-
-
-
   @ManyToOne(() => Acteur, {eager:true})
   @JoinColumn({ name: 'acteur_cedante_id' })
   acteurCedante!: Acteur;

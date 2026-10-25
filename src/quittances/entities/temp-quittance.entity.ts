@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -22,6 +23,7 @@ import { Acteur } from 'src/acteurs/entities/acteur.entity';
 import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 import { TempObjetAssure } from './temp-objet-assure.entity';
 import { TempPolice } from 'src/polices/entities/temp-police.entity';
+import { Devise } from 'src/referentiel/entities/devise.entity';
 
 /**
  * Quittance d'acceptation ou de cession de réassurance (proportionnelle,
@@ -43,7 +45,7 @@ export class TempQuittance extends BaseEntity {
   @Column({nullable:true})
   numero!: string;
 
-  @ManyToOne(() => Mouvement)
+  @ManyToOne(() => Mouvement , {eager:true})
   @JoinColumn({ name: 'mouvement_id' })
   mouvement!: Mouvement;
   @Column({ name: 'mouvement_id' })
@@ -52,34 +54,44 @@ export class TempQuittance extends BaseEntity {
   @ManyToOne(() => TempPolice)
   @JoinColumn({ name: 'police_id' })
   police!: TempPolice;
-
   @Column({ name: 'police_id' })
   policeId!: number;
 
+  @ManyToOne(() => Devise , {eager:true})
+  @JoinColumn({ name: 'devise_id' })
+  devise!: Devise;
   @Column({ name: 'devise_id' })
   deviseId!: number;
 
   @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
   coursDevise: number = 0;
+/*
   // True si cession, false si acceptation
+  // Provient de Police
   @Column({ name: 'is_cession', default: false })
   isCession: boolean = false;
 
   // True si proportionnel, false si non proportionnel
+  // Provient de Police.NatureOffre
+  @Column({ name: 'is_facultative', default: false })
+  isFacultative: boolean = false;
+
+  // True si proportionnel, false si non proportionnel
+  // Provient de Police.natureOffre
   @Column({ name: 'is_proportionnel', default: true })
   isProportionnel: boolean = false;
 
   // True si affaire facultative (FAC)
   @Column({ name: 'is_fac', default: false })
   isFac: boolean = false;
-
-  @Column({ name: 'date_emission', type: 'date' })
+*/
+  @CreateDateColumn({ name: 'date_emission' })
   dateEmission!: Date;
 
-  @Column({ name: 'date_effet', type: 'date' })
+  @Column({ name: 'date_effet', type: 'date' , nullable:true})
   dateEffet?: Date;
 
-  @Column({ name: 'date_echeance', type: 'date' })
+  @Column({ name: 'date_echeance', type: 'date' , nullable: true})
   dateEcheance?: Date;
 
 
@@ -92,12 +104,12 @@ export class TempQuittance extends BaseEntity {
   @Column({ name: 'capitaux', type: 'decimal', precision: 18, scale: 5 })
   capitaux: number = 0;
 
-  @Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 5 })
-  limiteCapitauxImpliques: number = 0;
+  //@Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 5 })
+  //limiteCapitauxImpliques: number = 0;
 
   // Sinistre Ici (Intérêt le plus important)
-  @Column({ name: 'ici', type: 'decimal', precision: 18, scale: 5 })
-  ici: number = 0;
+  @Column({ name: 'lci', type: 'decimal', precision: 18, scale: 5 })
+  lci: number = 0;
 
   // Sinistre Maximum Possible
   @Column({ name: 'smp', type: 'decimal', precision: 18, scale: 5 })
@@ -166,28 +178,6 @@ export class TempQuittance extends BaseEntity {
   // Sinistres provisionnés
   @Column({ name: 'aliment', type: 'decimal', precision: 18, scale: 5, default: 0 })
   aliment: number = 0;
-
-
-  // ===============================================
-  // RELATIONS AVEC ACTEUR
-  // ===============================================
-   // Relation Cedente
-    @ManyToOne(() => Acteur)
-    @JoinColumn({ name: 'acteur_cedante_id' })
-    acteurCedante!: Acteur;
-    @Column({ name: 'acteur_cedante_id' })
-    acteurCedanteId!: number;
-  
-  // Relation courtier
-    @ManyToOne(() => Acteur, { nullable: true })
-    @JoinColumn({ name: 'acteur_courtier_id' })
-    acteurCourtier?: Acteur;
-    @Column({ name: 'acteur_courtier_id', nullable: true })
-    acteurCourtierId?: number;
-  
-
-
-
 
 
   /**

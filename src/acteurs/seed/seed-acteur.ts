@@ -149,6 +149,17 @@ export async  function seedActeur(dataSource: DataSource): Promise<void>{
   // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
   const acteursData = [
   {
+    "isCourtier": true,
+    "raisonSociale": "<AUCUN>",
+    "sigle": "AUCUN",
+    "adresse": "AUCUNE",
+    "telephone": "AUCUN",
+    "email": "AUCUN",
+    "siteweb": "AUCUN",
+    "coordonneesBancaire": "AUCUN",
+    "paysId": 1,
+  },  
+  {
     "isReassureur": true,
     "raisonSociale": "AFRICA RE",
     "sigle": "AFRICA RE",

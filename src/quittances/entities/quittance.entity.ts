@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -60,43 +61,50 @@ export class Quittance extends BaseEntity {
 
   @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
   coursDevise: number = 0;
+ 
+ /*
   // True si cession, false si acceptation
   @Column({ name: 'is_cession', default: false })
   isCession: boolean = false;
 
   // True si proportionnel, false si non proportionnel
+  // Provient de Police.NatureOffre
+  @Column({ name: 'is_facultative', default: false })
+  isFacultative: boolean = false;
+
+  // True si proportionnel, false si non proportionnel
+  // Provient de Police.natureOffre
   @Column({ name: 'is_proportionnel', default: true })
   isProportionnel: boolean = false;
 
   // True si affaire facultative (FAC)
   @Column({ name: 'is_fac', default: false })
   isFac: boolean = false;
-
-  @Column({ name: 'date_emission', type: 'date' })
+*/
+  
+  @CreateDateColumn({ name: 'date_emission' })
   dateEmission!: Date;
 
-  @Column({ name: 'date_effet', type: 'date' })
+  @Column({ name: 'date_effet', type: 'date' , nullable:true})
   dateEffet?: Date;
 
-  @Column({ name: 'date_echeance', type: 'date' })
+  @Column({ name: 'date_echeance', type: 'date' , nullable:true})
   dateEcheance?: Date;
 
-
-
   // Nombre de jours avant l'échéance pour l'envoi de mail
-  @Column({ name: 'avis_echeance', type: 'int' })
+  @Column({ name: 'avis_echeance', type: 'int' , default:0})
   avisEcheance: number = 0;
 
   // Capitaux souscrits
-  @Column({ name: 'capitaux', type: 'decimal', precision: 18, scale: 5 })
+  @Column({ name: 'capitaux', type: 'decimal', precision: 18, scale: 5 , default:0})
   capitaux: number = 0;
 
-  @Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 5 })
-  limiteCapitauxImpliques: number = 0;
+  //@Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 5 })
+  //limiteCapitauxImpliques: number = 0;
 
   // Sinistre Ici (Intérêt le plus important)
-  @Column({ name: 'ici', type: 'decimal', precision: 18, scale: 5 })
-  ici: number = 0;
+  @Column({ name: 'lci', type: 'decimal', precision: 18, scale: 5 })
+  lci: number = 0;
 
   // Sinistre Maximum Possible
   @Column({ name: 'smp', type: 'decimal', precision: 18, scale: 5 })
@@ -171,24 +179,6 @@ export class Quittance extends BaseEntity {
 
   @Column({ name: 'quittance_id_annule', nullable: true })
   quittanceIdAnnule?: number;
-
-  // ===============================================
-  // RELATIONS AVEC ACTEUR
-  // ===============================================
-   // Relation Cedente
-    @ManyToOne(() => Acteur)
-    @JoinColumn({ name: 'acteur_cedante_id' })
-    acteurCedante!: Acteur;
-    @Column({ name: 'acteur_cedante_id' })
-    acteurCedanteId!: number;
-  
-  // Relation courtier
-    @ManyToOne(() => Acteur, { nullable: true })
-    @JoinColumn({ name: 'acteur_courtier_id' })
-    acteurCourtier?: Acteur;
-    @Column({ name: 'acteur_courtier_id', nullable: true })
-    acteurCourtierId?: number;
-  
 
 
 

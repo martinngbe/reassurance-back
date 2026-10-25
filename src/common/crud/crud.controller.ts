@@ -51,11 +51,11 @@ export abstract class CrudController<
 
     // <-- Appel de votre méthode de filtre
     const options = this.buildOptions(query); 
-      console.log("________________________________");
-      console.log("CrudController.findAll");
-      console.log("query:", query);
-      console.log("options:", options);
-      console.log("________________________________");
+      // console.log("________________________________");
+      // console.log("CrudController.findAll");
+      // console.log("query:", query);
+      // console.log("options:", options);
+      // console.log("________________________________");
     // <-- Passage des options au service
     const result = await this.service.findAllPaginated(pagination, options);
     return successPaginated(result);   

@@ -41,9 +41,11 @@ export class CreateTempQuittanceDto {
   dateEmission!: string;
 
   @IsDateString()
+  @IsOptional()
   dateEffet!: string;
 
   @IsDateString()
+  @IsOptional()
   dateEcheance!: string;
 
   @IsNumber()
@@ -51,7 +53,7 @@ export class CreateTempQuittanceDto {
   coursDevise: number=1;
 
   @IsInt()
-  @IsNotEmpty()
+  @IsOptional()
   avisEcheance!: number;
 
   @IsNumber()
@@ -61,7 +63,7 @@ export class CreateTempQuittanceDto {
   limiteCapitauxImpliques: number=0;
 
   @IsNumber()
-  ici: number=0;
+  lci: number=0;
 
   @IsNumber()
   smp: number=0;
