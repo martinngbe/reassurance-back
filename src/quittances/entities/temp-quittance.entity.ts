@@ -8,38 +8,11 @@ import {
 } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Mouvement } from '../../referentiel/entities/mouvement.entity';
-import { Police } from '../../polices/entities/police.entity';
-
-// Imports des entités liées pour l'annulation en cascade
-// ⚠️ Adaptez les chemins selon votre structure de projet
-import { SinistreQuittance } from '../../sinistres/entities/sinistre-quittance.entity';
-import { QuittanceCession } from './quittance-cession.entity';
-import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
-import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
-//import { EcheancePmd } from './echeance-pmd.entity';
-import { ObjetAssure } from './objet-assure.entity';
-import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
-import { Acteur } from 'src/acteurs/entities/acteur.entity';
-import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 import { TempObjetAssure } from './temp-objet-assure.entity';
 import { TempPolice } from 'src/polices/entities/temp-police.entity';
 import { Devise } from 'src/referentiel/entities/devise.entity';
 
-/**
- * Quittance d'acceptation ou de cession de réassurance (proportionnelle,
- * non proportionnelle ou facultative selon isProportionnel / isFac).
- * Entité centrale du modèle, reprise telle quelle des diagrammes
- * REASSURANCE-ACCEPTATION / REASSURANCE-CESSION.
- *
- * L'annulation d'une Quittance entraîne l'annulation en cascade de :
- * - QuittanceCession (et leurs dépendances : Bordereau, EcheancePmd, NoteDebitCredit)
- * - Bordereau (et leurs NotesDebitCredit)
- * - EcheancePmd (et leurs NotesDebitCredit)
- * - NoteDebitCredit (et leurs Reglements)
- * - ObjetAssure (suppression)
- * - SinistreQuittance (duplication pour traçabilité)
- * - SinistreEvaluationQuittance (et leurs SinistreEvaluationQuittanceCession)
- */
+
 @Entity('temp_quittance')
 export class TempQuittance extends BaseEntity {
   @Column({nullable:true})
@@ -65,26 +38,7 @@ export class TempQuittance extends BaseEntity {
 
   @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 })
   coursDevise: number = 0;
-/*
-  // True si cession, false si acceptation
-  // Provient de Police
-  @Column({ name: 'is_cession', default: false })
-  isCession: boolean = false;
 
-  // True si proportionnel, false si non proportionnel
-  // Provient de Police.NatureOffre
-  @Column({ name: 'is_facultative', default: false })
-  isFacultative: boolean = false;
-
-  // True si proportionnel, false si non proportionnel
-  // Provient de Police.natureOffre
-  @Column({ name: 'is_proportionnel', default: true })
-  isProportionnel: boolean = false;
-
-  // True si affaire facultative (FAC)
-  @Column({ name: 'is_fac', default: false })
-  isFac: boolean = false;
-*/
   @CreateDateColumn({ name: 'date_emission' })
   dateEmission!: Date;
 
@@ -94,8 +48,6 @@ export class TempQuittance extends BaseEntity {
   @Column({ name: 'date_echeance', type: 'date' , nullable: true})
   dateEcheance?: Date;
 
-
-
   // Nombre de jours avant l'échéance pour l'envoi de mail
   @Column({ name: 'avis_echeance', type: 'int' })
   avisEcheance: number = 0;
@@ -103,9 +55,6 @@ export class TempQuittance extends BaseEntity {
   // Capitaux souscrits
   @Column({ name: 'capitaux', type: 'decimal', precision: 18, scale: 5 })
   capitaux: number = 0;
-
-  //@Column({ name: 'limite_capitaux_impliques', type: 'decimal', precision: 18, scale: 5 })
-  //limiteCapitauxImpliques: number = 0;
 
   // Sinistre Ici (Intérêt le plus important)
   @Column({ name: 'lci', type: 'decimal', precision: 18, scale: 5 })

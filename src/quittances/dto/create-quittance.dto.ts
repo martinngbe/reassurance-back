@@ -25,18 +25,6 @@ export class CreateQuittanceDto {
   @IsNotEmpty()
   deviseId!: number;
 
-  @IsBoolean()
-  @IsOptional()
-  isCession?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  isProportionnel?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  isFac?: boolean;
-
   @IsDateString()
   dateEmission!: string;
 

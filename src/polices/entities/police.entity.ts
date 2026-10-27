@@ -16,53 +16,48 @@ export class Police extends BaseEntity {
   @Column({nullable:true})
   numero!: string;
 
-  @Column({ name: 'is_cession', default: false })
-  isCession: boolean=false;
-
-  @Column({ name: 'is_facultative', default: false })
-  isFacultative: boolean=false;  
-
-  @Column({ name: 'is_iard', default: false })
-  isIard: boolean=false; // IARD | VIE
-
   @Column({ name: 'is_reconduction_tacite', default: false })
   isReconductionTacite: boolean=false;
 
-  // Relation Quittance
-  @OneToMany(() => Quittance, (q) => q.police , {cascade:true})
+
+  @OneToMany(() => Quittance, (quittance) => quittance.police , {eager: true, cascade:true})
   quittances!: Quittance[];
 
-  // Relation SousBranche
+ 
+
   @ManyToOne(() => NatureOffre , {eager:true})
-  @JoinColumn({ name: 'nature_offre_id' })
+  @JoinColumn({ name: 'nature_offre_id'  })
   natureOffre!: NatureOffre;
   @Column({ name: 'nature_offre_id' })
-  natureOffreId!: number;  //  FAC? PROP?
+  natureOffreId!: number;
 
-  @ManyToOne(() => SousBranche)
+
+  // Relation SousBranche
+  @ManyToOne(() => SousBranche, {eager:true})
   @JoinColumn({ name: 'sous_branche_id' })
   sousBranche!: SousBranche;
   @Column({ name: 'sous_branche_id' })
   sousBrancheId!: number;
 
+
   // Relation Cedente
-  @ManyToOne(() => Acteur , {eager:true})
+  @ManyToOne(() => Acteur, {eager:true})
   @JoinColumn({ name: 'acteur_cedante_id' })
   acteurCedante!: Acteur;
   @Column({ name: 'acteur_cedante_id' })
   acteurCedanteId!: number;
 
 // Relation courtier
-  @ManyToOne(() => Acteur, { nullable: true ,eager:true})
+  @ManyToOne(() => Acteur, { nullable: true , eager:true})
   @JoinColumn({ name: 'acteur_courtier_id' })
   acteurCourtier?: Acteur;
   @Column({ name: 'acteur_courtier_id', nullable: true })
   acteurCourtierId?: number;
 
   // Relation courtier
-  @ManyToOne(() => Assure, { nullable: true ,eager:true})
+  @ManyToOne(() => Assure, { nullable: true , eager:true})
   @JoinColumn({ name: 'assure_id' })
   assure!: Assure;
-  @Column({ name: 'assure_id' })
-  assureId!: number;
+  @Column({ name: 'assure_id' , nullable:true })
+  assureId?: number;
 }

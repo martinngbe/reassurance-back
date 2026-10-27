@@ -1,16 +1,16 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CrudController } from 'src/common/crud/crud.controller';
 import { CreatePoliceDto } from '../dto/create-police.dto';
 import { UpdatePoliceDto } from '../dto/update-police.dto';
 import { Police } from '../entities/police.entity';
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, IsNull } from 'typeorm';
 import { PoliceService } from '../services/police.service';
 
 @ApiTags('Police')
 @Controller('police')
 export class PoliceController extends CrudController<Police, CreatePoliceDto, UpdatePoliceDto> {
-  constructor(service: PoliceService) {
+  constructor(protected readonly service: PoliceService) {
     super(service);
   }
      // les diffentes options ou filtre pour 
@@ -24,7 +24,7 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
               where: {},
               order: {}, 
             };
-      /*      const baseSort: any = { createdAt: 'desc'  };// Tri par défaut
+            const baseSort: any = { createdAt: 'desc'  };// Tri par défaut
             if( query.sortKey && query.sortDirection){
                 options.order ={ [query.sortKey]: `${query.sortDirection}`}
             }else {
@@ -33,23 +33,31 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
 
             //  Filtres exacts (AND)
             const baseWhere: any = {};
-            if (query.natureOffreId) {
-               baseWhere.natureOffre = { id: parseInt(query.natureOffreId, 10) };
-               // Note: Si votre entité utilise une colonne directe et non une relation, utilisez :
-               // baseWhere.brancheId = parseInt(query.brancheId, 10);
-             }
-             if (query.isFacultative) {
-               baseWhere.natureOffre = { isFacultative: query.isFacultative };
-               // Note: Si votre entité utilise une colonne directe et non une relation, utilisez :
-               // baseWhere.brancheId = parseInt(query.brancheId, 10);
-             }
+              // 2. Gestion du filtre assureId (null ou valeur spécifique)
+            if ( !query.assureId || query.assureId === 'null' || query.assureId === null) {
+              // Filtre pour récupérer les polices SANS assure
+              baseWhere.assure = IsNull(); 
+              
+              // REMARQUE : Si votre entité Police définit 'assureId' comme une colonne simple 
+              // (et non comme une relation 'assure'), utilisez plutôt :
+              // baseWhere.assureId = IsNull();
+              
+            } else if (query.assureId) {
+              // Filtre pour un assure spécifique
+              baseWhere.assure = { id: parseInt(query.assureId, 10) };               
+            }
   
             
             options.where = baseWhere
 
             console.log("options:",options)
             console.log("_____________________________________")
-          */
+          
             return options;
       }
+
+    @Post('temp/:id/transferer')
+    transferer(@Param('id', ParseIntPipe) id: number) {
+      return this.service.transfererDepuisTemp(id);
+    }
 }
