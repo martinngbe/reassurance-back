@@ -17,16 +17,16 @@ export class Police extends BaseEntity {
   numero!: string;
 
   @Column({ name: 'is_reconduction_tacite', default: false })
-  isReconductionTacite: boolean=false;
+  isReconductionTacite!: boolean;
 
   @Column({ name: 'is_iard', default: false })
   isIard!: boolean; // IARD | VIE
 
   @Column({ name: 'is_cession', default: false })
-  isCession: boolean=false;
+  isCession!: boolean;
 
 
-  @OneToMany(() => Quittance, (quittance) => quittance.police , {eager: true, cascade:true})
+  @OneToMany(() => Quittance, (quittance) => quittance.police , { cascade:true})
   quittances!: Quittance[];
 
  

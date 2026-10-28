@@ -24,7 +24,7 @@ export class Quittance extends BaseEntity {
   @Column({ name: 'mouvement_id' })
   mouvementId!: number;
 
-  @ManyToOne(() => Police , { onDelete: 'CASCADE' })
+  @ManyToOne(() => Police , {eager:true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'police_id' })
   police!: Police;
 
