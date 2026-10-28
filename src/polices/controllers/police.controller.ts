@@ -38,16 +38,17 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
               // Filtre pour récupérer les polices SANS assure
               baseWhere.assure = IsNull(); 
               
-              // REMARQUE : Si votre entité Police définit 'assureId' comme une colonne simple 
-              // (et non comme une relation 'assure'), utilisez plutôt :
-              // baseWhere.assureId = IsNull();
-              
             } else if (query.assureId) {
               // Filtre pour un assure spécifique
               baseWhere.assure = { id: parseInt(query.assureId, 10) };               
             }
-  
-            
+
+            if (query.isCession ) {
+              baseWhere.isCession = query.isCession==='true';
+            }   
+
+
+            console.log("baseWhere:",baseWhere)
             options.where = baseWhere
 
             console.log("options:",options)
@@ -56,8 +57,5 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
             return options;
       }
 
-    @Post('temp/:id/transferer')
-    transferer(@Param('id', ParseIntPipe) id: number) {
-      return this.service.transfererDepuisTemp(id);
-    }
+    
 }

@@ -19,6 +19,12 @@ export class TempPolice extends BaseEntity {
   @Column({ name: 'is_reconduction_tacite', default: false })
   isReconductionTacite: boolean=false;
 
+  @Column({ name: 'is_iard', default: false })
+  isIard!: boolean; // IARD | VIE
+
+  @Column({ name: 'is_cession', default: false })
+  isCession: boolean=false;
+
 
     // Relation Quittance
   // On charge automatiquement toutes les tempsQuittance de la police

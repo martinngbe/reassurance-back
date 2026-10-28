@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CrudController } from 'src/common/crud/crud.controller';
 import { FindManyOptions } from 'typeorm';
@@ -10,7 +10,7 @@ import { TempPoliceService } from '../services/temp-police.service';
 @ApiTags('empPolice')
 @Controller('temp-police')
 export class TempPoliceController extends CrudController<TempPolice, CreateTempPoliceDto, UpdateTempPoliceDto> {
-  constructor(service: TempPoliceService) {
+  constructor(protected readonly service: TempPoliceService) {
     super(service);
   }
      // les diffentes options ou filtre pour 
@@ -47,4 +47,10 @@ export class TempPoliceController extends CrudController<TempPolice, CreateTempP
             
             return options;
       }
+
+
+    @Post('temp/:id/transferer')
+    transferer(@Param('id', ParseIntPipe) id: number) {
+      return this.service.transfererDepuisTemp(id);
+    }
 }

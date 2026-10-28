@@ -80,6 +80,11 @@ export class TempQuittance extends BaseEntity {
   @Column({ name: 'capacite', type: 'decimal', precision: 18, scale: 5 })
   capacite: number = 0;
 
+   
+  @Column({ name: 'nombre_plein', type: 'decimal', precision: 18, scale: 5 })
+  nombrePlein: number = 0;
+
+
   // Prime théorique estimée
   @Column({ name: 'estimation_prime', type: 'decimal', precision: 18, scale: 5 })
   estimationPrime: number = 0;
@@ -91,6 +96,17 @@ export class TempQuittance extends BaseEntity {
   // % accepté par le réassureur
   @Column({ name: 'taux_accepte', type: 'float' })
   tauxAccepte: number = 0;
+
+
+    // % de la police cédée
+  @Column({ name: 'taux_cession', type: 'float' })
+  tauxCession: number = 0;
+
+  // % accepté par le réassureur
+  @Column({ name: 'taux_retention', type: 'float' })
+  tauxRetention: number = 0;
+
+
 
   // % commission de réassurance
   @Column({ name: 'taux_commission', type: 'float' })

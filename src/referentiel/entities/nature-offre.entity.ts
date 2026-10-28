@@ -18,5 +18,14 @@ export class NatureOffre extends BaseEntity {
 
   @Column({name:'is_proportionnelle', default: false})
   isProportionnelle!: boolean;
+
+  @Column({name:'is_edp', default: false})
+  isEdp!: boolean;
+
+   @Column({name:'is_quote_part', default: false})
+  isQuotePart!: boolean;
+
+  @Column({name:'is_xs', default: false})
+  isXs!: boolean;
   
 }

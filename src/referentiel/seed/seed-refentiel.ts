@@ -681,7 +681,7 @@ async function seedNatureOffre(dataSource: DataSource): Promise<void>{
    const natureOffreRepo = dataSource.getRepository(NatureOffre);
    
     // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
-  const natureOffresData =  [
+  const natureOffresData : Partial<NatureOffre>[] =  [
          {  libelle: "FACULTATIVE PURE",
             code: "FAC PURE",
             isFacultative: true,
@@ -691,13 +691,15 @@ async function seedNatureOffre(dataSource: DataSource): Promise<void>{
             libelle: "FACULTATIVE EXCESS",
             code: "FAC XS",
             isFacultative: true,
-            isProportionnelle: false
+            isProportionnelle: false,
+            isXs: true
         },
         {
             libelle: "EXCEDENT DE PLEIN",
             code: "EDP",
             isFacultative: false,
-            isProportionnelle: true
+            isProportionnelle: true,
+            isEdp: true
         },
         {
             libelle: "FACULTATIVE OBLIGATOIRE",
@@ -709,7 +711,7 @@ async function seedNatureOffre(dataSource: DataSource): Promise<void>{
         { 
             libelle: "QUOTE PART",
             code: "QP",
-           
+            isQuotePart: true,
             isFacultative: false,
             isProportionnelle: true
         },
@@ -717,29 +719,34 @@ async function seedNatureOffre(dataSource: DataSource): Promise<void>{
             libelle: "EXCESS AGGREGATE",
             code: "XS AGGREGATE",
             isFacultative: false,
-            isProportionnelle: false
+            isProportionnelle: false,
+            isXs: true
         },
         {
             libelle: "EXCEDENT DE SINISTRE PAR EVENEMENT",
             code: "XS\/EVENEMENT",
             isFacultative: false,
+            isXs: true,
             isProportionnelle: false
         },
         {
             libelle: "EXCEDENT DE PERTE ANNUELLE",
             code: "XS\/PERTE ANNUELLE",
+            isXs: true,
             isFacultative: false,
             isProportionnelle: false
         },
         {
             libelle: "EXCEDENT DE SINISTRE PAR RISQUE",
             code: "XS\/RISQUE",
+            isXs: true,
             isFacultative: false,
             isProportionnelle: false
         },
         {
             libelle: "EXCEDENT DE SINISTRE PAR RISQUE ET PAR EVENEMENT",
             code: "XS\/RISQUE ET EVENEMENT",
+            isXs: true,
             isFacultative: false,
             isProportionnelle: false
         }

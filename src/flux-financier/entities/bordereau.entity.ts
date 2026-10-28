@@ -8,14 +8,14 @@ import { NoteDebitCredit } from './note-debit-credit.entity';
 @Entity('bordereau')
 export class Bordereau extends BaseEntity {
   
-  @ManyToOne(() => Quittance, { nullable: true })
+  @ManyToOne(() => Quittance, { nullable: true , onDelete:'CASCADE' })
   @JoinColumn({ name: 'quittance_id' })
   quittance?: Quittance;
 
   @Column({ name: 'quittance_id', nullable: true })
   quittanceId?: number;
 
-  @ManyToOne(() => QuittanceCession, { nullable: true })
+  @ManyToOne(() => QuittanceCession, { nullable: true  , onDelete:'CASCADE' })
   @JoinColumn({ name: 'quittance_cession_id' })
   quittanceCession?: QuittanceCession;
 

@@ -20,8 +20,27 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
    protected buildOptions(query: any): FindManyOptions<Quittance> {
       const options: FindManyOptions<Quittance> = {
         where: {},
-        order: { createdAt: 'DESC' }, // Tri par défaut
+        order: {}, // Tri par défaut
       };
+      const baseSort: any = { createdAt: 'DESC'  };// Tri par défaut
+      if( query.sortKey && query.sortDirection){
+          options.order ={ [query.sortKey]: `${query.sortDirection}`}
+      }else {
+        options.order = baseSort
+      }   
+
+      // filtre sur un champs spécifique; Tableau de conditions
+      const baseWhere: any = {};
+      if (query.policeId) {
+        baseWhere.police = { id: parseInt(query.policeId, 10) }; 
+      }
+    
+      
+      options.where = baseWhere
+
+      console.log("options:",options)
+      console.log("_____________________________________")
+
       return options;
     }
   

@@ -10,13 +10,22 @@ export class CreateNatureOffreDto {
   libelle!: string;
 
   @IsBoolean()
-  isFacultative: boolean=false;
+  isFacultative!: boolean;
 
   @IsBoolean()
-  isFacObligatoire: boolean=false;
+  isFacObligatoire!: boolean;
 
   @IsBoolean()
-  isProportionnelle: boolean=false;
+  isProportionnelle!: boolean;
+
+  @IsBoolean()
+  isEdp!: boolean;
+
+  @IsBoolean()
+  isQuotePart!: boolean;
+
+  @IsBoolean()
+  isXs!: boolean;
 
 }
 

@@ -42,7 +42,7 @@ export class NatureOffreController extends CrudController<NatureOffre, CreateNat
       //   // baseWhere.brancheId = parseInt(query.brancheId, 10);
       // }
       if (query.isProportionnelle) {
-         baseWhere.isProportionnelle = { isProportionnelle :query.isProportionnelle};
+         baseWhere.isProportionnelle = query.isProportionnelle==='true';
        }
        if (query.isFacultative ) {
          baseWhere.isFacultative = query.isFacultative==='true';

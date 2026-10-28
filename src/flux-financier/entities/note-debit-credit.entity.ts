@@ -32,21 +32,21 @@ export class NoteDebitCredit extends BaseEntity {
   quittanceCessionId?: number;
   //////////////////////////////
   //  Relation Bordereau
-  @ManyToOne(() => Bordereau, { nullable: true })
+  @ManyToOne(() => Bordereau, { nullable: true  , onDelete:'CASCADE'})
   @JoinColumn({ name: 'bordereau_id' })
   bordereau?: Bordereau;
   @Column({ name: 'bordereau_id', nullable: true })
   bordereauId?: number;
   //////////////////////////////
   // Relation PMD
-  @ManyToOne(() => EcheancePmd, { nullable: true })
+  @ManyToOne(() => EcheancePmd, { nullable: true  , onDelete:'CASCADE'})
   @JoinColumn({ name: 'echeance_pmd_id' })
   echeancePmd?: EcheancePmd;
   @Column({ name: 'echeance_pmd_id', nullable: true })
   echeancePmdId?: number;
   //////////////////////////////
   // Relation CompteTraite
-  @ManyToOne(() => CompteTraite, { nullable: true })
+  @ManyToOne(() => CompteTraite, { nullable: true  , onDelete:'CASCADE'})
   @JoinColumn({ name: 'compte_traite_id' })
   compteTraite?: CompteTraite;
   @Column({ name: 'compte_traite_id', nullable: true })

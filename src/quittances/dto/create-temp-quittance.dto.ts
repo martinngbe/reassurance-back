@@ -60,7 +60,7 @@ export class CreateTempQuittanceDto {
   capitaux: number=0;
 
   @IsNumber()
-  limiteCapitauxImpliques: number=0;
+  nombrePlein: number=0;
 
   @IsNumber()
   lci: number=0;
@@ -94,6 +94,14 @@ export class CreateTempQuittanceDto {
 
   @IsNumber()
   taxeSurCommission: number=0;
+
+  @IsNumber()
+  tauxCession: number = 0;
+
+  @IsNumber()
+  tauxRetention: number = 0;
+
+
 
   @IsNumber()
   primeBrute: number=0;

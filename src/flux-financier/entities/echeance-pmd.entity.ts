@@ -9,14 +9,14 @@ import { Quittance } from 'src/quittances/entities/quittance.entity';
 /** Échéance de prime à terme (traités non proportionnels). */
 @Entity('echeance_pmd')
 export class EcheancePmd extends BaseEntity {
-  @ManyToOne(() => Quittance)
+  @ManyToOne(() => Quittance , {  onDelete:'CASCADE'})
   @JoinColumn({ name: 'quittance_id' })
   quittance!: Quittance;
 
   @Column({ name: 'quittance_id' })
   quittanceId!: number;
 
-  @ManyToOne(() => QuittanceCession, { nullable: true })
+  @ManyToOne(() => QuittanceCession, { nullable: true  , onDelete:'CASCADE'})
   @JoinColumn({ name: 'quittance_cession_id' })
   quittanceCession?: QuittanceCession;
 

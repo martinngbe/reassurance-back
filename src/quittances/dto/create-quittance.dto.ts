@@ -46,10 +46,10 @@ export class CreateQuittanceDto {
   capitaux: number=0;
 
   @IsNumber()
-  limiteCapitauxImpliques: number=0;
+  nombrePlein: number=0;
 
   @IsNumber()
-  ici: number=0;
+  lci: number=0;
 
   @IsNumber()
   smp: number=0;
@@ -74,6 +74,13 @@ export class CreateQuittanceDto {
 
   @IsNumber()
   tauxAccepte: number=0;
+
+  @IsNumber()
+  tauxCession: number = 0;
+
+  @IsNumber()
+  tauxRetention: number = 0;
+
 
   @IsNumber()
   tauxCommission: number=0;
