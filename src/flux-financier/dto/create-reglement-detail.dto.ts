@@ -10,9 +10,9 @@ export class CreateReglementDetailDto {
   noteDebitCreditId!: number;
   
   
-   @IsInt()
+  @IsInt()
   @IsNotEmpty()
-   deviseId!: number;
+  deviseId!: number;
  
   @IsInt()
   @IsNotEmpty()coursDevise: number = 0;
@@ -32,10 +32,3 @@ export class CreateReglementDetailDto {
 
  
 }
-
-/**
- * 
-  
- 
-  
- */

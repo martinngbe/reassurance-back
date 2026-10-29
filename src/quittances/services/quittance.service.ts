@@ -5,7 +5,7 @@ import { Quittance } from '../entities/quittance.entity';
 import { Transactional } from '@nestjs-cls/transactional';
 import { BordereauService } from 'src/flux-financier/services/bordereau.service';
 import { EcheancePmdService } from '../../flux-financier/services/echeance-pmd.service';
-import { CompteTraiteService } from 'src/flux-financier/services/compte-traite.service';
+import { CompteService } from 'src/flux-financier/services/compte.service';
 import { failure } from 'src/common/helper/response.helper';
 import { CrudService } from 'src/common/crud/crud.service';
 
@@ -16,7 +16,7 @@ export class QuittanceService  extends CrudService<Quittance>{
     private quittanceRepository: Repository<Quittance>,
     private readonly bordereauService: BordereauService,
     private readonly echeancePmdService: EcheancePmdService,
-    private readonly compteService: CompteTraiteService
+    private readonly compteService: CompteService
   ) {super(quittanceRepository);}
 /*
   /////////////////////////////////////

@@ -276,7 +276,7 @@
 -- -- COMPTE TRAITE
 -- -- ============================================================
 
--- CREATE TABLE IF NOT EXISTS compte_traite (
+-- CREATE TABLE IF NOT EXISTS compte (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
 --   quittance_retro_cession_id INT NULL,
 --   compte_type_id INT NOT NULL,
@@ -287,7 +287,7 @@
 --   is_proportionnel BOOLEAN DEFAULT FALSE,
 --   is_en_notre_faveur BOOLEAN DEFAULT FALSE,
 --   is_annule BOOLEAN DEFAULT FALSE,
---   id_compte_traite_annule INT NULL,
+--   id_compte_annule INT NULL,
 --   solde DECIMAL(15,2) DEFAULT 0,
 --   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -295,16 +295,16 @@
 --   FOREIGN KEY (acteur_id) REFERENCES acteur(id)
 -- ) ENGINE=InnoDB;
 
--- CREATE TABLE IF NOT EXISTS compte_traite_detail (
+-- CREATE TABLE IF NOT EXISTS compte_detail (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
---   compte_traite_id INT NOT NULL,
+--   compte_id INT NOT NULL,
 --   code_rubrique VARCHAR(50) NOT NULL,
 --   libelle_rubrique VARCHAR(255) NOT NULL,
 --   debit DECIMAL(15,2) DEFAULT 0,
 --   credit DECIMAL(15,2) DEFAULT 0,
 --   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
---   FOREIGN KEY (compte_traite_id) REFERENCES compte_traite(id) ON DELETE CASCADE
+--   FOREIGN KEY (compte_id) REFERENCES compte(id) ON DELETE CASCADE
 -- ) ENGINE=InnoDB;
 
 -- -- ============================================================
@@ -318,7 +318,7 @@
 --   quittance_cession_id INT NULL,
 --   reference INT NULL,
 --   bordereau_id INT NULL,
---   compte_traite_id INT NULL,
+--   compte_id INT NULL,
 --   echeance_pmd_id INT NULL,
 --   sinistre_id INT NULL,
 --   sinistre_evaluation INT NULL,
@@ -338,7 +338,7 @@
 --   FOREIGN KEY (quittance_id) REFERENCES quittance(id) ON DELETE SET NULL,
 --   FOREIGN KEY (quittance_cession_id) REFERENCES quittance_cession(id) ON DELETE SET NULL,
 --   FOREIGN KEY (bordereau_id) REFERENCES bordereau(id) ON DELETE SET NULL,
---   FOREIGN KEY (compte_traite_id) REFERENCES compte_traite(id) ON DELETE SET NULL,
+--   FOREIGN KEY (compte_id) REFERENCES compte(id) ON DELETE SET NULL,
 --   FOREIGN KEY (echeance_pmd_id) REFERENCES echeance_pmd(id) ON DELETE SET NULL
 -- ) ENGINE=InnoDB;
 

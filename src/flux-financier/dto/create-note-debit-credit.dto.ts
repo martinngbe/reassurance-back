@@ -23,7 +23,7 @@ export class CreateNoteDebitCreditDto {
 
   @IsInt()
   @IsOptional()
-  compteTraiteId?: number;
+  compteId?: number;
 
   @IsInt()
   @IsOptional()

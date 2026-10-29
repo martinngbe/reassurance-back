@@ -22,13 +22,13 @@ export class AuditSubscriber implements EntitySubscriberInterface {
   }
 
   beforeInsert(event: InsertEvent<any>) {
-    console.log("_____________________________________________")
-    console.log("     AuditSubscriber.beforeInsert")
-    console.log("_____________________________________________")
+    //console.log("_____________________________________________")
+    //console.log("     AuditSubscriber.beforeInsert")
+    //console.log("_____________________________________________")
     //const userId = this.cls.get<string>('userId');
     const userId = this.cls.isActive() ? this.cls.get('userId') : null;
-    console.log("   userId:",userId)
-    console.log("   Avant event.entity:",event.entity)
+    //console.log("   userId:",userId)
+    //console.log("   Avant event.entity:",event.entity)
     if (userId && event.entity) {
 
       if ('createdBy' in event.entity) {
@@ -39,24 +39,24 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       }
      
     }
-    console.log("  Apres event.entity:",event.entity)
-    console.log("_____________________________________________")
+    // console.log("  Apres event.entity:",event.entity)
+    // console.log("_____________________________________________")
   }
 
   beforeUpdate(event: UpdateEvent<any>) {
-    console.log("_____________________________________________")
-    console.log("     AuditSubscriber.beforeUpdate")
-    console.log("_____________________________________________")    
+    // console.log("_____________________________________________")
+    // console.log("     AuditSubscriber.beforeUpdate")
+    // console.log("_____________________________________________")    
     //const userId = this.cls.get<string>('userId');
     const userId = this.cls.isActive() ? this.cls.get('userId') : null;
-    console.log("   userId:",userId)
-    console.log("   Avant event.entity:",event.entity)
+    //console.log("   userId:",userId)
+    //console.log("   Avant event.entity:",event.entity)
     if (userId && event.entity) {
       if ('updatedBy' in event.entity) {
         event.entity.updatedBy = userId;
       }
     }
-    console.log("  Apres event.entity:",event.entity)
-    console.log("_____________________________________________")
+    // console.log("  Apres event.entity:",event.entity)
+    // console.log("_____________________________________________")
   }
 }

@@ -11,6 +11,8 @@ import { seedActeur, seedAssure } from './acteurs/seed/seed-acteur';
 import { seedReferentiel } from './referentiel/seed/seed-refentiel';
 import { ClsService } from 'nestjs-cls';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { seedFluxFinancier } from './flux-financier/seed/seed-flux-financier';
+import { seedPoliceQuittance } from './polices/seed/seed-police';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -54,6 +56,8 @@ async function bootstrap() {
     await seedReferentiel(dataSource);
     await seedAssure(dataSource);
     await seedActeur(dataSource);
+    await seedFluxFinancier(dataSource)
+    await seedPoliceQuittance(dataSource)
   }
 
   const port = process.env.PORT || 3000;

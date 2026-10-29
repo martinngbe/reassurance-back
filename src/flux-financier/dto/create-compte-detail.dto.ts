@@ -1,13 +1,13 @@
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-export class CreateCompteTraiteDetailDto {
+export class CreateCompteDetailDto {
   @IsInt()
   @IsNotEmpty()
-  compteTraiteId?: number;
+  compteId?: number;
 
   @IsInt()
   @IsNotEmpty()
-  compteTraiteRubriqueId!: number;
+  compteRubriqueId!: number;
 
  
   @IsInt()

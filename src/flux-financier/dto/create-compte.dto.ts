@@ -1,12 +1,12 @@
 import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
 
-export class CreateCompteTraiteDto {
+export class CreateCompteDto {
   @IsInt()
   @IsOptional()
   quittanceRetroCessionId?: number;
 
   @IsInt()
-  idCompteType!: number;
+  CompteTypeId!: number;
 
   @IsInt()
   acteurId!: number;

@@ -4,11 +4,11 @@ import { Repository } from 'typeorm';
 import { 
   CrudService, 
 } from '../../common/crud/crud.service';
-import { CompteTraite } from '../entities/compte-traite.entity';
+import { CompteDetail } from '../entities/compte-detail.entity';
 
 @Injectable()
-export class CompteTraiteService extends CrudService<CompteTraite> {
-  constructor(@InjectRepository(CompteTraite) repository: Repository<CompteTraite>) {
+export class CompteDetailService extends CrudService<CompteDetail> {
+  constructor(@InjectRepository(CompteDetail) repository: Repository<CompteDetail>) {
     super(repository);
   }
  

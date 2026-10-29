@@ -35,7 +35,7 @@ Système - Vue par Packages" :
 | `acteurs`             | Acteur, Assure, Contact                                                  |
 | `polices`             | Police                                                                    |
 | `quittances`          | Quittance, QuittanceCession, ObjetAssure, EcheancePmd                     |
-| `flux-financier`      | Bordereau, CompteTraite, CompteTraiteDetail, NoteDebitCredit, Reglement, ReglementDetail |
+| `flux-financier`      | Bordereau, Compte, CompteDetail, NoteDebitCredit, Reglement, ReglementDetail |
 | `sinistres`           | Sinistre, SinistreStatut, SinistreTypeEvaluation, SinistreDeclaration, SinistreEvaluation, SinistreQuittance, SinistreReglement (+ Detail/Cession/CessionDetail), SinistreEvaluationQuittance(Cession) |
 
 Chaque entité vit dans `<module>/entities/*.entity.ts` avec les
@@ -58,7 +58,7 @@ courts qui étendent ces classes (voir par ex. `branche.service.ts` /
 
 Certaines tables du diagramme sont des lignes de détail ou de
 ventilation plutôt que des ressources autonomes : `ObjetAssure`,
-`CompteTraiteDetail`, `ReglementDetail`, `SinistreQuittance`,
+`CompteDetail`, `ReglementDetail`, `SinistreQuittance`,
 `SinistreReglementDetail`, `SinistreReglementCession`,
 `SinistreReglementCessionDetail`, `SinistreEvaluationQuittance`,
 `SinistreEvaluationQuittanceCession`.

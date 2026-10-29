@@ -18,7 +18,7 @@ import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
 import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
 //import { EcheancePmd } from './echeance-pmd.entity';
 import { ObjetAssure } from './objet-assure.entity';
-import { CompteTraite } from 'src/flux-financier/entities/compte-traite.entity';
+import { Compte } from 'src/flux-financier/entities/compte.entity';
 import { Acteur } from 'src/acteurs/entities/acteur.entity';
 import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 
@@ -195,8 +195,8 @@ export class Quittance extends BaseEntity {
    * Lors de l'annulation, chaque EcheancePmd est annulée
    * (ainsi que ses NotesDebitCredit).
    */
-  @OneToMany(() => CompteTraite, (ep) => ep.quittance, {cascade: true,})
-  ComptesTraite!: CompteTraite[];
+  @OneToMany(() => Compte, (ep) => ep.quittance, {cascade: true,})
+  ComptesTraite!: Compte[];
 
 
   /**

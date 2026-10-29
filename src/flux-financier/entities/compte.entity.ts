@@ -5,16 +5,16 @@ import { CompteType } from '../../referentiel/entities/compte-type.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
 import { NoteDebitCredit } from './note-debit-credit.entity';
-import { CompteTraiteDetail } from './compte-traite-detail.entity';
+import { CompteDetail } from './compte-detail.entity';
 
 /** Compte courant de traité (position d'un acteur sur un traité donné). 
- * Contient le solde CompteTraiteDetail. 
+ * Contient le solde CompteDetail. 
  * Le solde peut être en notre faveur ou pas.
  * Génère une NoteDebitCredit
 */
 
-@Entity('compte_traite')
-export class CompteTraite extends BaseEntity {
+@Entity('compte')
+export class Compte extends BaseEntity {
   /// Relaltion Quittance
   @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })
@@ -28,11 +28,11 @@ export class CompteTraite extends BaseEntity {
   @Column({ name: 'quittance_cession_id', nullable: true })
   quittanceCessionId?: number;
 
-  @OneToMany(() => NoteDebitCredit, (b) => b.compteTraite)
+  @OneToMany(() => NoteDebitCredit, (b) => b.compte)
   notesDebitCredit!: NoteDebitCredit[];
 
-  @OneToMany(() => CompteTraiteDetail, (b) => b.compteTraite)
-  compteTraiteDetails!: CompteTraiteDetail[];
+  @OneToMany(() => CompteDetail, (b) => b.compte)
+  compteDetails!: CompteDetail[];
 
 
   @ManyToOne(() => CompteType)
@@ -56,7 +56,7 @@ export class CompteTraite extends BaseEntity {
   @Column({ name: 'cours_devise', type: 'decimal', precision: 18, scale: 5 , default: 0})
   coursDevise: number=0;
 
-  // provient de CompteTraiteDetail.
+  // provient de CompteDetail.
   @Column({ type: 'decimal', precision: 18, scale: 5, default: 0 })
   solde: number=0;
 
@@ -76,8 +76,8 @@ export class CompteTraite extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
 
-  @Column({ name: 'compte_traite_id_annule', nullable: true })
-  compteTraiteIdAnnule?: number;
+  @Column({ name: 'compte_id_annule', nullable: true })
+  compteIdAnnule?: number;
 
 
 }

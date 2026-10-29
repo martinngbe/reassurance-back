@@ -15,7 +15,7 @@ import { BordereauService } from '../services/bordereau.service';
 @Controller('bordereau')
 @UseGuards(RolesGuard)
 export class BordereauController extends CrudController<Bordereau, CreateBordereauDto, UpdateBordereauDto> {
-  constructor(private readonly compteTraiteDetailService: BordereauService) {super(compteTraiteDetailService);}
+  constructor(private readonly compteDetailService: BordereauService) {super(compteDetailService);}
 
   protected buildOptions(query: any): FindManyOptions<Bordereau> {
     const options: FindManyOptions<Bordereau> = {

@@ -3,7 +3,7 @@ import { BaseEntity } from '../../common/entities/base.entity';
 import { Quittance } from '../../quittances/entities/quittance.entity';
 import { QuittanceCession } from '../../quittances/entities/quittance-cession.entity';
 import { Bordereau } from './bordereau.entity';
-import { CompteTraite } from './compte-traite.entity';
+import { Compte } from './compte.entity';
 import { ReglementDetail } from './reglement-detail.entity';
 import { SinistreReglementQuittance } from 'src/sinistres/entities/sinistre-reglement-quittance.entity';
 import { SinistreReglementQuittanceCession } from 'src/sinistres/entities/sinistre-reglement-quittance-cession.entity';
@@ -45,12 +45,12 @@ export class NoteDebitCredit extends BaseEntity {
   @Column({ name: 'echeance_pmd_id', nullable: true })
   echeancePmdId?: number;
   //////////////////////////////
-  // Relation CompteTraite
-  @ManyToOne(() => CompteTraite, { nullable: true  , onDelete:'CASCADE'})
-  @JoinColumn({ name: 'compte_traite_id' })
-  compteTraite?: CompteTraite;
-  @Column({ name: 'compte_traite_id', nullable: true })
-  compteTraiteId?: number;
+  // Relation Compte
+  @ManyToOne(() => Compte, { nullable: true  , onDelete:'CASCADE'})
+  @JoinColumn({ name: 'compte_id' })
+  compte?: Compte;
+  @Column({ name: 'compte_id', nullable: true })
+  compteId?: number;
 
   //////////////  SINISTRE /////////////////////////////////
   // Relation SinistreReglementQuittance
