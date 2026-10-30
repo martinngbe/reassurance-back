@@ -47,6 +47,9 @@ export class Acteur extends BaseEntity {
   @Column({ name: 'is_reassureur', default: false })
   isReassureur: boolean=false;
 
+  @Column({ name: 'is_nous', default: false })
+  isNous: boolean=false;
+
   @ManyToOne(() => Pays, { nullable: true  , eager:true})
   @JoinColumn({ name: 'pays_id' })
   pays?: Pays;

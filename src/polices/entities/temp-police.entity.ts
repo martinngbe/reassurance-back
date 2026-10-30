@@ -22,8 +22,14 @@ export class TempPolice extends BaseEntity {
   @Column({ name: 'is_iard', default: false })
   isIard!: boolean; // IARD | VIE
 
+  // FAC | TRAITE  
+  // On veut reduire le nombre de jointure
+  // cette information peut être lu dans NatureOffre
+  @Column({ name: 'is_fac', default: false })
+  isFac!: boolean; 
+
   @Column({ name: 'is_cession', default: false })
-  isCession: boolean=false;
+  isCession: boolean=false;  // CESSION | ACCEPTATION
 
 
     // Relation Quittance

@@ -22,8 +22,14 @@ export class Police extends BaseEntity {
   @Column({ name: 'is_iard', default: false })
   isIard!: boolean; // IARD | VIE
 
+  // FAC | TRAITE  
+  // On veut reduire le nombre de jointure
+  // cette information peut être lu dans NatureOffre
+  @Column({ name: 'is_fac', default: false })
+  isFac!: boolean; // FAC | TRAITE
+
   @Column({ name: 'is_cession', default: false })
-  isCession!: boolean;
+  isCession!: boolean;  //  CESSION | ACCEPTATION
 
 
   @OneToMany(() => Quittance, (quittance) => quittance.police , { cascade:true})

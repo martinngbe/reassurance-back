@@ -9,6 +9,11 @@ export class CreatePoliceDto {
   @IsOptional()
   isCession?: boolean;
 
+
+  @IsBoolean()
+  @IsOptional()
+  isFac?: boolean;
+
   @IsBoolean()
   @IsOptional()
   isReconductionTacite?: boolean;

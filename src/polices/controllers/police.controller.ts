@@ -45,7 +45,10 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
 
             if (query.isCession ) {
               baseWhere.isCession = query.isCession==='true';
-            }   
+            }  
+             if (query.isFac ) {
+              baseWhere.isFac = query.isFac==='true';
+            } 
 
 
             console.log("baseWhere:",baseWhere)
