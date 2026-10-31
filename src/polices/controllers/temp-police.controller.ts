@@ -7,7 +7,7 @@ import { UpdateTempPoliceDto } from '../dto/update-temp-police.dto';
 import { TempPolice } from '../entities/temp-police.entity';
 import { TempPoliceService } from '../services/temp-police.service';
 
-@ApiTags('empPolice')
+@ApiTags('TempPolice')
 @Controller('temp-police')
 export class TempPoliceController extends CrudController<TempPolice, CreateTempPoliceDto, UpdateTempPoliceDto> {
   constructor(protected readonly service: TempPoliceService) {

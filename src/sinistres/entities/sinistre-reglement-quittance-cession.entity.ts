@@ -3,11 +3,11 @@ import { BaseEntity } from '../../common/entities/base.entity';
 import { Sinistre } from './sinistre.entity';
 import { SinistreReglement } from './sinistre-reglement.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
-import { QuittanceCession } from 'src/quittances/entities/quittance-cession.entity';
+import { QuittancePlacement } from 'src/quittances/entities/quittance-placement.entity';
 
 /** Quote-part cédée d'un règlement de sinistre.
  * On se prépare à regler la Quote-part cédée (tout ou fraction)
- * La table QuittanceCession contient les infos sur l'Acteur
+ * La table QuittancePlacement contient les infos sur l'Acteur
  * Cela déclenche une NoteDebitCredit
 */
 @Entity('sinistre_reglement_quittance_cession')
@@ -31,10 +31,10 @@ export class SinistreReglementQuittanceCession extends BaseEntity {
   quittance!: Quittance;
   @Column({ name: 'quitance_id' })
   quitanceId!: number;
- ////////  Relation QuittanceCession
-  @ManyToOne(() => QuittanceCession)
+ ////////  Relation QuittancePlacement
+  @ManyToOne(() => QuittancePlacement)
   @JoinColumn({ name: 'quitance_cession_id' })
-  quittanceCession!: QuittanceCession;
+  quittanceCession!: QuittancePlacement;
   @Column({ name: 'quitance_cession_id' })
   quitanceCessionId!: number;
 
@@ -45,7 +45,7 @@ export class SinistreReglementQuittanceCession extends BaseEntity {
   @Column({ name: 'cours_devise', type: 'decimal', precision: 20, scale: 5 })
   coursDevise: number=0;
 
-  // Calculé avec le taux de cession de QuittanceCession
+  // Calculé avec le taux de cession de QuittancePlacement
   @Column({ type: 'decimal', precision: 20, scale: 5})
   montant: number=0;
 

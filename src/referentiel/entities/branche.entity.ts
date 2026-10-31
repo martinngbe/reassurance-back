@@ -10,6 +10,9 @@ export class Branche extends BaseEntity {
   @Column()
   libelle!: string;
 
+  @Column({name:"is_retro_conventionnelle" , default:false})
+  isRetroConventionnelle!: boolean;
+
   @OneToMany(() => SousBranche, (sousBranche) => sousBranche.branche)
   sousBranches!: SousBranche[];
 }

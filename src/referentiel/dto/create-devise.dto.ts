@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDeviseDto {
   
@@ -14,5 +14,11 @@ export class CreateDeviseDto {
   @IsString()
   @IsOptional()
   cours!: number;
+
+  @IsBoolean()
+  @IsOptional()
+  isLocale?: boolean
+  
+
 
 }

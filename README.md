@@ -34,7 +34,7 @@ Système - Vue par Packages" :
 | `referentiel`        | Branche, SousBranche, DomaineActivite, Campagne, Mouvement, CompteType, NatureCession, Region, Pays |
 | `acteurs`             | Acteur, Assure, Contact                                                  |
 | `polices`             | Police                                                                    |
-| `quittances`          | Quittance, QuittanceCession, ObjetAssure, EcheancePmd                     |
+| `quittances`          | Quittance, QuittancePlacement, ObjetAssure, EcheancePmd                     |
 | `flux-financier`      | Bordereau, Compte, CompteDetail, NoteDebitCredit, Reglement, ReglementDetail |
 | `sinistres`           | Sinistre, SinistreStatut, SinistreTypeEvaluation, SinistreDeclaration, SinistreEvaluation, SinistreQuittance, SinistreReglement (+ Detail/Cession/CessionDetail), SinistreEvaluationQuittance(Cession) |
 

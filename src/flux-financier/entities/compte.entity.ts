@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
-import { QuittanceCession } from '../../quittances/entities/quittance-cession.entity';
+import { QuittancePlacement } from '../../quittances/entities/quittance-placement.entity';
 import { CompteType } from '../../referentiel/entities/compte-type.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
@@ -21,10 +21,10 @@ export class Compte extends BaseEntity {
   quittance?: Quittance;
   @Column({ name: 'quittance_id', nullable: true })
   quittanceId?: number;
-  /// Relation QuittanceCession
-  @ManyToOne(() => QuittanceCession, { nullable: true })
+  /// Relation QuittancePlacement
+  @ManyToOne(() => QuittancePlacement, { nullable: true })
   @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittanceCession;
+  quittanceCession?: QuittancePlacement;
   @Column({ name: 'quittance_cession_id', nullable: true })
   quittanceCessionId?: number;
 

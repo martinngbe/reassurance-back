@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Quittance } from '../../quittances/entities/quittance.entity';
-import { QuittanceCession } from '../../quittances/entities/quittance-cession.entity';
+import { QuittancePlacement } from '../../quittances/entities/quittance-placement.entity';
 import { Bordereau } from './bordereau.entity';
 import { Compte } from './compte.entity';
 import { ReglementDetail } from './reglement-detail.entity';
@@ -24,10 +24,10 @@ export class NoteDebitCredit extends BaseEntity {
   quittance?: Quittance;
   @Column({ name: 'quittance_id' })
   quittanceId?: number;
-  // Relation QuittanceCession
-  @ManyToOne(() => QuittanceCession, { nullable: true })
+  // Relation QuittancePlacement
+  @ManyToOne(() => QuittancePlacement, { nullable: true })
   @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittanceCession;
+  quittanceCession?: QuittancePlacement;
   @Column({ name: 'quittance_cession_id', nullable: true })
   quittanceCessionId?: number;
   //////////////////////////////

@@ -13,8 +13,8 @@ import { SinistreQuittance } from 'src/sinistres/entities/sinistre-quittance.ent
  * Rétrocession d'une quittance vers un autre réassureur ("autres
  * réassureurs" dans le diagramme), avec le taux de cession appliqué.
  */
-@Entity('quittance_cession')
-export class QuittanceCession extends BaseEntity {
+@Entity('quittance_placement')
+export class QuittancePlacement extends BaseEntity {
   @ManyToOne(() => Quittance)
   @JoinColumn({ name: 'quittance_id' })
   quittance!: Quittance;

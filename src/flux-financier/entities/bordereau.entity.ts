@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Quittance } from '../../quittances/entities/quittance.entity';
-import { QuittanceCession } from '../../quittances/entities/quittance-cession.entity';
+import { QuittancePlacement } from '../../quittances/entities/quittance-placement.entity';
 import { NoteDebitCredit } from './note-debit-credit.entity';
 
 /** Bordereau de primes ou de sinistres (FAC), manuel ou généré. */
@@ -15,9 +15,9 @@ export class Bordereau extends BaseEntity {
   @Column({ name: 'quittance_id', nullable: true })
   quittanceId?: number;
 
-  @ManyToOne(() => QuittanceCession, { nullable: true  , onDelete:'CASCADE' })
+  @ManyToOne(() => QuittancePlacement, { nullable: true  , onDelete:'CASCADE' })
   @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittanceCession;
+  quittanceCession?: QuittancePlacement;
 
   @Column({ name: 'quittance_cession_id', nullable: true })
   quittanceCessionId?: number;

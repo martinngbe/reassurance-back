@@ -1,6 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
-import { Region } from './region.entity';
 
 @Entity('devise')
 export class Devise extends BaseEntity {
@@ -14,5 +13,10 @@ export class Devise extends BaseEntity {
 
   @Column({default:1})
   cours: number=1;
+
+
+  @Column({name:'is_locale', default: false })
+  isLocale!: Boolean
+
   
 }

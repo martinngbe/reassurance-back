@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Quittance } from './entities/quittance.entity';
-import { QuittanceCession } from './entities/quittance-cession.entity';
+import { QuittancePlacement } from './entities/quittance-placement.entity';
 import { ObjetAssure } from './entities/objet-assure.entity';
 
 import { QuittanceService } from './services/quittance.service';
 import { QuittanceController } from './controllers/quittance.controller';
 import { QuittanceCessionService } from './services/quittance-cession.service';
-import { QuittanceCessionController } from './controllers/quittance-cession.controller';
+import { QuittanceCessionController } from './controllers/quittance-placement.controller';
 import { EcheancePmdService } from '../flux-financier/services/echeance-pmd.service';
 import { EcheancePmdController } from '../flux-financier/controllers/echeance-pmd.controller';
 import { ClsModule } from 'nestjs-cls';
@@ -23,7 +23,7 @@ import { TempObjetAssureService } from './services/temp-objet-assure.service';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
- * (QuittanceCession), les objets assurés et les échéances PMD.
+ * (QuittancePlacement), les objets assurés et les échéances PMD.
  * ObjetAssure n'a pas de route dédiée : il est géré comme sous-ressource
  * de la quittance (ajouter un ObjetAssureController si besoin d'un accès
  * direct, en suivant le même patron CrudController).
@@ -34,7 +34,7 @@ import { TempObjetAssureService } from './services/temp-objet-assure.service';
     FluxFinancierModule,
     TypeOrmModule.forFeature([
       Quittance, 
-      QuittanceCession, 
+      QuittancePlacement, 
       ObjetAssure,      
       EcheancePmd,
       TempQuittance,

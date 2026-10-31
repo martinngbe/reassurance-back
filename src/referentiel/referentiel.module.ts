@@ -36,6 +36,9 @@ import { DeviseService } from './services/devise.service';
 import { NatureOffre } from './entities/nature-offre.entity';
 import { NatureOffreController } from './controllers/nature-offre.controller';
 import { NatureOffreService } from './services/nature-offre.service';
+import { BrancheRetroCessionController } from './controllers/branche-retro-cession.controller';
+import { BrancheRetroCession } from './entities/branche-retro-cession.entity';
+import { BrancheRetroCessionService } from './services/branche-retro-cession.service';
 
 /**
  * Regroupe les tables de référence communes ("Référentiel" et une partie
@@ -48,6 +51,7 @@ import { NatureOffreService } from './services/nature-offre.service';
     TypeOrmModule.forFeature([
       Branche,
       SousBranche,
+      BrancheRetroCession,
       DomaineActivite,
       Devise,
       Campagne,
@@ -60,6 +64,7 @@ import { NatureOffreService } from './services/nature-offre.service';
     ]),
   ],
   controllers: [
+    BrancheRetroCessionController,
     BrancheController,
     SousBrancheController,
     DeviseController,
@@ -73,6 +78,7 @@ import { NatureOffreService } from './services/nature-offre.service';
     PaysController,
   ],
   providers: [
+    BrancheRetroCessionService,
     BrancheService,
     SousBrancheService,
     DeviseService,
@@ -86,6 +92,7 @@ import { NatureOffreService } from './services/nature-offre.service';
     PaysService,
   ],
   exports: [
+    BrancheRetroCessionService,
     BrancheService,
     SousBrancheService,
     DeviseService,

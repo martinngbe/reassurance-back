@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
 import { NoteDebitCredit } from 'src/flux-financier/entities/note-debit-credit.entity';
-import { QuittanceCession } from 'src/quittances/entities/quittance-cession.entity';
+import { QuittancePlacement } from 'src/quittances/entities/quittance-placement.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
 
 
@@ -16,9 +16,9 @@ export class EcheancePmd extends BaseEntity {
   @Column({ name: 'quittance_id' })
   quittanceId!: number;
 
-  @ManyToOne(() => QuittanceCession, { nullable: true  , onDelete:'CASCADE'})
+  @ManyToOne(() => QuittancePlacement, { nullable: true  , onDelete:'CASCADE'})
   @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittanceCession;
+  quittanceCession?: QuittancePlacement;
 
   @Column({ name: 'quittance_cession_id', nullable: true })
   quittanceCessionId?: number;

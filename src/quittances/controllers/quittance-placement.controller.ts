@@ -7,18 +7,18 @@ import { CrudController } from 'src/common/crud/crud.controller';
 import { FindManyOptions } from 'typeorm';
 import { CreateQuittanceCessionDto } from '../dto/create-quittance-cession.dto';
 import { UpdateQuittanceCessionDto } from '../dto/update-quittance-cession.dto';
-import { QuittanceCession } from '../entities/quittance-cession.entity';
+import { QuittancePlacement } from '../entities/quittance-placement.entity';
 import { QuittanceCessionService } from '../services/quittance-cession.service';
 
 @ApiTags('Métier Affaires - QuittanceCessions')
-@Controller('quittance-cession')
-export class QuittanceCessionController extends CrudController<QuittanceCession, CreateQuittanceCessionDto, UpdateQuittanceCessionDto> {
+@Controller('quittance-placement')
+export class QuittanceCessionController extends CrudController<QuittancePlacement, CreateQuittanceCessionDto, UpdateQuittanceCessionDto> {
   constructor(private readonly quittanceCessionService: QuittanceCessionService) 
   {  super(quittanceCessionService);}
 
    // les quittanceCessions seront affichées par ordre de la plus récentes
-   protected buildOptions(query: any): FindManyOptions<QuittanceCession> {
-      const options: FindManyOptions<QuittanceCession> = {
+   protected buildOptions(query: any): FindManyOptions<QuittancePlacement> {
+      const options: FindManyOptions<QuittancePlacement> = {
         where: {},
         order: { createdAt: 'DESC' }, // Tri par défaut
       };
@@ -28,7 +28,7 @@ export class QuittanceCessionController extends CrudController<QuittanceCession,
 
   @Patch(':id/annuler')
   @ApiOperation({ summary: 'Annule une quittanceCession' })
-  annuler(@Param('id', ParseIntPipe) id: number): Promise<QuittanceCession> {
+  annuler(@Param('id', ParseIntPipe) id: number): Promise<QuittancePlacement> {
     //return this.quittanceCessionService.annuler(id);
     return this.quittanceCessionService.findOne(0)
   }

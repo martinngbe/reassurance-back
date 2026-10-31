@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { Police } from '../entities/police.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
 
-export async function seedPoliceQuittance(dataSource: DataSource): Promise<void> {
+export async function seedAcceptationPoliceQuittance(dataSource: DataSource): Promise<void> {
    
    await seedPoliceAcceptationFac(dataSource);
    await seedPoliceAcceptationTraite(dataSource)
@@ -1150,8 +1150,8 @@ export async function seedPoliceQuittance(dataSource: DataSource): Promise<void>
       isCession: false,
       acteurCedanteId:  entierEntre(1,5) },
   {
-    numero: "PAT-26-000001",
-    sousBrancheId: entierEntre(1,30),
+      numero: "PAT-26-000001",
+      sousBrancheId: entierEntre(1,30),
       natureOffreId: entierEntre(1,10),
       isIard: true ,
       isCession: false,

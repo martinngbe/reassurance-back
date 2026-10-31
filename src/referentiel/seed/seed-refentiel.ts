@@ -18,6 +18,7 @@ export async function seedReferentiel(dataSource: DataSource): Promise<void> {
    await seedMouvement(dataSource)
    await seedNatureCession(dataSource)
    await seedNatureOffre(dataSource)
+   await seedSousBrancheCession(dataSource)
   console.log('✅ Referentiel seed terminé avec succès (Idempotent)');
 }
 // //////////////////////////////////////////////////////
@@ -41,6 +42,7 @@ async function seedBranche(dataSource: DataSource): Promise<void>{
         {code:'AGR',libelle:'Agriculture'},
         {code:'CRA',libelle:'Crédit et Caution'},
         {code:'RCG',libelle:'Risques Généraux'},
+        {code:'RETRO-CESS',libelle:'Branches pour cession conventionnel', isRetroConventionnelle:true},
   ];
   console.log('🔄 La liste des branches ....');
   for (const brancheData of branchesData) {
@@ -88,7 +90,6 @@ async function seedBranche(dataSource: DataSource): Promise<void>{
   for (const sousBrancheData of sousBranchesData) {
     const existing = await sousBrancheRepo.findOne({ where: { code: sousBrancheData.code } });
     if (!existing) {
-      console.log(sousBrancheData)
       await sousBrancheRepo.save(sousBrancheRepo.create(sousBrancheData));
     }
   }
@@ -442,76 +443,76 @@ async function seedDevise(dataSource: DataSource): Promise<void>{
    
     // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
   const devisesData = [
-    {  libelle: "FRANC COMORIEN", code: "KMF", isLocale: 0 , cours:1},
-    {  libelle: "FRANC COMORIEN", code: "KMF",  isLocale: 0 , cours:1},
-    {  libelle: "OUGUIYA MAURITANIEN (NOUVEAU)", code: "MRU", isLocale: 0 , cours:1}, 
-    {  libelle: "FRANC CONGOLAIS (RDC)", code: "CDF", isLocale: 0 , cours:1}, 
-    { libelle: "IRAK DINAR", code: "IQD", isLocale: 0 , cours:1}, 
-    {  libelle: "ESCUDO", code: "CVE", isLocale: 0 , cours:1},
-    {  libelle: "KWANZA ANGOLAIS", code: "AOA", isLocale: 0 , cours:1},
-    {  libelle: "RIAL IRANIEN", code: "IRR", isLocale: 0 , cours:1}, 
-    {  libelle: "LIVRE SOUDANAISE", code: "SDG", isLocale: 0 , cours:1},
-    {  libelle: "DOLLAR LIBERIEN", code: "LRD", isLocale: 0 , cours:1},
-    {  libelle: "SEYCHELLES - ROUPIE", code: "SCR", isLocale: 0 , cours:1},
-    {  libelle: "KWACHA ZAMBIEN", code: "ZMW", isLocale: 0 , cours:1},
-    {  libelle: "RAND SUD AFRICAIN", code: "ZAR", isLocale: 0 , cours:1}, 
-    {  libelle: "RIAL YEMENITE", code: "YER", isLocale: 0 , cours:1},
-    {  libelle: "CFA UEMOA", code: "XOF", isLocale: 1}, 
-    {  libelle: "CFA AFRIQUE CENTRALE", code: "XAF", isLocale: 0 , cours:1},
-    {  libelle: "DONG VIETNAMIEN", code: "VND", isLocale: 0 , cours:1},
-    {  libelle: "BOLIVAR VENUZUELIEN", code: "VEF", isLocale: 0 , cours:1},
-    {  libelle: "DOLLAR AMERICAIN", code: "USD", isLocale: 0 , cours:1}, 
-    {  libelle: "SHILLING OUGANDAIS", code: "UGX", isLocale: 0 , cours:1}, 
-    {  libelle: "HRYVNIA UKRAINIENNE", code: "UAH", isLocale: 0 , cours:1}, 
-    {  libelle: "SHILLING TANZANIEN", code: "TZS", isLocale: 0 , cours:1}, 
-    {  libelle: "DOLLAR DE TRINIDAD", code: "TTD", isLocale: 0 , cours:1}, 
-    {  libelle: "LIVRE TURQUE", code: "TRY", isLocale: 0 , cours:1}, 
-    {  libelle: "DINAR TUNISIEN", code: "TND", isLocale: 0 , cours:1}, 
-    {  libelle: "LILANGENI DU SWAZILAND", code: "SZL", isLocale: 0 , cours:1},
-    { libelle: "LIVRE SYRIENNE", code: "SYP", isLocale: 0 , cours:1},
-    {  libelle: "LIVRE SUD-SOUDANAIS", code: "SSP", isLocale: 0 , cours:1}, 
-    {  libelle: "LEONE SIERRA LEONAIS", code: "SLL", isLocale: 0 , cours:1}, 
-    {  libelle: "DOLLAR DE SINGAPOUR", code: "SGD", isLocale: 0 , cours:1},
-    {  libelle: "RIAL SAOUDIEN", code: "SAR", isLocale: 0 , cours:1}, 
-    {  libelle: "FRANC RWANDAIS", code: "RWF", isLocale: 0 , cours:1}, 
-    {  libelle: "ROUBLE RUSSE", code: "RUB", isLocale: 0 , cours:1}, 
-    {  libelle: "RIYAL QATARIEN", code: "QAR", isLocale: 0 , cours:1}, 
-    {  libelle: "PESO PHILIPPIN", code: "PHP", isLocale: 0 , cours:1}, 
-    {  libelle: "RIAL OMANAIS", code: "OMR", isLocale: 0 , cours:1}, 
-    {  libelle: "ROUPIE NEPALAISE", code: "NPR", isLocale: 0 , cours:1},
-    {  libelle: "NAIRA NIGERIAN", code: "NGN", isLocale: 0 , cours:1},
-    {  libelle: "METICAL MOZAMBICAIN", code: "MZN", isLocale: 0 , cours:1}, 
-    {  libelle: "KWACHA MALAWIEN", code: "MWK", isLocale: 0 , cours:1}, 
-    {  libelle: "RUFIYAA MALDIVIEN", code: "MVR", isLocale: 0 , cours:1},
-    {  libelle: "ROUPIE MAURICIENNE", code: "MUR", isLocale: 0 , cours:1},
-    {  libelle: "OUGUIYA MAURITANIEN (ANCIEN)", code: "MRO", isLocale: 0 , cours:1},
-    {  libelle: "ARIARY MALGACHE", code: "MGA", isLocale: 0 , cours:1},
-    {  libelle: "DIRHAM MAROCAIN", code: "MAD", isLocale: 0 , cours:1}, 
-    {  libelle: "DINAR LIBYEN", code: "LYD", isLocale: 0 , cours:1},
-    {  libelle: "ROUPIE SRI LANKAISE", code: "LKR", isLocale: 0 , cours:1}, 
-    {  libelle: "LIVRE LIBANAIS", code: "LBP", isLocale: 0 , cours:1},
-    {  libelle: "DINAR KOWEITIEN", code: "KWD", isLocale: 0 , cours:1},
-    {  libelle: "SHILLING KENYAN", code: "KES", isLocale: 0 , cours:1},
-    {  libelle: "YEN JAPONNAIS", code: "JPY", isLocale: 0 , cours:1}, 
-    {  libelle: "DINAR JORDANIEN", code: "JOD", isLocale: 0 , cours:1}, 
-    {  libelle: "ROUPIE INDIENNE", code: "INR", isLocale: 0 , cours:1},
-    {  libelle: "ROUPIE INDONESIEN", code: "IDR", isLocale: 0 , cours:1},
-    {  libelle: "FRANC GUINEEN", code: "GNF", isLocale: 0 , cours:1}, 
-    {  libelle: "DALASI GAMBIEN", code: "GMD", isLocale: 0 , cours:1},
-    {  libelle: "CEDI GHANEEN", code: "GHS", isLocale: 0 , cours:1}, 
-    {  libelle: "LIVRE STERLING", code: "GBP", isLocale: 0 , cours:1}, 
-    {  libelle: "EURO", code: "EURO", isLocale: 0 , cours:1}, 
-    {  libelle: "BIRR ETHIOPIEN", code: "ETB", isLocale: 0 , cours:1},
-    {  libelle: "LIVRE EGYPTIEN", code: "EGP", isLocale: 0 , cours:1}, 
-    {  libelle: "DINAR ALGERIEN", code: "DZD", isLocale: 0 , cours:1}, 
-    {  libelle: "YUAN CHINOIS", code: "CNY", isLocale: 0 , cours:1},
-    {  libelle: "PULA DU BOTSWANA", code: "BWP", isLocale: 0 , cours:1},
-    {  libelle: "NGULTRUM BHUTANAIS", code: "BTN", isLocale: 0 , cours:1}, 
-    {  libelle: "BIRR ETHIOPIEN", code: "BIRR", isLocale: 0 , cours:1},
-    {  libelle: "FRANC BURUNDAIS", code: "BIF", isLocale: 0 , cours:1}, 
-    {  libelle: "DINAR DE BAREIN", code: "BHD", isLocale: 0 , cours:1},
-    {  libelle: "TAKA BANGLADAIS", code: "BDT", isLocale: 0 , cours:1}, 
-    {  libelle: "DIRHAM DES EMIRATS ARABES UNIS", code: "AED", isLocale: 0 , cours:1}, 
+    {  libelle: "FRANC COMORIEN", code: "KMF",  cours:1},
+    {  libelle: "FRANC COMORIEN", code: "KMF",   cours:1},
+    {  libelle: "OUGUIYA MAURITANIEN (NOUVEAU)", code: "MRU",  cours:1}, 
+    {  libelle: "FRANC CONGOLAIS (RDC)", code: "CDF",  cours:1}, 
+    {  libelle: "IRAK DINAR", code: "IQD",  cours:1}, 
+    {  libelle: "ESCUDO", code: "CVE",  cours:1},
+    {  libelle: "KWANZA ANGOLAIS", code: "AOA",  cours:1},
+    {  libelle: "RIAL IRANIEN", code: "IRR",  cours:1}, 
+    {  libelle: "LIVRE SOUDANAISE", code: "SDG",  cours:1},
+    {  libelle: "DOLLAR LIBERIEN", code: "LRD",  cours:1},
+    {  libelle: "SEYCHELLES - ROUPIE", code: "SCR",  cours:1},
+    {  libelle: "KWACHA ZAMBIEN", code: "ZMW",  cours:1},
+    {  libelle: "RAND SUD AFRICAIN", code: "ZAR",  cours:1}, 
+    {  libelle: "RIAL YEMENITE", code: "YER",  cours:1},
+    {  libelle: "CFA UEMOA", code: "XOF", isLocale: true}, 
+    {  libelle: "CFA AFRIQUE CENTRALE", code: "XAF",  cours:1},
+    {  libelle: "DONG VIETNAMIEN", code: "VND",  cours:1},
+    {  libelle: "BOLIVAR VENUZUELIEN", code: "VEF",  cours:1},
+    {  libelle: "DOLLAR AMERICAIN", code: "USD",  cours:1}, 
+    {  libelle: "SHILLING OUGANDAIS", code: "UGX",  cours:1}, 
+    {  libelle: "HRYVNIA UKRAINIENNE", code: "UAH",  cours:1}, 
+    {  libelle: "SHILLING TANZANIEN", code: "TZS",  cours:1}, 
+    {  libelle: "DOLLAR DE TRINIDAD", code: "TTD",  cours:1}, 
+    {  libelle: "LIVRE TURQUE", code: "TRY",  cours:1}, 
+    {  libelle: "DINAR TUNISIEN", code: "TND",  cours:1}, 
+    {  libelle: "LILANGENI DU SWAZILAND", code: "SZL",  cours:1},
+    {  libelle: "LIVRE SYRIENNE", code: "SYP",  cours:1},
+    {  libelle: "LIVRE SUD-SOUDANAIS", code: "SSP",  cours:1}, 
+    {  libelle: "LEONE SIERRA LEONAIS", code: "SLL",  cours:1}, 
+    {  libelle: "DOLLAR DE SINGAPOUR", code: "SGD",  cours:1},
+    {  libelle: "RIAL SAOUDIEN", code: "SAR",  cours:1}, 
+    {  libelle: "FRANC RWANDAIS", code: "RWF",  cours:1}, 
+    {  libelle: "ROUBLE RUSSE", code: "RUB",  cours:1}, 
+    {  libelle: "RIYAL QATARIEN", code: "QAR",  cours:1}, 
+    {  libelle: "PESO PHILIPPIN", code: "PHP",  cours:1}, 
+    {  libelle: "RIAL OMANAIS", code: "OMR",  cours:1}, 
+    {  libelle: "ROUPIE NEPALAISE", code: "NPR",  cours:1},
+    {  libelle: "NAIRA NIGERIAN", code: "NGN",  cours:1},
+    {  libelle: "METICAL MOZAMBICAIN", code: "MZN",  cours:1}, 
+    {  libelle: "KWACHA MALAWIEN", code: "MWK",  cours:1}, 
+    {  libelle: "RUFIYAA MALDIVIEN", code: "MVR",  cours:1},
+    {  libelle: "ROUPIE MAURICIENNE", code: "MUR",  cours:1},
+    {  libelle: "OUGUIYA MAURITANIEN (ANCIEN)", code: "MRO",  cours:1},
+    {  libelle: "ARIARY MALGACHE", code: "MGA",  cours:1},
+    {  libelle: "DIRHAM MAROCAIN", code: "MAD",  cours:1}, 
+    {  libelle: "DINAR LIBYEN", code: "LYD",  cours:1},
+    {  libelle: "ROUPIE SRI LANKAISE", code: "LKR",  cours:1}, 
+    {  libelle: "LIVRE LIBANAIS", code: "LBP",  cours:1},
+    {  libelle: "DINAR KOWEITIEN", code: "KWD",  cours:1},
+    {  libelle: "SHILLING KENYAN", code: "KES",  cours:1},
+    {  libelle: "YEN JAPONNAIS", code: "JPY",  cours:1}, 
+    {  libelle: "DINAR JORDANIEN", code: "JOD",  cours:1}, 
+    {  libelle: "ROUPIE INDIENNE", code: "INR",  cours:1},
+    {  libelle: "ROUPIE INDONESIEN", code: "IDR",  cours:1},
+    {  libelle: "FRANC GUINEEN", code: "GNF",  cours:1}, 
+    {  libelle: "DALASI GAMBIEN", code: "GMD",  cours:1},
+    {  libelle: "CEDI GHANEEN", code: "GHS",  cours:1}, 
+    {  libelle: "LIVRE STERLING", code: "GBP",  cours:1}, 
+    {  libelle: "EURO", code: "EURO",  cours:1}, 
+    {  libelle: "BIRR ETHIOPIEN", code: "ETB",  cours:1},
+    {  libelle: "LIVRE EGYPTIEN", code: "EGP",  cours:1}, 
+    {  libelle: "DINAR ALGERIEN", code: "DZD",  cours:1}, 
+    {  libelle: "YUAN CHINOIS", code: "CNY",  cours:1},
+    {  libelle: "PULA DU BOTSWANA", code: "BWP",  cours:1},
+    {  libelle: "NGULTRUM BHUTANAIS", code: "BTN",  cours:1}, 
+    {  libelle: "BIRR ETHIOPIEN", code: "BIRR",  cours:1},
+    {  libelle: "FRANC BURUNDAIS", code: "BIF",  cours:1}, 
+    {  libelle: "DINAR DE BAREIN", code: "BHD",  cours:1},
+    {  libelle: "TAKA BANGLADAIS", code: "BDT",  cours:1}, 
+    {  libelle: "DIRHAM DES EMIRATS ARABES UNIS", code: "AED",  cours:1}, 
           
   ];
   console.log('🔄 La liste des devises ....');
@@ -756,6 +757,67 @@ async function seedNatureOffre(dataSource: DataSource): Promise<void>{
     const existing = await natureOffreRepo.findOne({ where: { code: natureOffreData.code } });
     if (!existing) {
       await natureOffreRepo.save(natureOffreRepo.create(natureOffreData));
+    }
+  }
+}
+// //////////////////////////////////////////////////////
+//   NATURE OFFRE 
+// //////////////////////////////////////////////////////
+async function seedSousBrancheCession(dataSource: DataSource): Promise<void>{
+   const brancheCessionRepo = dataSource.getRepository(SousBranche);
+   
+    // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
+  const branchesCessionsData : Partial<SousBranche>[] =  [
+          {
+            code: "VIE",
+            libelle: "VIE",
+          },
+          {
+            code:"VTM",
+            libelle: "VEHICULES TERRESTRES A MOTEUR",
+          },
+          { 
+            code:"TM",
+            libelle: "TRANSPORTS MARITIMES",
+          },
+          {
+            code:"TA", 
+            libelle: "TRANSPORTS AERIENS",
+          },
+          {
+            code:"RC",
+            libelle: "RESPONSABILITE CIVILE GENERALE",
+          },
+          {
+            code:"INCDOM",
+            libelle: "INCENDIE ET AUTRES DOMMAGES AUX BIENS",
+          },
+          {
+            code:"AT",
+            libelle: "AUTRES TRANSPORTS",
+          },
+          {
+            code:"ARD",
+            libelle: "AUTRES RISQUES DIRECTS DOMMAGES",
+          },
+          {
+            code:"IAM",
+            libelle: "ACCIDENTS CORPORELS ET MALADIE",
+          },
+          {
+            code:"ADOM",
+            libelle: "ACCEPTATIONS DOMMAGES (CREDIT CAUTION)",
+          }
+
+
+  ]
+    console.log('🔄 La liste des sous branches de retro-conventionnel  ....');
+  for (const brancheCession of branchesCessionsData) {
+    const existing = await brancheCessionRepo.findOne({ where: { code: brancheCession.code } });
+    if (!existing) {
+      
+      brancheCession.brancheId=11 // LA derniere ligne de l'entité Branche
+      await brancheCessionRepo.save(brancheCessionRepo.create({...brancheCession }));
     }
   }
 }

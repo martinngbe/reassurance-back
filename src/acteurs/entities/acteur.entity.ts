@@ -22,6 +22,7 @@ export class Acteur extends BaseEntity {
   @Column({ name: 'raison_sociale' ,nullable: true })
   raisonSociale!: string;
 
+
   @Column({nullable:true})
   email!: string;
 
@@ -39,16 +40,16 @@ export class Acteur extends BaseEntity {
 
 
   @Column({ name: 'is_courtier', default: false })
-  isCourtier: boolean=false;
+  isCourtier: Boolean=false;
 
   @Column({ name: 'is_compagnie_assurance', default: false })
-  isCompagnieAssurance: boolean=false;
+  isCompagnieAssurance: Boolean=false;
 
   @Column({ name: 'is_reassureur', default: false })
-  isReassureur: boolean=false;
+  isReassureur: Boolean=false;
 
   @Column({ name: 'is_nous', default: false })
-  isNous: boolean=false;
+  isNous: Boolean=false;
 
   @ManyToOne(() => Pays, { nullable: true  , eager:true})
   @JoinColumn({ name: 'pays_id' })

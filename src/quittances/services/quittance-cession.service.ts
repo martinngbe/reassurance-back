@@ -4,11 +4,11 @@ import { Repository } from 'typeorm';
 import { 
   CrudService, 
 } from '../../common/crud/crud.service';
-import { QuittanceCession } from '../entities/quittance-cession.entity';
+import { QuittancePlacement } from '../entities/quittance-placement.entity';
 
 @Injectable()
-export class QuittanceCessionService extends CrudService<QuittanceCession> {
-  constructor(@InjectRepository(QuittanceCession) repository: Repository<QuittanceCession>) {
+export class QuittanceCessionService extends CrudService<QuittancePlacement> {
+  constructor(@InjectRepository(QuittancePlacement) repository: Repository<QuittancePlacement>) {
     super(repository);
   }
  

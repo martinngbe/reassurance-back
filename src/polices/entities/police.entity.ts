@@ -17,19 +17,19 @@ export class Police extends BaseEntity {
   numero!: string;
 
   @Column({ name: 'is_reconduction_tacite', default: false })
-  isReconductionTacite!: boolean;
+  isReconductionTacite!: Boolean;
 
   @Column({ name: 'is_iard', default: false })
-  isIard!: boolean; // IARD | VIE
+  isIard!: Boolean; // IARD | VIE
 
   // FAC | TRAITE  
   // On veut reduire le nombre de jointure
   // cette information peut être lu dans NatureOffre
   @Column({ name: 'is_fac', default: false })
-  isFac!: boolean; // FAC | TRAITE
+  isFac!: Boolean; // FAC | TRAITE
 
   @Column({ name: 'is_cession', default: false })
-  isCession!: boolean;  //  CESSION | ACCEPTATION
+  isCession!: Boolean;  //  CESSION | ACCEPTATION
 
 
   @OneToMany(() => Quittance, (quittance) => quittance.police , { cascade:true})
@@ -45,11 +45,12 @@ export class Police extends BaseEntity {
 
 
   // Relation SousBranche
-  @ManyToOne(() => SousBranche, {eager:true})
+  @ManyToOne(() => SousBranche, {eager:true })
   @JoinColumn({ name: 'sous_branche_id' })
   sousBranche!: SousBranche;
   @Column({ name: 'sous_branche_id' })
   sousBrancheId!: number;
+
 
 
   // Relation Cedente
@@ -58,6 +59,14 @@ export class Police extends BaseEntity {
   acteurCedante!: Acteur;
   @Column({ name: 'acteur_cedante_id' })
   acteurCedanteId!: number;
+
+  // Relation Réassureur
+  @ManyToOne(() => Acteur, {eager:true})
+  @JoinColumn({ name: 'acteur_reassureur_id' })
+  acteurReassureur!: Acteur;
+  @Column({ name: 'acteur_reassureur_id' , nullable:true})
+  acteurReassureurId!: number;
+
 
 // Relation courtier
   @ManyToOne(() => Acteur, { nullable: true , eager:true})
