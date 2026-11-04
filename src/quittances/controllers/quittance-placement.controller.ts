@@ -4,24 +4,45 @@ import {
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { CrudController } from 'src/common/crud/crud.controller';
-import { FindManyOptions } from 'typeorm';
-import { CreateQuittanceCessionDto } from '../dto/create-quittance-cession.dto';
-import { UpdateQuittanceCessionDto } from '../dto/update-quittance-cession.dto';
+import { FindManyOptions, Like } from 'typeorm';
 import { QuittancePlacement } from '../entities/quittance-placement.entity';
-import { QuittanceCessionService } from '../services/quittance-cession.service';
+import { CreateQuittancePlacementDto } from '../dto/create-quittance-placement.dto';
+import { QuittancePlacementService } from '../services/quittance-placement.service';
+import { UpdateQuittancePlacementDto } from '../dto/update-quittance-placement.dto';
+import { OPERATION_SUCCES, success } from 'src/common/helper/response.helper';
 
 @ApiTags('Métier Affaires - QuittanceCessions')
 @Controller('quittance-placement')
-export class QuittanceCessionController extends CrudController<QuittancePlacement, CreateQuittanceCessionDto, UpdateQuittanceCessionDto> {
-  constructor(private readonly quittanceCessionService: QuittanceCessionService) 
-  {  super(quittanceCessionService);}
+export class QuittancePlacementController extends CrudController<QuittancePlacement, 
+CreateQuittancePlacementDto, UpdateQuittancePlacementDto> {
+  constructor(private readonly quittancePlacementService: QuittancePlacementService) 
+  {  super(quittancePlacementService);}
 
+ 
    // les quittanceCessions seront affichées par ordre de la plus récentes
    protected buildOptions(query: any): FindManyOptions<QuittancePlacement> {
-      const options: FindManyOptions<QuittancePlacement> = {
-        where: {},
-        order: { createdAt: 'DESC' }, // Tri par défaut
-      };
+          const baseSort: any = {createdAt: 'ASC'};// Tri par défaut
+             const options: FindManyOptions<QuittancePlacement> = {
+               where: {},
+               order: {}, 
+             };
+  
+      if( query.sortKey && query.sortDirection){          
+          options.order ={ [query.sortKey]: `${query.sortDirection}`}
+      }else {
+        options.order = baseSort
+      }
+  
+      // 3. Filtres exacts (AND)
+      const baseWhere: any = {};
+      // filtre sur un champs spécifique; Tableau de conditions
+       if (query.quittanceId) {
+        baseWhere.quittance = { id: parseInt(query.quittanceId, 10) };
+      }
+      options.where = baseWhere;
+      console.log("options:", options);
+      
+          
       return options;
     }
   
@@ -30,6 +51,18 @@ export class QuittanceCessionController extends CrudController<QuittancePlacemen
   @ApiOperation({ summary: 'Annule une quittanceCession' })
   annuler(@Param('id', ParseIntPipe) id: number): Promise<QuittancePlacement> {
     //return this.quittanceCessionService.annuler(id);
-    return this.quittanceCessionService.findOne(0)
+    return this.quittancePlacementService.findOne(0)
+  }
+
+
+  @Get('cumul-taux/:quittanceId')
+  @ApiOperation({ 
+    summary: 'Récupère le cumul des taux de cession d\'une quittance',
+    description: 'Retourne le taux accepté, le cumul actuel et le disponible'
+  })
+  async getCumulTauxCession(
+    @Param('quittanceId', ParseIntPipe) quittanceId: number,
+  ) {
+    return this.quittancePlacementService.getCumulTauxCession(quittanceId);
   }
 }

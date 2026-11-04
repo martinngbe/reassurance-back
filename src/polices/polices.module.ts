@@ -7,6 +7,7 @@ import { ClsModule } from 'nestjs-cls';
 import { TempPoliceController } from './controllers/temp-police.controller';
 import { TempPoliceService } from './services/temp-police.service';
 import { TempPolice } from './entities/temp-police.entity';
+import { QuittanceCalculService } from 'src/quittances/services/quittance-calcul.service';
 
 @Module({
   
@@ -14,7 +15,7 @@ import { TempPolice } from './entities/temp-police.entity';
      ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module
     TypeOrmModule.forFeature([Police , TempPolice])],
   controllers: [PoliceController , TempPoliceController],
-  providers: [PoliceService , TempPoliceService],
-  exports: [PoliceService,TempPoliceService],
+  providers: [PoliceService , TempPoliceService , QuittanceCalculService],
+  exports: [PoliceService,TempPoliceService ,QuittanceCalculService],
 })
 export class PolicesModule {}

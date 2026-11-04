@@ -23,10 +23,10 @@ export class Compte extends BaseEntity {
   quittanceId?: number;
   /// Relation QuittancePlacement
   @ManyToOne(() => QuittancePlacement, { nullable: true })
-  @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittancePlacement;
-  @Column({ name: 'quittance_cession_id', nullable: true })
-  quittanceCessionId?: number;
+  @JoinColumn({ name: 'quittance_placement_id' })
+  quittancePlacement?: QuittancePlacement;
+  @Column({ name: 'quittance_placement_id', nullable: true })
+  quittancePlacementId?: number;
 
   @OneToMany(() => NoteDebitCredit, (b) => b.compte)
   notesDebitCredit!: NoteDebitCredit[];
@@ -65,8 +65,8 @@ export class Compte extends BaseEntity {
   isEnNotreFaveur: boolean=false;
   
   // les statuts
-  @Column({ name: 'is_cession', default: false })
-  isCession: boolean=false;
+  @Column({ name: 'is_placement', default: false })
+  isPlacement: boolean=false;
 
   @Column({ name: 'is_proportionnel', default: true })
   isProportionnel: boolean=false;

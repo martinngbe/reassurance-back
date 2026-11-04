@@ -16,11 +16,11 @@ export class Bordereau extends BaseEntity {
   quittanceId?: number;
 
   @ManyToOne(() => QuittancePlacement, { nullable: true  , onDelete:'CASCADE' })
-  @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittancePlacement;
+  @JoinColumn({ name: 'quittance_placement_id' })
+  quittancePlacement?: QuittancePlacement;
 
-  @Column({ name: 'quittance_cession_id', nullable: true })
-  quittanceCessionId?: number;
+  @Column({ name: 'quittance_placement_id', nullable: true })
+  quittancePlacementId?: number;
 
   @OneToMany(() => NoteDebitCredit, (b) => b.bordereau)
   notesDebitCredit!: NoteDebitCredit[];

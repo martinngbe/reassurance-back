@@ -6,8 +6,8 @@ import { Bordereau } from './bordereau.entity';
 import { Compte } from './compte.entity';
 import { ReglementDetail } from './reglement-detail.entity';
 import { SinistreReglementQuittance } from 'src/sinistres/entities/sinistre-reglement-quittance.entity';
-import { SinistreReglementQuittanceCession } from 'src/sinistres/entities/sinistre-reglement-quittance-cession.entity';
 import { EcheancePmd } from './echeance-pmd.entity';
+import { SinistreReglementQuittancePlacement } from 'src/sinistres/entities/sinistre-reglement-quittance-placement.entity';
 
 /**
  * Note de débit / crédit : pièce comptable générée à partir d'une
@@ -26,10 +26,10 @@ export class NoteDebitCredit extends BaseEntity {
   quittanceId?: number;
   // Relation QuittancePlacement
   @ManyToOne(() => QuittancePlacement, { nullable: true })
-  @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittancePlacement;
-  @Column({ name: 'quittance_cession_id', nullable: true })
-  quittanceCessionId?: number;
+  @JoinColumn({ name: 'quittance_placement_id' })
+  quittancePlacement?: QuittancePlacement;
+  @Column({ name: 'quittance_placement_id', nullable: true })
+  quittancePlacementId?: number;
   //////////////////////////////
   //  Relation Bordereau
   @ManyToOne(() => Bordereau, { nullable: true  , onDelete:'CASCADE'})
@@ -59,12 +59,12 @@ export class NoteDebitCredit extends BaseEntity {
   sinistreReglementQuittance?: SinistreReglementQuittance;
   @Column({ name: 'sinistre_reglement_quittance_id', nullable: true })
   sinistreReglementQuittanceId?: number;
-  // Relation SinistreReglementQuittanceCession
-  @ManyToOne(() => SinistreReglementQuittanceCession, { nullable: true })
-  @JoinColumn({ name: 'sinistre_reglement_quittance_cession_id' })
-  sinistreReglementQuittanceCession?: SinistreReglementQuittanceCession;
-  @Column({ name: 'sinistre_reglement_quittance_cession_id', nullable: true })
-  sinistreReglementQuittanceCessionId?: number;
+  // Relation SinistreReglementQuittancePlacement
+  @ManyToOne(() => SinistreReglementQuittancePlacement, { nullable: true })
+  @JoinColumn({ name: 'sinistre_reglement_quittance_placement_id' })
+  sinistreReglementQuittancePlacement?: SinistreReglementQuittancePlacement;
+  @Column({ name: 'sinistre_reglement_quittance_placement_id', nullable: true })
+  sinistreReglementQuittancePlacementId?: number;
 
 
 
@@ -81,8 +81,8 @@ export class NoteDebitCredit extends BaseEntity {
   @Column({ name: 'sinistre_evaluation_id', nullable: true })
   sinistreEvaluationId?: number;
 
-  @Column({ name: 'is_cession', default: false })
-  isCession: boolean=false;
+  @Column({ name: 'is_placement', default: false })
+  isPlacement: boolean=false;
 
   @Column({ name: 'is_proportionnel', default: true })
   isProportionnel: boolean=false;

@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
+import { DataSource, DeepPartial } from 'typeorm';
 import { Police } from '../entities/police.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
 
@@ -112,12 +112,24 @@ export async function seedAcceptationPoliceQuittance(dataSource: DataSource): Pr
                 const policeSave = await policeRepo.save(policeRepo.create(policeData));
                 // lecture de la quittance
                 let quittanceRead = getQuittanceAcceptationFac(compteurPolice)
+                console.log("Acceptation FAC quittanceRead:",quittanceRead)
                 const existing2 = await quittanceRepo.findOne({ where: { numero: quittanceRead.numero } });
                 if (!existing2) {
                    quittanceRead.policeId = policeSave.id 
                    quittanceRead.deviseId=14
                    quittanceRead.mouvementId=1
-                  await quittanceRepo.save(quittanceRepo.create(quittanceRead));
+                  
+
+                  await quittanceRepo.save(quittanceRepo.create({
+                    ...quittanceRead , 
+                    primeNette:0,
+                    capacite:0,
+                    tauxCession:0,
+                    taxeSurCommission:0,
+                    primeCedee: 0,
+                    primeAcceptee:0
+
+                  } as   DeepPartial<Quittance>));
                 } else {
                   console.log("Police N°",policeData.numero )
                   console.log("Doublon quittance N°",quittanceRead.numero )
@@ -231,6 +243,7 @@ export async function seedAcceptationPoliceQuittance(dataSource: DataSource): Pr
           tauxAccepte: 86.25,
           commissionFixe: 27.5,
           taxeSurCommissionFixe: 0,
+          coursDevise: decimalEntre(1 , 655),
           avisEcheance: 90,
           numero: "QAF-26-000004",
           dateEffet: "2026-05-01",
@@ -1158,7 +1171,7 @@ export async function seedAcceptationPoliceQuittance(dataSource: DataSource): Pr
       acteurCedanteId:  entierEntre(1,5)   
   }
 ];
-    console.log('🔄 La liste des polices ....');
+    console.log('🔄 La liste des polices Acceptation Traité ....');
   const quittanceRepo = dataSource.getRepository(Quittance); 
   let compteurPolice =0
   for (const policeData of policesTraiteData) {
@@ -1168,11 +1181,26 @@ export async function seedAcceptationPoliceQuittance(dataSource: DataSource): Pr
                 const policeSave = await policeRepo.save(policeRepo.create(policeData));
                 // lecture de la quittance
                 let quittanceRead = getQuittanceAcceptationTraite(compteurPolice)
+                //console.log("Quittance acceptation Traité  quittanceRead:",quittanceRead)
                 const existing2 = await quittanceRepo.findOne({ where: { numero: quittanceRead.numero } });
                 if (!existing2) {
                   quittanceRead.policeId = policeSave.id
                   quittanceRead.deviseId=14
-                  await quittanceRepo.save(quittanceRepo.create({...quittanceRead , mouvementId:1}));
+                  
+                  await quittanceRepo.save(quittanceRepo.create({
+                    ...quittanceRead , 
+                    mouvementId:1,
+                    primeNette:0,
+                    capacite:0,
+                    tauxCedante:0,
+                    tauxAccepte:0,
+                    tauxCession:0 ,
+                    taxeSurPrime: 0,
+                    avisSinistre:0 ,
+                    primeCedee:0 ,
+                    primeAcceptee:0
+                    //taxeSurCommission:0,
+                  } as DeepPartial<Quittance>));
                 } else {
                   console.log("Police Traité N°",policeData.numero )
                   console.log("Doublon quittance Traité N°",quittanceRead.numero )

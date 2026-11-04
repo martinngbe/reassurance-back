@@ -10,8 +10,8 @@ import { QuittancePlacement } from 'src/quittances/entities/quittance-placement.
  * La table QuittancePlacement contient les infos sur l'Acteur
  * Cela déclenche une NoteDebitCredit
 */
-@Entity('sinistre_reglement_quittance_cession')
-export class SinistreReglementQuittanceCession extends BaseEntity {
+@Entity('sinistre_reglement_quittance_placement')
+export class SinistreReglementQuittancePlacement extends BaseEntity {
 
   ////////  Relation Sinistre
   @ManyToOne(() => Sinistre)
@@ -33,10 +33,10 @@ export class SinistreReglementQuittanceCession extends BaseEntity {
   quitanceId!: number;
  ////////  Relation QuittancePlacement
   @ManyToOne(() => QuittancePlacement)
-  @JoinColumn({ name: 'quitance_cession_id' })
-  quittanceCession!: QuittancePlacement;
-  @Column({ name: 'quitance_cession_id' })
-  quitanceCessionId!: number;
+  @JoinColumn({ name: 'quitance_placement_id' })
+  quittancePlacement!: QuittancePlacement;
+  @Column({ name: 'quitance_placement_id' })
+  quitancePlacementId!: number;
 
   //  Finance 
   @Column({ name: 'devise_id' })
@@ -45,7 +45,7 @@ export class SinistreReglementQuittanceCession extends BaseEntity {
   @Column({ name: 'cours_devise', type: 'decimal', precision: 20, scale: 5 })
   coursDevise: number=0;
 
-  // Calculé avec le taux de cession de QuittancePlacement
+  // Calculé avec le taux de placement de QuittancePlacement
   @Column({ type: 'decimal', precision: 20, scale: 5})
   montant: number=0;
 
@@ -53,6 +53,6 @@ export class SinistreReglementQuittanceCession extends BaseEntity {
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;
 
-  @Column({ name: 'sinistre_reglement_cession_id_annule', nullable: true })
-  sinistreReglementCessionIdAnnule?: number;
+  @Column({ name: 'sinistre_reglement_placement_id_annule', nullable: true })
+  sinistreReglementPlacementIdAnnule?: number;
 }

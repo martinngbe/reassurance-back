@@ -7,7 +7,7 @@ import { DomaineActivite } from './entities/domaine-activite.entity';
 import { Campagne } from './entities/campagne.entity';
 import { Mouvement } from './entities/mouvement.entity';
 import { CompteType } from './entities/compte-type.entity';
-import { NatureCession } from './entities/nature-cession.entity';
+import { NaturePlacement } from './entities/nature-placement.entity';
 import { Region } from './entities/region.entity';
 import { Pays } from './entities/pays.entity';
 
@@ -23,8 +23,8 @@ import { MouvementService } from './services/mouvement.service';
 import { MouvementController } from './controllers/mouvement.controller';
 import { CompteTypeService } from './services/compte-type.service';
 import { CompteTypeController } from './controllers/compte-type.controller';
-import { NatureCessionService } from './services/nature-cession.service';
-import { NatureCessionController } from './controllers/nature-cession.controller';
+import { NaturePlacementService } from './services/nature-placement.service';
+import { NaturePlacementController } from './controllers/nature-placement.controller';
 import { RegionService } from './services/region.service';
 import { RegionController } from './controllers/region.controller';
 import { PaysService } from './services/pays.service';
@@ -57,7 +57,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
       Campagne,
       Mouvement,
       CompteType,
-      NatureCession,
+      NaturePlacement,
       NatureOffre,
       Region,
       Pays,
@@ -72,7 +72,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
     CampagneController,
     MouvementController,
     CompteTypeController,
-    NatureCessionController,
+    NaturePlacementController,
     NatureOffreController,
     RegionController,
     PaysController,
@@ -86,7 +86,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
     CampagneService,
     MouvementService,
     CompteTypeService,
-    NatureCessionService,
+    NaturePlacementService,
     NatureOffreService,
     RegionService,
     PaysService,
@@ -100,7 +100,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
     CampagneService,
     MouvementService,
     CompteTypeService,
-    NatureCessionService,
+    NaturePlacementService,
     NatureOffreService,
     RegionService,
     PaysService,

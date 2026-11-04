@@ -20,7 +20,7 @@ import { SinistreReglementController } from './controllers/sinistre-reglement.co
 import { ClsModule } from 'nestjs-cls';
 import { SinistreController } from './controllers/sinistre.controller';
 import { SinistreReglementQuittance } from './entities/sinistre-reglement-quittance.entity';
-import { SinistreReglementQuittanceCession } from './entities/sinistre-reglement-quittance-cession.entity';
+import { SinistreReglementQuittancePlacement } from './entities/sinistre-reglement-quittance-placement.entity';
 import { SinistreTypeEValuationController } from './controllers/sinistre-type-evaluation.controller';
 import { SinistreReglementDetailController } from './controllers/sinistre-reglement-detail.controller';
 import { SinistreReglementDetailService } from './services/sinistre-reglement-detail.service';
@@ -33,8 +33,8 @@ import { SinistreActeurService } from './services/sinistre-acteur.service';
 /**
  * Module sinistres : statuts, types d'évaluation, déclaration,
  * évaluations et règlements exposent une route CRUD. Les tables de
- * ventilation (SinistreQuittance, *Detail, *Cession, *CessionDetail,
- * SinistreEvaluationQuittance[Cession]) sont enregistrées pour TypeORM
+ * ventilation (SinistreQuittance, *Detail, *Placement, *PlacementDetail,
+ * SinistreEvaluationQuittance[Placement]) sont enregistrées pour TypeORM
  * mais gérées comme sous-ressources de leur agrégat (ajouter un
  * contrôleur dédié au besoin, en suivant le même patron CrudController).
  */
@@ -51,7 +51,7 @@ import { SinistreActeurService } from './services/sinistre-acteur.service';
       SinistreReglement,
       SinistreReglementDetail,
       SinistreReglementQuittance,
-      SinistreReglementQuittanceCession
+      SinistreReglementQuittancePlacement
     ]),
   ],
   controllers: [

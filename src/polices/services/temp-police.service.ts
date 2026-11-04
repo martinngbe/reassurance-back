@@ -10,6 +10,7 @@ import { Quittance } from 'src/quittances/entities/quittance.entity';
 import { TempQuittance } from 'src/quittances/entities/temp-quittance.entity';
 import { Police } from '../entities/police.entity';
 import { TransactionalAdapterTypeOrm } from '@nestjs-cls/transactional-adapter-typeorm';
+import { QuittanceCalculService } from 'src/quittances/services/quittance-calcul.service';
 
 // Champs copiés TempQuittance -> Quittance (jamais id / policeId)
 const CHAMPS_QUITTANCE = [
@@ -35,12 +36,13 @@ const CHAMPS_QUITTANCE = [
   'tauxCommission',
   'taxeSurCommission',
   'primeBrute',
-  'primeNette',
+  //'primeNette',
   'taxeSurPrime',
   'nombreEcheancePmd',
   'sinistreAuComptant',
   'avisSinistre',
   'aliment',
+  'commissionFixe',
 ] as const;
 
 
@@ -49,6 +51,7 @@ export class TempPoliceService extends CrudService<TempPolice> {
   constructor(
     @InjectRepository(TempPolice) tempPolicerepository: Repository<TempPolice>,
    private readonly txHost: TransactionHost<TransactionalAdapterTypeOrm>,
+    private readonly quittanceCalculService: QuittanceCalculService, // ✅ AJOUT
   ) {
     super(tempPolicerepository);
   }
@@ -79,6 +82,8 @@ export class TempPoliceService extends CrudService<TempPolice> {
       where: { id: tempPoliceId },
       loadEagerRelations: false,
     });
+    console.log(' _________ TempPoliceService.transfererDepuisTemp _____________________')
+    console.log('tp:', tp)
     if (!tp) {
       throw new NotFoundException( failure(`TempPolice ${tempPoliceId} introuvable`));
     }
@@ -98,9 +103,12 @@ export class TempPoliceService extends CrudService<TempPolice> {
         isReconductionTacite: tp.isReconductionTacite,
         isIard: tp.isIard,
         isCession: tp.isCession,
+        isFac: tp.isFac,
+        
         natureOffreId: tp.natureOffreId,
         sousBrancheId: tp.sousBrancheId,
         acteurCedanteId: tp.acteurCedanteId,
+        acteurReassureurId: tp.acteurReassureurId,
         acteurCourtierId: tp.acteurCourtierId,
         assureId: tp.assureId,
         
@@ -113,24 +121,42 @@ export class TempPoliceService extends CrudService<TempPolice> {
       loadEagerRelations: false,
       order: { id: 'ASC' },
     });
-
+     console.log('CHAMPS_QUITTANCE:', CHAMPS_QUITTANCE)
+    console.log('tempQuittances:', tempQuittances)
     const quittanceRepo = tx.getRepository(Quittance);
     for (const tq of tempQuittances) {
-      const data: Record<string, unknown> = {};
-      for (const champ of CHAMPS_QUITTANCE) data[champ] = tq[champ];
+              // 1. Copie des champs bruts
+              const data: Record<string, unknown> = {};
+              for (const champ of CHAMPS_QUITTANCE) data[champ] = tq[champ];
 
-      await quittanceRepo.save(
-        quittanceRepo.create({
-          ...data,
-          policeId: police.id, // lien père/fils
-         // isAnnule: false,
-        }),
-      );
+              // 2. ✅ Calcul des champs dérivés (primeCedee, primeAcceptee, primeNette, commissionFixe)
+              const calculee = this.quittanceCalculService.appliquer(data as Partial<Quittance>);
 
-      // 3 bis. Objets assurés : à compléter avec TempObjetAssure / ObjetAssure
-      // (nouvel id de quittance comme clé). À supprimer AVANT les
-      // TempQuittance à l'étape 4 (delete() ne déclenche pas le cascade).
-    }
+              // 3. Sauvegarde avec merge des valeurs calculées
+              await quittanceRepo.save(
+                quittanceRepo.create({
+                  ...data,
+                  ...calculee,          // ✅ fusionne les champs dérivés
+                  policeId: police.id,
+                }),
+              );
+      }
+    // for (const tq of tempQuittances) {
+    //   const data: Record<string, unknown> = {};
+    //   for (const champ of CHAMPS_QUITTANCE) data[champ] = tq[champ];
+
+    //   await quittanceRepo.save(
+    //     quittanceRepo.create({
+    //       ...data,
+    //       policeId: police.id, // lien père/fils
+    //      // isAnnule: false,
+    //     }),
+    //   );
+
+    //   // 3 bis. Objets assurés : à compléter avec TempObjetAssure / ObjetAssure
+    //   // (nouvel id de quittance comme clé). À supprimer AVANT les
+    //   // TempQuittance à l'étape 4 (delete() ne déclenche pas le cascade).
+    // }
 
     // 4. Purge des données temporaires (enfants avant parent)
     if (tempQuittances.length) {

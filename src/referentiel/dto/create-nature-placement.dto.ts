@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateNatureCessionDto {
+export class CreateNaturePlacementDto {
   @IsString()
   @IsNotEmpty()
-  code: string;
+  code!: string;
 
   @IsString()
   @IsNotEmpty()
-  libelle: string;
+  libelle!: string;
 }

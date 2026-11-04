@@ -7,8 +7,6 @@ import { ObjetAssure } from './entities/objet-assure.entity';
 
 import { QuittanceService } from './services/quittance.service';
 import { QuittanceController } from './controllers/quittance.controller';
-import { QuittanceCessionService } from './services/quittance-cession.service';
-import { QuittanceCessionController } from './controllers/quittance-placement.controller';
 import { EcheancePmdService } from '../flux-financier/services/echeance-pmd.service';
 import { EcheancePmdController } from '../flux-financier/controllers/echeance-pmd.controller';
 import { ClsModule } from 'nestjs-cls';
@@ -20,6 +18,10 @@ import { TempQuittanceService } from './services/temp-quittance.service';
 import { TempObjetAssure } from './entities/temp-objet-assure.entity';
 import { TempObjetAssureController } from './controllers/temp-objet-assure.controller';
 import { TempObjetAssureService } from './services/temp-objet-assure.service';
+import { QuittanceCalculService } from './services/quittance-calcul.service';
+import { QuittancePlacementController } from './controllers/quittance-placement.controller';
+import { QuittancePlacementService } from './services/quittance-placement.service';
+import { QuittancePlacementCalculService } from './services/quittance-placement-calcul.service';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
@@ -43,7 +45,7 @@ import { TempObjetAssureService } from './services/temp-objet-assure.service';
   ],
   controllers: [
     QuittanceController, 
-    QuittanceCessionController, 
+    QuittancePlacementController, 
     EcheancePmdController,
     TempQuittanceController,
     TempObjetAssureController
@@ -51,14 +53,20 @@ import { TempObjetAssureService } from './services/temp-objet-assure.service';
   ],
   providers: [
     QuittanceService, 
-    QuittanceCessionService, 
+    QuittancePlacementService, 
+    QuittanceCalculService,
+    QuittancePlacementService,
+    QuittancePlacementCalculService ,
     EcheancePmdService,
     TempQuittanceService,
     TempObjetAssureService
   ],
   exports: [
     QuittanceService, 
-    QuittanceCessionService, 
+    QuittancePlacementService,
+    QuittanceCalculService,
+    QuittancePlacementService ,
+    QuittancePlacementCalculService ,
     EcheancePmdService,
     TempQuittanceService,
     TempObjetAssureService

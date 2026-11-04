@@ -6,7 +6,7 @@ import { Pays } from '../entities/pays.entity';
 import { Devise } from '../entities/devise.entity';
 import { DomaineActivite } from '../entities/domaine-activite.entity';
 import { Mouvement } from '../entities/mouvement.entity';
-import { NatureCession } from '../entities/nature-cession.entity';
+import {  NaturePlacement } from '../entities/nature-placement.entity';
 import { NatureOffre } from '../entities/nature-offre.entity';
 
 export async function seedReferentiel(dataSource: DataSource): Promise<void> {
@@ -16,7 +16,7 @@ export async function seedReferentiel(dataSource: DataSource): Promise<void> {
    await seedDevise(dataSource)
    await seedDomaineActivite(dataSource)
    await seedMouvement(dataSource)
-   await seedNatureCession(dataSource)
+   await seedNaturePlacement(dataSource)
    await seedNatureOffre(dataSource)
    await seedSousBrancheCession(dataSource)
   console.log('✅ Referentiel seed terminé avec succès (Idempotent)');
@@ -657,8 +657,8 @@ async function seedMouvement(dataSource: DataSource): Promise<void>{
 // //////////////////////////////////////////////////////
 //   NATURE CESSION 
 // //////////////////////////////////////////////////////
-async function seedNatureCession(dataSource: DataSource): Promise<void>{
-   const natureCessionRepo = dataSource.getRepository(NatureCession);
+async function seedNaturePlacement(dataSource: DataSource): Promise<void>{
+   const naturePlacementRepo = dataSource.getRepository(NaturePlacement);
    
     // 1. Créer les rôles UNIQUEMENT s'ils n'existent pas déjà
     //Légale, Conventionnelle, Facultative
@@ -669,9 +669,9 @@ async function seedNatureCession(dataSource: DataSource): Promise<void>{
     ]
     console.log('🔄 La liste des natures cessions ....');
   for (const natureCessionData of natureCessionsData) {
-    const existing = await natureCessionRepo.findOne({ where: { code: natureCessionData.code } });
+    const existing = await naturePlacementRepo.findOne({ where: { code: natureCessionData.code } });
     if (!existing) {
-      await natureCessionRepo.save(natureCessionRepo.create(natureCessionData));
+      await naturePlacementRepo.save(naturePlacementRepo.create(natureCessionData));
     }
   }
 }

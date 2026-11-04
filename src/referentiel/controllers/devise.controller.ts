@@ -35,12 +35,6 @@ export class DeviseController extends CrudController<Devise, CreateDeviseDto, Up
 
     // 3. Filtres exacts (AND)
     const baseWhere: any = {};
-    // filtre sur un champs spécifique; Tableau de conditions
-    //  if (query.brancheId) {
-    //   baseWhere.branche = { id: parseInt(query.brancheId, 10) };
-    //   // Note: Si votre entité utilise une colonne directe et non une relation, utilisez :
-    //   // baseWhere.brancheId = parseInt(query.brancheId, 10);
-    // }
    
     // 4. Filtre de recherche globale (LIKE avec OR)
     if (query.search) {

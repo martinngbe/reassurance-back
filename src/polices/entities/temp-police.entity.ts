@@ -36,7 +36,7 @@ export class TempPolice extends BaseEntity {
   // On charge automatiquement toutes les tempsQuittance de la police
   // On se rassure qu'il n'y aura pas plus de un. car saisie temporaire.
   // la table sera vidée à la fin de la saisie
-  @OneToMany(() => TempQuittance, (quittance) => quittance.police , {eager: true, cascade:true})
+  @OneToMany(() => TempQuittance, (quittance) => quittance.police , {eager: false})
   quittances!: TempQuittance[];
 
 
@@ -62,6 +62,15 @@ export class TempPolice extends BaseEntity {
   acteurCedante!: Acteur;
   @Column({ name: 'acteur_cedante_id' })
   acteurCedanteId!: number;
+
+    // Relation Réassureur
+  @ManyToOne(() => Acteur, {eager:true})
+  @JoinColumn({ name: 'acteur_reassureur_id' })
+  acteurReassureur!: Acteur;
+  @Column({ name: 'acteur_reassureur_id' , nullable:true})
+  acteurReassureurId!: number;
+
+
 
 // Relation courtier
   @ManyToOne(() => Acteur, { nullable: true , eager:true})

@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
+import { DataSource, DeepPartial } from 'typeorm';
 import { Police } from '../entities/police.entity';
 import { Quittance } from 'src/quittances/entities/quittance.entity';
 
@@ -128,14 +128,31 @@ async function seedPoliceRetroCessionTRaite(dataSource: DataSource): Promise<voi
                 // lecture de la quittance de la police à l'index :compteurPolice
                 // //////////////////////////////////////////////
                 let quittanceRead = getQuittanceCessionTRaite(compteurPolice)
+                console.log(" -- getQuittanceCessionTRaite  quittanceRead:",quittanceRead)
                 const existing2 = await quittanceRepo.findOne({ where: { numero: quittanceRead.numero } });
                 if (!existing2) {
                    const policeId = policeSave.id 
                    quittanceRead.deviseId=14
                    
-                  await quittanceRepo.save(quittanceRepo.create({...quittanceRead ,
+                  await quittanceRepo.save(quittanceRepo.create( {...quittanceRead ,
                         policeId,
-                        mouvementId:1 }));
+                        mouvementId:1 ,
+                        primeNette:0,
+                        capitaux:0,
+                        capacite:0,
+                        tauxCedante:0,
+                        tauxAccepte:0,
+                        tauxCession:0 ,
+                        taxeSurPrime:0,
+                        avisSinistre:0,
+                        lci:0 ,
+                        smp:0 , 
+                        estimationPrime:0,
+                        sinistreAuComptant:0,
+                        primeCedee: 0,
+                    primeAcceptee:0
+                      
+                      } as DeepPartial<Quittance>));
                 } else {
                   console.log("Police N°",policeData.numero )
                   console.log("Doublon quittance N°",quittanceRead.numero )

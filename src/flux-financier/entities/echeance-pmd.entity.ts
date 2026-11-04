@@ -17,11 +17,11 @@ export class EcheancePmd extends BaseEntity {
   quittanceId!: number;
 
   @ManyToOne(() => QuittancePlacement, { nullable: true  , onDelete:'CASCADE'})
-  @JoinColumn({ name: 'quittance_cession_id' })
-  quittanceCession?: QuittancePlacement;
+  @JoinColumn({ name: 'quittance_placement_id' })
+  quittancePlacement?: QuittancePlacement;
 
-  @Column({ name: 'quittance_cession_id', nullable: true })
-  quittanceCessionId?: number;
+  @Column({ name: 'quittance_placement_id', nullable: true })
+  quittancePlacementId?: number;
 
   @ManyToOne(() => Acteur)
   @JoinColumn({ name: 'acteur_id' })
@@ -46,8 +46,8 @@ export class EcheancePmd extends BaseEntity {
   @Column({ type: 'decimal', precision: 18, scale: 5 })
   prime: number=0;
 
-  @Column({ name: 'is_cession', default: false })
-  isCession: boolean=false;
+  @Column({ name: 'is_placement', default: false })
+  isPlacement: boolean=false;
 
   @Column({ name: 'is_annule', default: false })
   isAnnule: boolean=false;

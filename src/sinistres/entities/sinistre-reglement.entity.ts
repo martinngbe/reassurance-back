@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Sinistre } from './sinistre.entity';
 import { SinistreReglementDetail } from './sinistre-reglement-detail.entity';
-import { SinistreReglementQuittanceCession } from './sinistre-reglement-quittance-cession.entity';
+import { SinistreReglementQuittancePlacement } from './sinistre-reglement-quittance-placement.entity';
 import { SinistreReglementQuittance } from './sinistre-reglement-quittance.entity';
 
 /** Règlement d'un sinistre en parti ou en totalité
@@ -22,9 +22,9 @@ export class SinistreReglement extends BaseEntity {
   ////////  Relation SinistreReglementDetail
   @OneToMany(() => SinistreReglementDetail, (qc) => qc.sinistreReglement, {cascade: true,})
   sinistreReglement!: SinistreReglementDetail[];
-  ////////  Relation SinistreReglementQuittanceCession
-  @OneToMany(() => SinistreReglementQuittanceCession, (qc) => qc.sinistreReglement, {cascade: true,})
-  sinistreReglementQuittanceCession!: SinistreReglementQuittanceCession[];
+  ////////  Relation SinistreReglementQuittancePlacement
+  @OneToMany(() => SinistreReglementQuittancePlacement, (qc) => qc.sinistreReglement, {cascade: true,})
+  sinistreReglementQuittancePlacement!: SinistreReglementQuittancePlacement[];
 
   @OneToMany(() => SinistreReglementQuittance, (qc) => qc.sinistreReglement, {cascade: true,})
   sinistreReglementQuittance!: SinistreReglementQuittance[];
