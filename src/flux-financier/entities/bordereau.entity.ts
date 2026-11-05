@@ -5,6 +5,7 @@ import { QuittancePlacement } from '../../quittances/entities/quittance-placemen
 import { NoteDebitCredit } from './note-debit-credit.entity';
 import Decimal from 'decimal.js';
 import { DecimalTransformer } from 'src/common/transformers/decimal.transformer';
+import { Devise } from 'src/referentiel/entities/devise.entity';
 
 /** Bordereau de primes ou de sinistres (FAC), manuel ou généré. 
  *  Dans la zonz CIMA, l'habitude opérationnelle rattache systématiquement
@@ -31,8 +32,7 @@ export class Bordereau extends BaseEntity {
   @Column({ name: 'periode_fin', type: 'date' , nullable: true})
   periodeFin?: Date;
 
-  @Column({ name: 'devise_id' })
-  deviseId!: number;
+
 
   @Column({ name: 'cours_devise', type: 'decimal',precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer()  })
   coursDevise: number = 0;
@@ -84,9 +84,16 @@ export class Bordereau extends BaseEntity {
   @Column({ name: 'bordereau_id_annule', nullable: true })
   bordereauIdAnnule!: number;
 
- 
+  /// Realation
+  @ManyToOne(() => Devise , {eager:true})
+  @JoinColumn({ name: 'devise_id' })
+  devise!: Devise;
+  @Column({ name: 'devise_id' })
+  deviseId!: number;
+
+
   // Le bordereau est toujours rattaché à une quittance
-  @ManyToOne(() => Quittance, { nullable: false , onDelete:'CASCADE' })
+  @ManyToOne(() => Quittance, { eager:true , onDelete:'CASCADE' })
   @JoinColumn({ name: 'quittance_id' })
   quittance!: Quittance;
   @Column({ name: 'quittance_id', nullable: true })
@@ -96,7 +103,6 @@ export class Bordereau extends BaseEntity {
   @ManyToOne(() => QuittancePlacement, { nullable: true  , onDelete:'CASCADE' })
   @JoinColumn({ name: 'quittance_placement_id' })
   quittancePlacement?: QuittancePlacement;
-
   @Column({ name: 'quittance_placement_id', nullable: true })
   quittancePlacementId?: number;
 

@@ -1,9 +1,14 @@
-import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
+import { IsBoolean, IsInt,IsString, IsNumber, IsOptional } from 'class-validator';
 import Decimal from 'decimal.js';
 
 export class CreateBordereauDto {
+    @IsString()
     @IsOptional()
     numero!: string
+
+    @IsString()
+    @IsOptional()
+    reference!: string
 
     @IsOptional()
     dateReception?: Date;
