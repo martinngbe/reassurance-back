@@ -89,18 +89,23 @@ export class CreateQuittanceDto {
   @IsOptional()
   tauxAccepte: number=0;
 
-  @IsNumber()
-  @IsOptional()
-  tauxCession: number = 0;
+  //@IsNumber()
+  //@IsOptional()
+  //tauxCession: number = 0;
 
-  @IsNumber()
-  @IsOptional()
-  tauxRetention: number = 0;
+  //@IsNumber()
+  //@IsOptional()
+  //tauxRetention: number = 0;
 
 
   @IsNumber()
   @IsOptional()
   tauxCommission: number=0;
+
+
+  @IsNumber()
+  @IsOptional()
+  commissionFixe: number=0;
 
   @IsNumber()
   @IsOptional()
@@ -154,8 +159,8 @@ export class CreateQuittanceDto {
   @Exclude()
   primeAcceptee?: any;
 
-  @Exclude()
-  commissionFixe?: any;
+  // @Exclude()
+  // commissionFixe?: any;
 
   // @Exclude()
   // formuleVersion?: any;

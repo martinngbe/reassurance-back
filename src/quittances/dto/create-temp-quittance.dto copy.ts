@@ -95,11 +95,11 @@ export class CreateTempQuittanceDto {
   @IsNumber()
   taxeSurCommission: number=0;
 
-  @IsNumber()
-  tauxCession: number = 0;
+  //@IsNumber()
+  //tauxCession: number = 0;
 
-  @IsNumber()
-  tauxRetention: number = 0;
+  //@IsNumber()
+  //tauxRetention: number = 0;
 
 
 

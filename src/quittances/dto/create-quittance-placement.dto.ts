@@ -28,18 +28,6 @@ export class CreateQuittancePlacementDto {
   @IsNumber()
   taxeSurCommission: Decimal= new Decimal(0);
   
-  // @IsBoolean()
-  // @IsOptional()
-  // isCession?: boolean;
-
-  // @IsBoolean()
-  // @IsOptional()
-  // isProportionnel?: boolean;
-
-  // @IsBoolean()
-  // @IsOptional()
-  // isFac?: boolean;
-
   @IsBoolean()
   @IsOptional()
   isAnnule?: boolean;

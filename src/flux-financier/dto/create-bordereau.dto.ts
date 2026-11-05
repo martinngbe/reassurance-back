@@ -1,38 +1,86 @@
 import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
+import Decimal from 'decimal.js';
 
 export class CreateBordereauDto {
-  @IsInt()
-  @IsOptional()
-  idBordereauReference?: number;
+    @IsOptional()
+    numero!: string
 
-  @IsInt()
-  @IsOptional()
-  quittanceId?: number;
+    @IsOptional()
+    dateReception?: Date;
 
-  @IsInt()
-  @IsOptional()
-  quittanceCessionId?: number;
+    @IsOptional()
+    periodeDebut?: Date;
 
-  @IsNumber()
-  montant: number=0;
+    @IsOptional()
+    periodeFin?: Date;
 
-  @IsBoolean()
-  @IsOptional()
-  isCession?: boolean;
+    @IsInt()
+    deviseId!: number;
 
-  @IsBoolean()
-  @IsOptional()
-  isProportionnel?: boolean;
+    @IsNumber()
+    coursDevise: number = 1;
 
-  @IsBoolean()
-  @IsOptional()
-  isManuel?: boolean;
+    @IsNumber()
+    primeBrute: number=0;
 
-  @IsBoolean()
-  @IsOptional()
-  isAnnule?: boolean;
+    @IsNumber()
+    @IsOptional()
+    primeNette: Decimal = new Decimal(0);
 
-  @IsInt()
-  @IsOptional()
-  bordereauIdAnnule?: number;
+    @IsNumber()
+    @IsOptional()
+    tauxCedante: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    tauxAccepte: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    tauxCession: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    commissionFixe: Decimal = new Decimal(0); 
+
+    @IsNumber()
+    @IsOptional()
+    tauxCommission: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    taxeSurCommission: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    taxeSurPrime: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    primeCedee: Decimal = new Decimal(0);
+
+    @IsNumber()
+    @IsOptional()
+    primeAcceptee: Decimal = new Decimal(0);
+
+
+    @IsInt()
+    @IsOptional()
+    quittanceId?: number;
+
+    @IsInt()
+    @IsOptional()
+    quittancePlacementId?: number;
+
+    @IsBoolean()
+    @IsOptional()
+    isManuel?: boolean;
+
+    @IsBoolean()
+    @IsOptional()
+    isAnnule?: boolean;
+
+    @IsInt()
+    @IsOptional()
+    bordereauIdAnnule?: number;
 }

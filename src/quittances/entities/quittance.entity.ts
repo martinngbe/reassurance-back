@@ -103,19 +103,19 @@ export class Quittance extends BaseEntity {
   @Column({ name: 'taux_accepte',  type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
   tauxAccepte: Decimal = new Decimal(0);
 
+  //
+  // @Column({ name: 'taux_cession',  type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
+  // tauxCession: Decimal = new Decimal(0);
 
-  @Column({ name: 'taux_cession',  type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
-  tauxCession: Decimal = new Decimal(0);
-
-  @Column({ name: 'taux_retention',  type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
-  tauxRetention: Decimal = new Decimal(0);
+  // @Column({ name: 'taux_retention',  type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
+  // tauxRetention: Decimal = new Decimal(0);
 
   @Column({ name: 'commission_fixe',   type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer()  })
   commissionFixe: Decimal = new Decimal(0); 
 
    // % commission de réassurance
-  @Column({ name: 'taxe_commission_fixe', type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
-  taxeSurCommissionFixe: Decimal = new Decimal(0);
+  // @Column({ name: 'taxe_commission_fixe', type: 'decimal', precision: 9, scale: 4, default: 0, transformer: new DecimalTransformer() })
+  // taxeSurCommissionFixe: Decimal = new Decimal(0);
 
 
 

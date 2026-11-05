@@ -89,13 +89,13 @@ export class CreateTempQuittanceDto {
   @IsOptional()
   tauxAccepte: number=0;
 
-  @IsNumber()
-  @IsOptional()
-  tauxCession: number = 0;
+  //@IsNumber()
+  //@IsOptional()
+  //tauxCession: number = 0;
 
-  @IsNumber()
-  @IsOptional()
-  tauxRetention: number = 0;
+  //@IsNumber()
+  //@IsOptional()
+  //tauxRetention: number = 0;
 
 
   @IsNumber()

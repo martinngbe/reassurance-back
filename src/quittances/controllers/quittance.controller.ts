@@ -50,13 +50,22 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
         // Conversion de la valeur (qui arrive en string depuis l'URL) en booléen
         baseWhere.police.isCession = query.isCession === 'true' || query.isCession === true;
       }
+      // ==========================================================
+      // AJOUT : Filtrage sur isCession de la police associée
+      // La liste des quittance dont police.isFac= vrai ou faut
+      // ==========================================================
+      if (query.isFac !== undefined) {
+        if (!baseWhere.police) {
+          baseWhere.police = {};
+        }
+        // Conversion de la valeur (qui arrive en string depuis l'URL) en booléen
+        baseWhere.police.isFac = query.isFac === 'true' || query.isFac === true;
+      }
       
+
     // 4. Filtre de recherche globale (LIKE avec OR)
     if (query.search && this.SEARCHABLE_FIELDS.length > 0) {
       const searchTerm = `%${query.search}%`;      
-      // On génère un tableau de conditions : 
-      // [{ branche: {id: 3}, code: Like('%x%') }, { branche: {id: 3}, libelle: Like('%x%') }]
-      // TypeORM interprétera ce tableau comme : (branche=3 AND code LIKE '%x%') OR (branche=3 AND libelle LIKE '%x%')
       const searchConditions = this.SEARCHABLE_FIELDS.map(field => ({
         ...baseWhere,
         [field]: Like(searchTerm),
