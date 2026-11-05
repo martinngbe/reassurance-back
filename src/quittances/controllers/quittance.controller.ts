@@ -22,67 +22,65 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
   protected buildOptions(query: any): FindManyOptions<Quittance> {
       const options: FindManyOptions<Quittance> = {
         where: {},
-        order: {}, // Tri par défaut
+        order: {},
+        relations: ['police', 'police.natureOffre'], // ✅ AJOUT : Indispensable pour filtrer sur les relations imbriquées
       };
-      const baseSort: any = { createdAt: 'DESC'  };// Tri par défaut
-      if( query.sortKey && query.sortDirection){
-          options.order ={ [query.sortKey]: `${query.sortDirection}`}
-      }else {
-        options.order = baseSort
+      
+      const baseSort: any = { createdAt: 'DESC' };
+      if (query.sortKey && query.sortDirection) {
+          options.order = { [query.sortKey]: `${query.sortDirection}` };
+      } else {
+        options.order = baseSort;
       }   
 
-      // filtre sur un champs spécifique; Tableau de conditions
-      //==========================================================
-      // La liste des quittances dont policeId=query.policeId
-      //==========================================================
       const baseWhere: any = {};
+      
+      // 1. Filtre sur policeId
       if (query.policeId) {
         baseWhere.police = { id: parseInt(query.policeId, 10) }; 
       }
-      // ==========================================================
-      // AJOUT : Filtrage sur isCession de la police associée
-      // La liste des quittance dont police.isCession= vrai ou faut
-      // ==========================================================
+      
+      // 2. Filtrage sur isCession de la police associée
       if (query.isCession !== undefined) {
-        if (!baseWhere.police) {
-          baseWhere.police = {};
-        }
-        // Conversion de la valeur (qui arrive en string depuis l'URL) en booléen
+        if (!baseWhere.police) baseWhere.police = {};
         baseWhere.police.isCession = query.isCession === 'true' || query.isCession === true;
       }
-      // ==========================================================
-      // AJOUT : Filtrage sur isCession de la police associée
-      // La liste des quittance dont police.isFac= vrai ou faut
-      // ==========================================================
+      
+      // 3. Filtrage sur isFac de la police associée
       if (query.isFac !== undefined) {
+        if (!baseWhere.police) baseWhere.police = {};
+        baseWhere.police.isFac = query.isFac === 'true' || query.isFac === true;
+      }
+
+      // ✅ 4. NOUVEAU : Filtrage sur isProportionnelle de la NatureOffre associée à la Police
+      if (query.isProportionnelle !== undefined) {
         if (!baseWhere.police) {
           baseWhere.police = {};
         }
-        // Conversion de la valeur (qui arrive en string depuis l'URL) en booléen
-        baseWhere.police.isFac = query.isFac === 'true' || query.isFac === true;
+        if (!baseWhere.police.natureOffre) {
+          baseWhere.police.natureOffre = {};
+        }
+        // Conversion de la valeur (string depuis l'URL) en booléen
+        baseWhere.police.natureOffre.isProportionnelle = query.isProportionnelle === 'true' || query.isProportionnelle === true;
       }
-      
 
-    // 4. Filtre de recherche globale (LIKE avec OR)
-    if (query.search && this.SEARCHABLE_FIELDS.length > 0) {
-      const searchTerm = `%${query.search}%`;      
-      const searchConditions = this.SEARCHABLE_FIELDS.map(field => ({
-        ...baseWhere,
-        [field]: Like(searchTerm),
-      }));
+      // 5. Filtre de recherche globale (LIKE avec OR)
+      if (query.search && this.SEARCHABLE_FIELDS.length > 0) {
+        const searchTerm = `%${query.search}%`;      
+        const searchConditions = this.SEARCHABLE_FIELDS.map(field => ({
+          ...baseWhere, // ✅ Préserve les filtres de relations (police, natureOffre)
+          [field]: Like(searchTerm),
+        }));
+        options.where = searchConditions;
+      } else {
+        options.where = baseWhere;
+      }
 
-      options.where = searchConditions;
-    } else {
-      options.where = baseWhere
-    }
-
-      
-
-      console.log("options:",options)
-      console.log("_____________________________________")
+      console.log("options:", JSON.stringify(options, null, 2));
+      console.log("_____________________________________");
 
       return options;
-    }
+  }
 
   // ✅ Endpoint d'annulation corrigé
   @Patch(':id/annuler')

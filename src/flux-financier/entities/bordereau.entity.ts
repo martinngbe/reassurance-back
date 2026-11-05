@@ -35,10 +35,10 @@ export class Bordereau extends BaseEntity {
 
 
   @Column({ name: 'cours_devise', type: 'decimal',precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer()  })
-  coursDevise: number = 0;
+  coursDevise:  Decimal = new Decimal(0);
 
   @Column({ name: 'prime_brute',  type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer() })
-  primeBrute: number=0;
+  primeBrute:  Decimal = new Decimal(0);
 
   @Column({ name: 'prime_nette',  type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer() })
   primeNette: Decimal = new Decimal(0);

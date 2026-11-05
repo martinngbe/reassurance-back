@@ -1,10 +1,10 @@
+// quittance.controller.ts
 import {
-  Controller, Get,  Param,  ParseIntPipe,  Patch,
+  Controller, Get, Param, ParseIntPipe, Patch, Post, Body,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { QuittanceService } from '../services/quittance.service';
 import { Quittance } from '../entities/quittance.entity';
-
 import { CrudController } from 'src/common/crud/crud.controller';
 import { CreateQuittanceDto } from '../dto/create-quittance.dto';
 import { UpdateQuittanceDto } from '../dto/update-quittance.dto';
@@ -13,13 +13,13 @@ import { FindManyOptions, Like } from 'typeorm';
 @ApiTags('Métier Affaires - Quittances')
 @Controller('quittance')
 export class QuittanceController extends CrudController<Quittance, CreateQuittanceDto, UpdateQuittanceDto> {
-  constructor(private readonly quittanceService: QuittanceService) 
-  {  super(quittanceService);}
+  constructor(private readonly quittanceService: QuittanceService) {
+    super(quittanceService);
+  }
 
-    private readonly SEARCHABLE_FIELDS: (keyof Quittance)[] = ['numero', 'dateEffet', 'dateEcheance']; 
-    // Ajoutez d'autres champs texte ici si votre entité en possède (ex: 'description')
-   // les quittances seront affichées par ordre de la plus récentes
-   protected buildOptions(query: any): FindManyOptions<Quittance> {
+  private readonly SEARCHABLE_FIELDS: (keyof Quittance)[] = ['numero', 'dateEffet', 'dateEcheance'];
+
+  protected buildOptions(query: any): FindManyOptions<Quittance> {
       const options: FindManyOptions<Quittance> = {
         where: {},
         order: {}, // Tri par défaut
@@ -50,13 +50,23 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
         // Conversion de la valeur (qui arrive en string depuis l'URL) en booléen
         baseWhere.police.isCession = query.isCession === 'true' || query.isCession === true;
       }
+      // ==========================================================
+      // AJOUT : Filtrage sur isCession de la police associée
+      // La liste des quittance dont police.isFac= vrai ou faut
+      //  donc la liste des Polices FACULTATIVES (true) ou des TRAITES (false)
+      // ==========================================================
+      if (query.isFac !== undefined) {
+        if (!baseWhere.police) {
+          baseWhere.police = {};
+        }
+        // Conversion de la valeur (qui arrive en string depuis l'URL) en booléen
+        baseWhere.police.isFac = query.isFac === 'true' || query.isFac === true;
+      }
       
+
     // 4. Filtre de recherche globale (LIKE avec OR)
     if (query.search && this.SEARCHABLE_FIELDS.length > 0) {
       const searchTerm = `%${query.search}%`;      
-      // On génère un tableau de conditions : 
-      // [{ branche: {id: 3}, code: Like('%x%') }, { branche: {id: 3}, libelle: Like('%x%') }]
-      // TypeORM interprétera ce tableau comme : (branche=3 AND code LIKE '%x%') OR (branche=3 AND libelle LIKE '%x%')
       const searchConditions = this.SEARCHABLE_FIELDS.map(field => ({
         ...baseWhere,
         [field]: Like(searchTerm),
@@ -74,12 +84,25 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
 
       return options;
     }
-  
 
+  // ✅ Endpoint d'annulation corrigé
   @Patch(':id/annuler')
-  @ApiOperation({ summary: 'Annule une quittance' })
+  @ApiOperation({ summary: 'Annule une quittance (copie miroir + cascade)' })
   annuler(@Param('id', ParseIntPipe) id: number): Promise<Quittance> {
-    //return this.quittanceService.annuler(id);
-    return this.quittanceService.findOne(0)
+    return this.quittanceService.annuler(id);
+  }
+
+  // ✅ Endpoint d'émission (verrou définitif)
+  @Patch(':id/emettre')
+  @ApiOperation({ summary: 'Émet la quittance (verrouille le calcul)' })
+  emettre(@Param('id', ParseIntPipe) id: number): Promise<Quittance> {
+    return this.quittanceService.emettre(id);
+  }
+
+  // ✅ Simulation pour le front (aperçu)
+  @Post('simuler')
+  @ApiOperation({ summary: 'Simule le calcul sans persister' })
+  simuler(@Body() dto: Partial<Quittance>): Partial<Quittance> {
+    return this.quittanceService.simuler(dto);
   }
 }
