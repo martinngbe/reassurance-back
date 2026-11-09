@@ -25,7 +25,7 @@ export class TempCompteController extends CrudController<TempCompte, CreateCompt
   ) {super(tempCompteService);}
 
    protected buildOptions(query: any): FindManyOptions<TempCompte> {
-      const baseSort: any = {libelle: 'ASC'};// Tri par défaut
+      const baseSort: any = {createdAt: 'DESC'};// Tri par défaut
       const options: FindManyOptions<TempCompte> = {
         where: {},
         order: {}, 
