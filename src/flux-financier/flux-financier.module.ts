@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Bordereau } from './entities/bordereau.entity';
 import { Compte } from './entities/compte.entity';
-import { CompteDetail } from './entities/compte-detail.entity';
 import { NoteDebitCredit } from './entities/note-debit-credit.entity';
 import { Reglement } from './entities/reglement.entity';
 import { ReglementDetail } from './entities/reglement-detail.entity';
@@ -20,11 +19,21 @@ import { NoteDebitCreditService } from './services/note-debit-credit.service';
 import { ReglementService } from './services/reglement.service';
 import { ReglementDetailController } from './controllers/reglement-detail.controller';
 import { ReglementDetailService } from './services/reglement-detail.service';
-import { CompteRubrique } from './entities/compte-rubrique.entity';
 import { CompteRubriqueController } from './controllers/compte-rubrique.controller';
 import { CompteDetailController } from './controllers/compte-detail.controller';
 import { CompteDetailService } from './services/compte-detail.service';
 import { CompteRubriqueService } from './services/compte-rubrique.service';
+import { CompteDetail } from './entities/compte-detail.entity';
+import { TempCompte } from './entities/temp-compte.entity';
+import { TempCompteDetail } from './entities/temp-compte-detail.entity';
+import { TempCompteController } from './controllers/temp-compte.controller';
+import { TempCompteDetailController } from './controllers/temp-compte-detail.controller';
+import { TempCompteService } from './services/temp-compte.service';
+import { TempCompteDetailService } from './services/temp-compte-detail.service';
+import { CompteTypeController } from './controllers/compte-type.controller';
+import { CompteTypeService } from './services/compte-type.service';
+import { CompteRubrique } from './entities/compte-rubrique.entity';
+import { CompteType } from './entities/compte-type.entity';
 
 
 @Module({
@@ -33,7 +42,10 @@ import { CompteRubriqueService } from './services/compte-rubrique.service';
     TypeOrmModule.forFeature([
       Bordereau,
       Compte,
+      CompteType,
       CompteDetail,
+      TempCompte,
+      TempCompteDetail,
       CompteRubrique,
       NoteDebitCredit,
       Reglement,
@@ -43,7 +55,10 @@ import { CompteRubriqueService } from './services/compte-rubrique.service';
   controllers: [
     BordereauController,
     CompteController,
+    CompteTypeController,
     CompteDetailController,
+    TempCompteController,
+    TempCompteDetailController,
     CompteRubriqueController,
     NoteDebitCreditController,
     ReglementController,
@@ -52,7 +67,10 @@ import { CompteRubriqueService } from './services/compte-rubrique.service';
   providers: [
     BordereauService,
     CompteService,
+    CompteTypeService,
     CompteDetailService,
+    TempCompteService,
+    TempCompteDetailService,
     CompteRubriqueService,
     NoteDebitCreditService,
     ReglementService,
@@ -61,7 +79,10 @@ import { CompteRubriqueService } from './services/compte-rubrique.service';
   exports: [
     BordereauService,
     CompteService,
+     CompteTypeService,
     CompteDetailService,
+    TempCompteService,
+    TempCompteDetailService,
     CompteRubriqueService,    
     NoteDebitCreditService,
     ReglementService,

@@ -19,9 +19,9 @@ export class CreateCompteRubriqueDto {
  
    @IsBoolean()
    @IsOptional()
-   isProportionnel!: boolean;
+   isProportionnelle!: boolean;
  
    @IsBoolean()
    @IsOptional()
-   isNonProportionnel!: boolean;
+   isNonProportionnelle!: boolean;
 }

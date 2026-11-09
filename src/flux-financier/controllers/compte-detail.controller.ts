@@ -6,10 +6,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { FindManyOptions } from 'typeorm';
 import { CrudController } from 'src/common/crud/crud.controller';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { CompteDetail } from '../entities/compte-detail.entity';
 import { CompteDetailService } from '../services/compte-detail.service';
 import { CreateCompteDetailDto } from '../dto/create-compte-detail.dto';
 import { UpdateCompteDetailDto } from '../dto/update-compte-detail.dto';
+import { CompteDetail } from '../entities/compte-detail.entity';
 
 @ApiTags('Métier Flux Financier - CompteDetail')
 @Controller('compte-detail')

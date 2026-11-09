@@ -6,11 +6,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { FindManyOptions, Like } from 'typeorm';
 import { CrudController } from 'src/common/crud/crud.controller';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { CompteRubrique } from '../entities/compte-rubrique.entity';
 import { CompteRubriqueService } from '../services/compte-rubrique.service';
 import { CreateCompteRubriqueDto } from '../dto/create-compte-rubrique.dto';
 import { UpdateCompteRubriqueDto } from '../dto/update-compte-rubrique.dto';
-import { NatureOffre } from 'src/referentiel/entities/nature-offre.entity';
+import { CompteRubrique } from '../entities/compte-rubrique.entity';
 
 @ApiTags('Métier Flux Financier - CompteRubrique')
 @Controller('compte-rubrique')
@@ -21,7 +20,7 @@ export class CompteRubriqueController extends CrudController<CompteRubrique, Cre
 
    // 2. Définir les champs textuels recherchables (exclut id, created_at, branche_id, etc.)
     private readonly SEARCHABLE_FIELDS: (keyof CompteRubrique)[] = [
-      'code', 'libelle', 'isProportionnel', 'isNonProportionnel' ]; 
+      'code', 'libelle', 'isProportionnelle', 'isNonProportionnelle' ]; 
     // Ajoutez d'autres champs texte ici si votre entité en possède (ex: 'description')
   
     protected buildOptions(query: any): FindManyOptions<CompteRubrique> {
@@ -43,7 +42,7 @@ export class CompteRubriqueController extends CrudController<CompteRubrique, Cre
          baseWhere.isProportionnelle = query.isProportionnelle==='true';
        }
        if (query.isNonProportionnel ) {
-         baseWhere.isNonProportionnel = query.isNonProportionnel==='true';
+         baseWhere.isNonProportionnelle = query.isNonProportionnelle==='true';
        } 
       // 4. Filtre de recherche globale (LIKE avec OR)
       if (query.search) {

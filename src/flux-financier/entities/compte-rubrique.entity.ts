@@ -17,10 +17,10 @@ export class CompteRubrique extends BaseEntity {
   @Column()
   partie!: string;
 
-  @Column({name:'is_proportionnel', default:false})
-  isProportionnel!: boolean;
+  @Column({name:'is_proportionnelle', default:false})
+  isProportionnelle!: boolean;
 
-  @Column({name:'is_non_proportionnel', default:false})
-  isNonProportionnel!: boolean;
+  @Column({name:'is_non_proportionnelle', default:false})
+  isNonProportionnelle!: boolean;
 
 }

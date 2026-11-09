@@ -30,7 +30,7 @@ export class CreateCompteDetailDto {
 
   @IsInt()
   @IsOptional()
-  compteTratieDetailIdAnnule?: number;
+  compteDetailIdAnnule?: number;
 
 
 }

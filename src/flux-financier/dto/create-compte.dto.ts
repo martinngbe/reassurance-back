@@ -1,9 +1,13 @@
-import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
+import { IsBoolean, IsInt, IsNumber,IsString, IsOptional } from 'class-validator';
 
 export class CreateCompteDto {
+
+  @IsString()
+  numero!: string
+
   @IsInt()
   @IsOptional()
-  quittanceRetroCessionId?: number;
+  quittancePlacementId?: number;
 
   @IsInt()
   CompteTypeId!: number;
@@ -17,13 +21,6 @@ export class CreateCompteDto {
   @IsNumber()
   coursDevise: number=0;
 
-  @IsBoolean()
-  @IsOptional()
-  isCession?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  isProportionnel?: boolean;
 
   @IsBoolean()
   @IsOptional()
@@ -39,5 +36,5 @@ export class CreateCompteDto {
 
   @IsNumber()
   @IsOptional()
-  solde?: number;
+  solde!: number;
 }
