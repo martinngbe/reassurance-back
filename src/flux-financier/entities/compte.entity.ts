@@ -66,7 +66,7 @@ export class Compte extends BaseEntity {
   compteDetails!: CompteDetail[];
 
 
-  @ManyToOne(() => CompteType)
+  @ManyToOne(() => CompteType , {eager:true})
   @JoinColumn({ name: 'compte_type_id' })
   compteType!: CompteType;
   @Column({ name: 'compte_type_id' })

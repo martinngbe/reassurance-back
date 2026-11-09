@@ -19,10 +19,10 @@ export class BordereauController extends CrudController<Bordereau, CreateBordere
 
      // les diffentes options ou filtre pour 
       protected buildOptions(query: any): FindManyOptions<Bordereau> {        
-            console.log("_____________________________________")
-            console.log("BordereauController.buildOptions")
-            console.log("query:",query)
-            console.log("_____________________________________")
+            // console.log("_____________________________________")
+            // console.log("BordereauController.buildOptions")
+            // console.log("query:",query)
+            // console.log("_____________________________________")
             
             const options: FindManyOptions<Bordereau> = {
               where: {},

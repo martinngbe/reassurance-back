@@ -38,7 +38,7 @@ export class CompteDetail extends BaseEntity {
   @Column({ name: 'compte_id' })
   compteId!: number;
   
-  @ManyToOne(() => CompteRubrique)
+  @ManyToOne(() => CompteRubrique , {eager:true})
   @JoinColumn({ name: 'compte_rubrique_id' })
   compteRubrique!: CompteRubrique;
   @Column({ name: 'compte_rubrique_id' })

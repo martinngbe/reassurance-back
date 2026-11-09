@@ -24,13 +24,37 @@ export class TempCompteController extends CrudController<TempCompte, CreateCompt
    //private readonly compteTransferService: CompteTransferService, // ✅ Injection du service de transfer
   ) {super(tempCompteService);}
 
-  protected buildOptions(query: any): FindManyOptions<TempCompte> {
-    const options: FindManyOptions<TempCompte> = {
-      where: {},
-      order: { createdAt: 'DESC' }, // Tri par défaut
-    };
-    return options;
-  }
+   protected buildOptions(query: any): FindManyOptions<TempCompte> {
+      const baseSort: any = {libelle: 'ASC'};// Tri par défaut
+      const options: FindManyOptions<TempCompte> = {
+        where: {},
+        order: {}, 
+      };
+      
+      if( query.sortKey && query.sortDirection){
+          
+          options.order ={ [query.sortKey]: `${query.sortDirection}`}
+      }else {
+        options.order = baseSort
+      }
+  
+      // 3. Filtres exacts (AND)
+      const baseWhere: any = {};
+      // filtre sur un champs spécifique; Tableau de conditions
+       if (query.createdBy) {
+        baseWhere.createdBy =  parseInt(query.createdBy, 10) ;
+      }
+  
+   
+  
+      console.log("options:", options);
+      return options;
+    }
+
+
+
+
+
   /**
    * Transfère un TempCompte (et ses détails) vers un Compte définitif.
    * Le TempCompte original sera supprimé après transfert.

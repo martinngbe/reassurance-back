@@ -32,9 +32,9 @@ export class RoleService extends CrudService<Role> {
     const page = pagination.page && pagination.page > 0 ? pagination.page : 1;
     const limit = pagination.limit && pagination.limit > 0 ? pagination.limit : 10;
     const skip = (page - 1) * limit;
-    console.log(  `_________________________________________________`)
-    console.log(  `      RoleService.getRolesForUser pagination:`, pagination , " userId:",userId)
-    console.log(  `_________________________________________________`)
+    // console.log(  `_________________________________________________`)
+    // console.log(  `      RoleService.getRolesForUser pagination:`, pagination , " userId:",userId)
+    // console.log(  `_________________________________________________`)
     // 1️⃣ Requête de comptage (très simple)
     const countQb = this.repository.createQueryBuilder('role');
     if (pagination.search) {
@@ -51,13 +51,13 @@ export class RoleService extends CrudService<Role> {
   
     const sortKey = pagination.sortKey ?? 'code';
     const sortDirection = pagination.sortDirection ?? 'ASC';
-    console.log(  `sortKey:`, sortKey )
+    //console.log(  `sortKey:`, sortKey )
     qb.orderBy(`role.${sortKey}`, sortDirection)
       .skip(skip)
       .take(limit);
 
     const roles = await qb.getMany(); // Récupère directement les entités, pas besoin de getRawAndEntities()
-    console.log(  `roles:`, roles ) 
+    //console.log(  `roles:`, roles ) 
     // 3️⃣ Récupération des IDs des rôles assignés à cet utilisateur (Requête ultra-rapide)
     const assignedRoles = await this.repository.manager
       .createQueryBuilder()
@@ -77,7 +77,7 @@ export class RoleService extends CrudService<Role> {
       description: role.description,
       assigned: assignedRoleIds.has(role.id), // ✅ Simple, propre, sans parsing de string
     }));
-    console.log(  `data:`, data ) 
+    //console.log(  `data:`, data ) 
     return {
       success: true,
       data,

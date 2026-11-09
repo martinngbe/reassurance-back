@@ -4,9 +4,11 @@ import {
   EntitySubscriberInterface,
   InsertEvent,
   UpdateEvent,
+  EventSubscriber,
 } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 
+@EventSubscriber() // ✅ Indispensable
 @Injectable()
 export class AuditSubscriber implements EntitySubscriberInterface {
   constructor(
@@ -16,47 +18,32 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     dataSource.subscribers.push(this);
   }
 
-  // S'applique à toutes les entités (ou remplacez Object par votre classe BaseEntity)
-  listenTo() {
-    return Object;
-  }
+  // ✅ Supprimé listenTo() — s'applique à TOUTES les entités
 
   beforeInsert(event: InsertEvent<any>) {
-    //console.log("_____________________________________________")
-    //console.log("     AuditSubscriber.beforeInsert")
-    //console.log("_____________________________________________")
-    //const userId = this.cls.get<string>('userId');
-    const userId = this.cls.isActive() ? this.cls.get('userId') : null;
-    //console.log("   userId:",userId)
-    //console.log("   Avant event.entity:",event.entity)
-    if (userId && event.entity) {
+    const userId = this.getUserId();
+    if (userId == null || !event.entity) return;
 
-      if ('createdBy' in event.entity) {
-        event.entity.createdBy = userId;
-      }
-      if ('updatedBy' in event.entity) {
-        event.entity.updatedBy = userId;
-      }
-     
+    if (event.metadata.findColumnWithPropertyName('createdBy')) {
+      event.entity.createdBy = userId;
     }
-    // console.log("  Apres event.entity:",event.entity)
-    // console.log("_____________________________________________")
+    if (event.metadata.findColumnWithPropertyName('updatedBy')) {
+      event.entity.updatedBy = userId;
+    }
   }
 
   beforeUpdate(event: UpdateEvent<any>) {
-    // console.log("_____________________________________________")
-    // console.log("     AuditSubscriber.beforeUpdate")
-    // console.log("_____________________________________________")    
-    //const userId = this.cls.get<string>('userId');
-    const userId = this.cls.isActive() ? this.cls.get('userId') : null;
-    //console.log("   userId:",userId)
-    //console.log("   Avant event.entity:",event.entity)
-    if (userId && event.entity) {
-      if ('updatedBy' in event.entity) {
-        event.entity.updatedBy = userId;
-      }
+    const userId = this.getUserId();
+    if (userId == null || !event.entity) return;
+
+    if (event.metadata.findColumnWithPropertyName('updatedBy')) {
+      event.entity.updatedBy = userId;
     }
-    // console.log("  Apres event.entity:",event.entity)
-    // console.log("_____________________________________________")
+  }
+
+  private getUserId(): number | null {
+    if (!this.cls.isActive()) return null;
+    const id = this.cls.get('userId');
+    return id != null ? Number(id) : null;
   }
 }

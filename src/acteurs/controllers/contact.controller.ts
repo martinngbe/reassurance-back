@@ -15,10 +15,10 @@ export class ContactController extends CrudController<Contact, CreateContactDto,
   }
      // les diffentes options ou filtre pour 
       protected buildOptions(query: any): FindManyOptions<Contact> {        
-            console.log("_____________________________________")
-            console.log("ContactController.buildOptions")
-            console.log("query:",query)
-            console.log("_____________________________________")
+            // console.log("_____________________________________")
+            // console.log("ContactController.buildOptions")
+            // console.log("query:",query)
+            // console.log("_____________________________________")
             
             const options: FindManyOptions<Contact> = {
               where: {},

@@ -18,10 +18,10 @@ export class EcheancePmdController extends CrudController<EcheancePmd, CreateEch
   constructor(private readonly echeancePmdService: EcheancePmdService) {super(echeancePmdService);}
 
      protected buildOptions(query: any): FindManyOptions<EcheancePmd> {        
-            console.log("_____________________________________")
-            console.log("EcheancePmdController.buildOptions")
-            console.log("query:",query)
-            console.log("_____________________________________")
+            // console.log("_____________________________________")
+            // console.log("EcheancePmdController.buildOptions")
+            // console.log("query:",query)
+            // console.log("_____________________________________")
             
             const options: FindManyOptions<EcheancePmd> = {
               where: {},

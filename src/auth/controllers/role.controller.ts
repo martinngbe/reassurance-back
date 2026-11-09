@@ -63,9 +63,9 @@ export class RoleController extends CrudController<Role, CreateRoleDto, UpdateRo
     @Query('sortKey') sortKey?: string,
     @Query('sortDirection') sortDirection?: 'ASC' | 'DESC',
   ) {
-    console.log(  `_________________________________________________`)
-    console.log(  `      RoleController.getRolesForUser userId:${userId}`)
-    console.log(  `_________________________________________________`)
+    // console.log(  `_________________________________________________`)
+    // console.log(  `      RoleController.getRolesForUser userId:${userId}`)
+    // console.log(  `_________________________________________________`)
     try {
 
        
@@ -80,7 +80,7 @@ export class RoleController extends CrudController<Role, CreateRoleDto, UpdateRo
         return resultat;
     } catch (error) {
        const message = error instanceof Error ? error.message : String(error);
-       console.log(  `>>>>>>>>>>>>>>>> Erreur findAllWithUserAssignment: ${message}`)
+       //console.log(  `>>>>>>>>>>>>>>>> Erreur findAllWithUserAssignment: ${message}`)
         //this.logger.error(`Erreur findAllWithUserAssignment: ${message}`, error instanceof Error ? error.stack : undefined);
         throw new InternalServerErrorException( failure(`Erreur findAllWithUserAssignment: ${message}`) );
     }

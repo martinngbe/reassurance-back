@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { PaginationParams, PaginatedResult } from '../interfaces/response.interface';
 import { failure } from '../helper/response.helper';
-import { Role } from 'src/auth/entities/role.entity';
 import { LogMethod } from '../decorateur/log-method.decorator';
 
 
@@ -83,10 +82,6 @@ export abstract class CrudService<T extends { id: number }> {
     const entity = this.repository.create(dto);
     return this.repository.save(entity);
   }
-
-  /**
-   * Met à jour une entité existante.
-   */ 
 
     /**
    * Met à jour une entité existante.

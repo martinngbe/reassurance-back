@@ -39,6 +39,10 @@ export class TempPoliceController extends CrudController<TempPolice, CreateTempP
             if (query.assureId) {
               baseWhere.assure = { id: parseInt(query.assureId, 10) }; 
             }
+            if (query.createdBy) {
+              baseWhere.createdBy = parseInt(query.createdBy, 10); 
+            }
+
             
             options.where = baseWhere
 

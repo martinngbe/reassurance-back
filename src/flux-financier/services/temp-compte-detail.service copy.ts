@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { CrudService } from '../../common/crud/crud.service';
 import { TempCompteDetail } from '../entities/temp-compte-detail.entity';
 import { CompteRubrique } from '../entities/compte-rubrique.entity';
@@ -8,6 +8,7 @@ import { PaginatedResult } from 'src/common/interfaces/response.interface';
 import Decimal from 'decimal.js';
 import { TempCompte } from '../entities/temp-compte.entity';
 import { failure } from 'src/common/helper/response.helper';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class TempCompteDetailService extends CrudService<TempCompteDetail> {
@@ -15,7 +16,7 @@ export class TempCompteDetailService extends CrudService<TempCompteDetail> {
     @InjectRepository(TempCompteDetail) repository: Repository<TempCompteDetail>,
     @InjectRepository(CompteRubrique)
     private readonly compteRubriqueRepository: Repository<CompteRubrique>,
-    
+    private readonly cls: ClsService, // ✅ Injection
     @InjectRepository(TempCompte) // ⬅️ Ajout de l'injection
     private readonly tempCompteRepository: Repository<TempCompte>,
     private readonly dataSource: DataSource, // ⬅️ Ajout pour les transactions
@@ -113,69 +114,137 @@ export class TempCompteDetailService extends CrudService<TempCompteDetail> {
       },
     };
   }
- /**
-   * Crée ou met à jour un détail de compte et recalcule le solde du compte parent.
-   * Règle métier : Si debit = 0 et credit = 0, aucun enregistrement n'est effectué.
-   * 
-   * @param data Les données du détail (avec ou sans 'id' pour différencier create/update)
+
+
+
+  /**
+   * Méthode privée : Recalcule le solde d'un TempCompte à partir de ses détails actifs.
+   * Factorisée pour être réutilisée par create, update et annuler.
    */
+  private async recalculerSoldeCompte(
+    manager: EntityManager,
+    compteId: number,
+  ): Promise<void> {
+    const sumResult = await manager
+      .createQueryBuilder(TempCompteDetail, 'detail')
+      .select('SUM(detail.debit)', 'totalDebit')
+      .addSelect('SUM(detail.credit)', 'totalCredit')
+      .where('detail.compteId = :compteId', { compteId })
+      .andWhere('detail.isAnnule = :isAnnule', { isAnnule: false })
+      .getRawOne();
+
+    const totalDebit = new Decimal(sumResult?.totalDebit || 0);
+    const totalCredit = new Decimal(sumResult?.totalCredit || 0);
+    const nouveauSolde = totalDebit.minus(totalCredit);
+
+    await manager.update(TempCompte, compteId, {
+      solde: nouveauSolde,
+      isEnNotreFaveur: nouveauSolde.greaterThanOrEqualTo(0),
+    });
+  }
+
+   /**
+   * Crée ou met à jour un détail avec recalcul automatique du solde.
+   */
+ 
   async saveDetailAndUpdateSolde(data: Partial<TempCompteDetail>): Promise<TempCompteDetail> {
     const debit = data.debit ? new Decimal(data.debit) : new Decimal(0);
     const credit = data.credit ? new Decimal(data.credit) : new Decimal(0);
-    console.log(' _________ TempCompteDetailService.saveDetailAndUpdateSolde ')
-    console.log(' data: ',data)
-    console.log(' debit: ',debit)
-    console.log(' credit: ',credit)
-    // 1. Vérification de la règle métier
+
     if (debit.isZero() && credit.isZero()) {
-      throw new BadRequestException(failure(
-        "L'enregistrement est ignoré : le débit et le crédit sont tous deux à 0.")
+      throw new BadRequestException(
+        failure("L'enregistrement est ignoré : le débit et le crédit sont tous deux à 0.")
       );
-      // Note : Si vous préférez ne pas lever d'erreur, remplacez par : return null;
     }
 
-    // 2. Transaction pour garantir l'intégrité des données (Atomicité)
+    // ✅ Récupérer le userId AVANT la transaction (contexte CLS encore actif)
+    const userId = this.cls.isActive() ? (this.cls.get('userId') ?? null) : null;
+
     return await this.dataSource.transaction(async (manager) => {
       let detail: TempCompteDetail;
-      
+
       if (data.id) {
         // --- Mise à jour ---
-         console.log(' --- Mise à jour data.id ',data.id)
-        await manager.update(TempCompteDetail, data.id, { ...data, debit, credit });
-        detail = await manager.findOneOrFail(TempCompteDetail, { where: { id: data.id } });
+        const existing = await manager.findOneOrFail(TempCompteDetail, {
+          where: { id: data.id },
+        });
+        Object.assign(existing, { ...data, debit, credit });
+        
+        // ✅ Injecter manuellement updatedBy
+        if (userId) existing.updatedBy = userId;
+        
+        // ✅ Utiliser save() au lieu de update() pour déclencher les subscribers
+        detail = await manager.save(existing);
       } else {
         // --- Création ---
-        console.log(' --- Création ',data)
         const newDetail = manager.create(TempCompteDetail, { ...data, debit, credit });
-        console.log(' --- newDetail ',newDetail)
+        
+        // ✅ Injecter manuellement createdBy et updatedBy
+        if (userId) {
+          newDetail.createdBy = userId;
+          newDetail.updatedBy = userId;
+        }
+        
         detail = await manager.save(newDetail);
       }
 
       // 3. Recalcul du solde du TempCompte associé
       const compteId = detail.compteId;
-      
       const sumResult = await manager
         .createQueryBuilder(TempCompteDetail, 'detail')
         .select('SUM(detail.debit)', 'totalDebit')
         .addSelect('SUM(detail.credit)', 'totalCredit')
         .where('detail.compteId = :compteId', { compteId })
-        .andWhere('detail.isAnnule = :isAnnule', { isAnnule: false }) // Exclusion des lignes annulées
+        .andWhere('detail.isAnnule = :isAnnule', { isAnnule: false })
         .getRawOne();
 
       const totalDebit = new Decimal(sumResult?.totalDebit || 0);
       const totalCredit = new Decimal(sumResult?.totalCredit || 0);
-      
-      // Formule demandée : Somme des débits - Somme des crédits
       const nouveauSolde = totalDebit.minus(totalCredit);
 
       // 4. Mise à jour du TempCompte
-      await manager.update(TempCompte, compteId, {
-        solde: nouveauSolde,
-        isEnNotreFaveur: nouveauSolde.greaterThanOrEqualTo(0), // Mise à jour logique du statut
+      const compteToUpdate = await manager.findOneOrFail(TempCompte, {
+        where: { id: compteId },
       });
+      compteToUpdate.solde = nouveauSolde;
+      compteToUpdate.isEnNotreFaveur = nouveauSolde.greaterThanOrEqualTo(0);
+      
+      // ✅ Audit sur le compte parent
+      if (userId) compteToUpdate.updatedBy = userId;
+      
+      await manager.save(compteToUpdate);
 
       return detail;
     });
   }
+
+ /**
+   * Annule un détail (soft delete) et recalcule le solde du compte parent.
+   * Conserve l'historique comptable (principe d'audit trail).
+   */
+  async annulerDetail(id: number): Promise<TempCompteDetail> {
+    return await this.dataSource.transaction(async (manager) => {
+      const detail = await manager.findOne(TempCompteDetail, { where: { id } });
+
+      if (!detail) {
+        throw new NotFoundException( failure(`Détail #${id} introuvable.`));
+      }
+
+      if (detail.isAnnule) {
+        throw new BadRequestException(failure(`Le détail #${id} est déjà annulé.`));
+      }
+
+      // Soft delete : on marque comme annulé
+      //await manager.update(TempCompteDetail, id, { isAnnule: true });
+      await manager.delete(TempCompteDetail, id);
+
+      // Recalcul du solde (les lignes annulées sont exclues automatiquement)
+      await this.recalculerSoldeCompte(manager, detail.compteId);
+
+      return { ...detail, isAnnule: true };
+    });
+  }
+
+
 
 }
