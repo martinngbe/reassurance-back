@@ -22,6 +22,7 @@ import { QuittanceCalculService } from './services/quittance-calcul.service';
 import { QuittancePlacementController } from './controllers/quittance-placement.controller';
 import { QuittancePlacementService } from './services/quittance-placement.service';
 import { QuittancePlacementCalculService } from './services/quittance-placement-calcul.service';
+import { SeriesModule } from 'src/series/series.module';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
@@ -34,6 +35,7 @@ import { QuittancePlacementCalculService } from './services/quittance-placement-
   imports: [
     ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module    
     FluxFinancierModule,
+     SeriesModule,
     TypeOrmModule.forFeature([
       Quittance, 
       QuittancePlacement, 

@@ -13,23 +13,23 @@ import { Quittance } from 'src/quittances/entities/quittance.entity';
  */
 @Entity('police')
 export class Police extends BaseEntity {
-  @Column({nullable:true})
+  @Column({nullable:true , unique: true, update: false})
   numero!: string;
 
   @Column({ name: 'is_reconduction_tacite', default: false })
-  isReconductionTacite!: Boolean;
+  isReconductionTacite!: boolean;
 
   @Column({ name: 'is_iard', default: false })
-  isIard!: Boolean; // IARD | VIE
+  isIard!: boolean; // IARD | VIE
 
   // FAC | TRAITE  
   // On veut reduire le nombre de jointure
   // cette information peut être lu dans NatureOffre
   @Column({ name: 'is_fac', default: false })
-  isFac!: Boolean; // FAC | TRAITE
+  isFac!: boolean; // FAC | TRAITE
 
   @Column({ name: 'is_cession', default: false })
-  isCession!: Boolean;  //  CESSION | ACCEPTATION
+  isCession!: boolean;  //  CESSION | ACCEPTATION
 
 
   @OneToMany(() => Quittance, (quittance) => quittance.police , { cascade:true})

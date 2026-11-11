@@ -47,7 +47,7 @@ export class EcheancePmd extends BaseEntity {
   @Column({ name: 'devise_id' })
   deviseId!: number;
 
-  @ManyToOne(() => Quittance , { eager: true, onDelete:'CASCADE'})
+  @ManyToOne(() => Quittance , {  onDelete:'CASCADE'})
   @JoinColumn({ name: 'quittance_id' })
   quittance!: Quittance;
   @Column({ name: 'quittance_id' })

@@ -15,7 +15,7 @@ import { CompteDetail } from './compte-detail.entity';
 @Entity('compte')
 export class Compte extends BaseEntity {
 
-  @Column({ nullable:true })
+  @Column({ nullable:true , unique: true, update: false})
   numero!: string;
 
   // provient de CompteDetail.
@@ -52,6 +52,7 @@ export class Compte extends BaseEntity {
   quittance?: Quittance;
   @Column({ name: 'quittance_id' })
   quittanceId?: number;
+  
   /// Relation QuittancePlacement
   @ManyToOne(() => QuittancePlacement, { nullable: true })
   @JoinColumn({ name: 'quittance_placement_id' })

@@ -14,11 +14,14 @@ import { ObjetAssure } from './objet-assure.entity';
 import Decimal from 'decimal.js';
 import { DecimalTransformer } from 'src/common/transformers/decimal.transformer';
 import { QuittancePlacement } from './quittance-placement.entity';
+import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
+import { Compte } from 'src/flux-financier/entities/compte.entity';
+import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
 
 
 @Entity('quittance')
 export class Quittance extends BaseEntity {
-  @Column({nullable:true})
+  @Column({nullable:true , unique: true, update: false})
   numero!: string;
 
   @ManyToOne(() => Mouvement , {eager:true})
@@ -196,5 +199,15 @@ export class Quittance extends BaseEntity {
    // on charge cette liste automatiquement
   @OneToMany(() => QuittancePlacement, (sa) => sa.quittance , {eager:true})
   quittancePlacements!: QuittancePlacement[];
+
+
+  @OneToMany(() => Bordereau, (sa) => sa.quittance , {eager:true})
+  bordereaux!: Bordereau[];
+
+  @OneToMany(() => Compte, (sa) => sa.quittance , {eager:true})
+  comptes!: Compte[];
+
+  @OneToMany(() => EcheancePmd, (sa) => sa.quittance , {eager:true})
+  echeancesPmd!: EcheancePmd[];
 
 }

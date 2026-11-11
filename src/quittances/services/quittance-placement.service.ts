@@ -2,7 +2,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Transactional } from '@nestjs-cls/transactional';
+import { Transactional, TransactionHost } from '@nestjs-cls/transactional';
 import { CrudService } from 'src/common/crud/crud.service';
 import { QuittancePlacement } from '../entities/quittance-placement.entity';
 import { QuittancePlacementCalculService } from './quittance-placement-calcul.service';
@@ -11,6 +11,11 @@ import { UpdateQuittancePlacementDto } from '../dto/update-quittance-placement.d
 import Decimal from 'decimal.js';
 import { Quittance } from '../entities/quittance.entity';
 import { failure } from 'src/common/helper/response.helper';
+import { TransactionalAdapterTypeOrm } from '@nestjs-cls/transactional-adapter-typeorm';
+import { SeriesService } from 'src/series/series.service';
+import { LogMethod } from 'src/common/decorateur/log-method.decorator';
+import { buildContextFromFlags, EntityType } from 'src/series';
+import { fail } from 'node:assert';
 
 @Injectable()
 export class QuittancePlacementService extends CrudService<QuittancePlacement> {
@@ -20,12 +25,56 @@ export class QuittancePlacementService extends CrudService<QuittancePlacement> {
     @InjectRepository(Quittance)
     private readonly quittanceRepository: Repository<Quittance>,
     private readonly calculService: QuittancePlacementCalculService,
+    private readonly txHost: TransactionHost<TransactionalAdapterTypeOrm>,
+    private readonly seriesService: SeriesService,
   ) {
     super(quittancePlacementRepository);
   }
 
-  // ── CRÉATION : on calcule AVANT de persister ──────────────
+// ── CRÉATION : on calcule AVANT de persister ──────────────
+@Transactional()
+@LogMethod()
 async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
+  const tx = this.txHost.tx;
+  /////////////////////////////////////////////////////////////
+  ////   Process de numérotation de la QuittancePlacement
+  /////////////////////////////////////////////////////////////
+  // 1. Validation : quittanceId obligatoire
+  if (!dto.quittanceId) {
+    throw new NotFoundException(failure('Le champ quittanceId est obligatoire'));
+  }
+  // 2. Charger la Quittance avec sa Police (relation eager)
+  const quittance = await tx.getRepository(Quittance).findOne({
+    where: { id: dto.quittanceId },
+    relations: { police: true },
+    loadEagerRelations: false,
+  });
+
+  if (!quittance) {
+      throw new NotFoundException(failure(`Quittance ${dto.quittanceId} introuvable`));
+  }
+
+  if (!quittance.police) {
+        throw new NotFoundException(failure(
+          `La Quittance ${dto.quittanceId} n'a pas de Police associée`),
+        );
+  }
+  // 3. Déduire le contexte depuis la Police parente
+  const serieContext = buildContextFromFlags(
+    quittance.police.isCession,
+    quittance.police.isFac,
+  );
+    // 4. Générer le numéro de Bordereau (BAF-26-00001 / BAT / BCF / BCT)
+    const numero = await this.seriesService.nextNumero(
+      EntityType.PLACEMENT,
+      serieContext,
+    );
+  /////////////////////////////////////////////////////////////
+  ////    FIN
+  /////////////////////////////////////////////////////////////
+
+
+
   // 1. Validation métier AVANT calcul
   await this.validerTauxCession(
       dto.quittanceId,
@@ -34,10 +83,14 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
 
     // 2. Calcul des montants dérivés
   const partial = this.calculService.appliquer(dto as any);
-  const data = { ...(dto as any), ...partial };
+  const data = { ...(dto as any), ...partial , numero };
    // 3. Persistance
   return super.create(data); // ← utilise la méthode parente
 }
+
+
+
+
 
   // ── MISE À JOUR : recalcul + verrou si émise ──────────────
   async update(id: number, dto: UpdateQuittancePlacementDto): Promise<QuittancePlacement> {

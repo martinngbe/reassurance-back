@@ -34,11 +34,13 @@ import { CompteTypeController } from './controllers/compte-type.controller';
 import { CompteTypeService } from './services/compte-type.service';
 import { CompteRubrique } from './entities/compte-rubrique.entity';
 import { CompteType } from './entities/compte-type.entity';
+import { SeriesModule } from 'src/series/series.module';
 
 
 @Module({
   imports: [
     ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module      
+    SeriesModule,
     TypeOrmModule.forFeature([
       Bordereau,
       Compte,

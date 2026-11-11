@@ -16,7 +16,7 @@ import { Devise } from 'src/referentiel/entities/devise.entity';
 @Entity('bordereau')
 export class Bordereau extends BaseEntity {
 
-  @Column({ nullable: true })
+  @Column({ nullable: true , unique: true, update: false})
   numero!: string
 
   // la référence chez le client
@@ -93,7 +93,7 @@ export class Bordereau extends BaseEntity {
 
 
   // Le bordereau est toujours rattaché à une quittance
-  @ManyToOne(() => Quittance, { eager:true , onDelete:'CASCADE' })
+  @ManyToOne(() => Quittance, { onDelete:'CASCADE' })
   @JoinColumn({ name: 'quittance_id' })
   quittance!: Quittance;
   @Column({ name: 'quittance_id', nullable: true })

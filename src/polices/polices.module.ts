@@ -8,12 +8,16 @@ import { TempPoliceController } from './controllers/temp-police.controller';
 import { TempPoliceService } from './services/temp-police.service';
 import { TempPolice } from './entities/temp-police.entity';
 import { QuittanceCalculService } from 'src/quittances/services/quittance-calcul.service';
+import { SeriesModule } from 'src/series/series.module';
 
 @Module({
   
   imports: [
      ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module
-    TypeOrmModule.forFeature([Police , TempPolice])],
+    TypeOrmModule.forFeature([Police , TempPolice]),
+     SeriesModule,
+  
+  ],
   controllers: [PoliceController , TempPoliceController],
   providers: [PoliceService , TempPoliceService , QuittanceCalculService],
   exports: [PoliceService,TempPoliceService ,QuittanceCalculService],

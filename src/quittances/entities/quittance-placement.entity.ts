@@ -18,7 +18,7 @@ import { NaturePlacement } from 'src/referentiel/entities/nature-placement.entit
 @Entity('quittance_placement')
 export class QuittancePlacement extends BaseEntity {
 
-  @Column({nullable:true})
+  @Column({nullable:true , unique: true, update: false})
   numero!: string;
 
   @ManyToOne(() => NaturePlacement , {eager:true})

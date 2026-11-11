@@ -11,10 +11,12 @@ import { TempQuittance } from 'src/quittances/entities/temp-quittance.entity';
 import { Police } from '../entities/police.entity';
 import { TransactionalAdapterTypeOrm } from '@nestjs-cls/transactional-adapter-typeorm';
 import { QuittanceCalculService } from 'src/quittances/services/quittance-calcul.service';
+import { buildContextFromFlags, EntityType } from 'src/series';
+import { SeriesService } from 'src/series/series.service';
 
 // Champs copiés TempQuittance -> Quittance (jamais id / policeId)
 const CHAMPS_QUITTANCE = [
-  'numero',
+  ///'numero',
   'mouvementId',
   'deviseId',
   'coursDevise',
@@ -50,8 +52,9 @@ const CHAMPS_QUITTANCE = [
 export class TempPoliceService extends CrudService<TempPolice> {
   constructor(
     @InjectRepository(TempPolice) tempPolicerepository: Repository<TempPolice>,
-   private readonly txHost: TransactionHost<TransactionalAdapterTypeOrm>,
+    private readonly txHost: TransactionHost<TransactionalAdapterTypeOrm>,
     private readonly quittanceCalculService: QuittanceCalculService, // ✅ AJOUT
+    private readonly seriesService: SeriesService, // ✅ AJOUT
   ) {
     super(tempPolicerepository);
   }
@@ -87,19 +90,23 @@ export class TempPoliceService extends CrudService<TempPolice> {
     if (!tp) {
       throw new NotFoundException( failure(`TempPolice ${tempPoliceId} introuvable`));
     }
-    // Police.assureId est NOT NULL, TempPolice.assureId est nullable
-   /* if (!tp.assureId) {
-      throw new BadRequestException(
-        failure(`La police temporaire ${tempPoliceId} n'a pas d'assuré`),
-      );
-    }
-    */
+  
+    // 2. ✅ Contexte de série déduit des flags métier (valable pour Police ET Quittances)
+    //    isCession/isFac -> { operation: A|C, mode: F|T }
+    const serieContext = buildContextFromFlags(tp.isCession, tp.isFac);
+
+    // 3. ✅ Numéro de Police : PAF-26-00001 / PAT / PCF / PCT
+    const numeroPolice = await this.seriesService.nextNumero(
+      EntityType.POLICE,
+      serieContext,
+    );
+
 
     // 2. TempPolice -> Police
     const policeRepo = tx.getRepository(Police);
     const police = await policeRepo.save(
       policeRepo.create({
-        numero: tp.numero,
+        numero: numeroPolice, // ✅ au lieu de tp.numero
         isReconductionTacite: tp.isReconductionTacite,
         isIard: tp.isIard,
         isCession: tp.isCession,
@@ -132,32 +139,23 @@ export class TempPoliceService extends CrudService<TempPolice> {
               // 2. ✅ Calcul des champs dérivés (primeCedee, primeAcceptee, primeNette, commissionFixe)
               const calculee = this.quittanceCalculService.appliquer(data as Partial<Quittance>);
 
+              // 5.3 ✅ Numéro de Quittance : même opération/mode que la police parente
+              //     Police PAF -> Quittances QAF-26-00001, QAF-26-00002, ...
+              const numeroQuittance = await this.seriesService.nextNumero(
+                EntityType.QUITTANCE,
+                serieContext,
+              );
               // 3. Sauvegarde avec merge des valeurs calculées
               await quittanceRepo.save(
                 quittanceRepo.create({
                   ...data,
                   ...calculee,          // ✅ fusionne les champs dérivés
+                  numero: numeroQuittance, // ✅ en dernier : jamais écrasé par data
                   policeId: police.id,
                 }),
               );
       }
-    // for (const tq of tempQuittances) {
-    //   const data: Record<string, unknown> = {};
-    //   for (const champ of CHAMPS_QUITTANCE) data[champ] = tq[champ];
-
-    //   await quittanceRepo.save(
-    //     quittanceRepo.create({
-    //       ...data,
-    //       policeId: police.id, // lien père/fils
-    //      // isAnnule: false,
-    //     }),
-    //   );
-
-    //   // 3 bis. Objets assurés : à compléter avec TempObjetAssure / ObjetAssure
-    //   // (nouvel id de quittance comme clé). À supprimer AVANT les
-    //   // TempQuittance à l'étape 4 (delete() ne déclenche pas le cascade).
-    // }
-
+    
     // 4. Purge des données temporaires (enfants avant parent)
     if (tempQuittances.length) {
       await tx
