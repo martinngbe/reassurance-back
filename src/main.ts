@@ -58,8 +58,8 @@ async function bootstrap() {
     await seedAssure(dataSource);
     await seedActeur(dataSource);
     await seedFluxFinancier(dataSource)
-    await seedAcceptationPoliceQuittance(dataSource)
-    await seedPoliceRetroCessionQuittance(dataSource)
+   // await seedAcceptationPoliceQuittance(dataSource)
+   // await seedPoliceRetroCessionQuittance(dataSource)
   }
 
   const port = process.env.PORT || 3000;

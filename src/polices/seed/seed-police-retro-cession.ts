@@ -4,7 +4,7 @@ import { Quittance } from 'src/quittances/entities/quittance.entity';
 
 export async function seedPoliceRetroCessionQuittance(dataSource: DataSource): Promise<void> {
    
-   await seedPoliceRetroCessionTRaite(dataSource);
+   //await seedPoliceRetroCessionTRaite(dataSource);
   console.log('✅ Referentiel seed seedPoliceQuittance avec succès (Idempotent)');
 }
 

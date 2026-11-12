@@ -32,11 +32,11 @@ export class TempPolice extends BaseEntity {
   isCession: boolean=false;  // CESSION | ACCEPTATION
 
 
-    // Relation Quittance
+  // Relation Quittance
   // On charge automatiquement toutes les tempsQuittance de la police
   // On se rassure qu'il n'y aura pas plus de un. car saisie temporaire.
   // la table sera vidée à la fin de la saisie
-  @OneToMany(() => TempQuittance, (quittance) => quittance.police , {eager: false})
+  @OneToMany(() => TempQuittance, (quittance) => quittance.police , {eager: true})
   quittances!: TempQuittance[];
 
 

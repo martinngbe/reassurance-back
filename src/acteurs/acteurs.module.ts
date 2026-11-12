@@ -10,9 +10,10 @@ import { ContactController } from './controllers/contact.controller';
 import { ActeurService } from './services/acteur.service';
 import { AssureService } from './services/assure.service';
 import { ContactService } from './services/contact.service';
+import { SeriesModule } from 'src/series/series.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Acteur, Assure, Contact])],
+  imports: [TypeOrmModule.forFeature([Acteur, Assure, Contact]), SeriesModule],
   controllers: [ActeurController, AssureController, ContactController],
   providers: [ActeurService, AssureService, ContactService],
   exports: [ActeurService, AssureService, ContactService],

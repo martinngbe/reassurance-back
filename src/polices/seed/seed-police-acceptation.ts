@@ -4,9 +4,9 @@ import { Quittance } from 'src/quittances/entities/quittance.entity';
 
 export async function seedAcceptationPoliceQuittance(dataSource: DataSource): Promise<void> {
    
-   await seedPoliceAcceptationFac(dataSource);
-   await seedPoliceAcceptationTraite(dataSource)
-  console.log('✅ Referentiel seed seedPoliceQuittance avec succès (Idempotent)');
+   //await seedPoliceAcceptationFac(dataSource);
+   //await seedPoliceAcceptationTraite(dataSource)
+  //console.log('✅ Referentiel seed seedPoliceQuittance avec succès (Idempotent)');
 }
 
 // //////////////////////////////////////////////////////
