@@ -18,22 +18,20 @@ import { NaturePlacement } from 'src/referentiel/entities/nature-placement.entit
 @Entity('quittance_placement')
 export class QuittancePlacement extends BaseEntity {
 
-  @Column({nullable:true , unique: true, update: false})
-  numero!: string;
+ @Column({nullable:true , unique: true, update: false})
+ numero!: string;
 
-  @ManyToOne(() => NaturePlacement , {eager:true})
-  @JoinColumn({ name: 'nature_placement_id' })
-  naturePlacement!: NaturePlacement; // LEGAL  CONVENTIONNELLE
+   // assiettePrime XS avant commission
+  @Column({ name: 'assiette_prime',  type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer() })
+  assiettePrime: Decimal = new Decimal(0);
 
-  @Column({ name: 'nature_placement_id' })
-  naturePlacementId!: number;
 
-  
-// Prime brute avant commission
+  // Prime brute avant commission
+  // En XS la prime brute porte le nom Assiette de Prime
   @Column({ name: 'prime_brute',  type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer() })
   primeBrute: Decimal = new Decimal(0);
 
-  // quittance.entity.ts — à ajouter
+  // Prime cedee (Champ Calculé )= TauxCession x PrimeBrute ou (assiettePrime) 
   @Column({ name: 'prime_cedee', type: 'decimal', precision: 18, scale: 5, default: '0', transformer: new DecimalTransformer() })
   primeCedee: Decimal = new Decimal(0);
 
@@ -85,7 +83,14 @@ export class QuittancePlacement extends BaseEntity {
   @Column({ name: 'acteur_id' })
   acteurId!: number;
 
+  @ManyToOne(() => NaturePlacement , {eager:true})
+  @JoinColumn({ name: 'nature_placement_id' })
+  naturePlacement!: NaturePlacement; // LEGAL  CONVENTIONNELLE
 
+  @Column({ name: 'nature_placement_id' })
+  naturePlacementId!: number;
+
+  
 
   /**
    * Bordereaux générés directement depuis cette quittance placement.

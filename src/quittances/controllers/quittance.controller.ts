@@ -39,7 +39,12 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
       if (query.policeId) {
         baseWhere.police = { id: parseInt(query.policeId, 10) }; 
       }
-      
+
+            // 4. Filtrage sur isFac de la police associée
+      if (query.cedanteId !== undefined) {
+        if (!baseWhere.police) baseWhere.police = {};
+        baseWhere.police.acteurCedanteId = { id: parseInt(query.acteurCedanteId, 10) };
+      }
       // 2. Filtrage sur isCession de la police associée
       if (query.isCession !== undefined) {
         if (!baseWhere.police) baseWhere.police = {};
