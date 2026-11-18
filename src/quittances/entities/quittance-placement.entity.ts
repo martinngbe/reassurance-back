@@ -22,8 +22,8 @@ export class QuittancePlacement extends BaseEntity {
  numero!: string;
 
    // assiettePrime XS avant commission
-  @Column({ name: 'assiette_prime',  type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer() })
-  assiettePrime: Decimal = new Decimal(0);
+  @Column({ name: 'estimation_prime',  type: 'decimal', precision: 18, scale: 4, default: 0, transformer: new DecimalTransformer() })
+  estimationPrime: Decimal = new Decimal(0);
 
 
   // Prime brute avant commission

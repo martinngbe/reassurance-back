@@ -23,6 +23,9 @@ import { QuittancePlacementController } from './controllers/quittance-placement.
 import { QuittancePlacementService } from './services/quittance-placement.service';
 import { QuittancePlacementCalculService } from './services/quittance-placement-calcul.service';
 import { SeriesModule } from 'src/series/series.module';
+import { QuittanceTranche } from './entities/quittance-tranche.entity';
+import { QuittanceTrancheController } from './controllers/quittance-tranche.controller';
+import { QuittanceTrancheService } from './services/quittance-tranche.service';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
@@ -39,6 +42,7 @@ import { SeriesModule } from 'src/series/series.module';
     TypeOrmModule.forFeature([
       Quittance, 
       QuittancePlacement, 
+      QuittanceTranche,
       ObjetAssure,      
       EcheancePmd,
       TempQuittance,
@@ -47,7 +51,8 @@ import { SeriesModule } from 'src/series/series.module';
   ],
   controllers: [
     QuittanceController, 
-    QuittancePlacementController, 
+    QuittancePlacementController,
+    QuittanceTrancheController, 
     EcheancePmdController,
     TempQuittanceController,
     TempObjetAssureController
@@ -55,7 +60,8 @@ import { SeriesModule } from 'src/series/series.module';
   ],
   providers: [
     QuittanceService, 
-    QuittancePlacementService, 
+    QuittancePlacementService,
+    QuittanceTrancheService, 
     QuittanceCalculService,
     QuittancePlacementService,
     QuittancePlacementCalculService ,

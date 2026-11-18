@@ -4,7 +4,7 @@ import { CrudController } from 'src/common/crud/crud.controller';
 import { CreatePoliceDto } from '../dto/create-police.dto';
 import { UpdatePoliceDto } from '../dto/update-police.dto';
 import { Police } from '../entities/police.entity';
-import { FindManyOptions, IsNull } from 'typeorm';
+import { FindManyOptions, IsNull, Like } from 'typeorm';
 import { PoliceService } from '../services/police.service';
 
 @ApiTags('Police')
@@ -13,6 +13,9 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
   constructor(protected readonly service: PoliceService) {
     super(service);
   }
+
+       private readonly SEARCHABLE_FIELDS: (keyof Police)[] = ['numero'];
+      
      // les diffentes options ou filtre pour 
       protected buildOptions(query: any): FindManyOptions<Police> {        
             console.log("_____________________________________")
@@ -51,11 +54,20 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
             } 
 
 
-            console.log("baseWhere:",baseWhere)
-            options.where = baseWhere
+                  // 5. Filtre de recherche globale (LIKE avec OR)
+            if (query.search && this.SEARCHABLE_FIELDS.length > 0) {
+              const searchTerm = `%${query.search}%`;      
+              const searchConditions = this.SEARCHABLE_FIELDS.map(field => ({
+                ...baseWhere, // ✅ Préserve les filtres de relations (police, natureOffre)
+                [field]: Like(searchTerm),
+              }));
+              options.where = searchConditions;
+            } else {
+              options.where = baseWhere;
+            }
 
-            console.log("options:",options)
-            console.log("_____________________________________")
+            console.log("police baseWhere:",baseWhere)
+            console.log("police options:",options)
           
             return options;
       }

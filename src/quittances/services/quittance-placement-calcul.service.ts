@@ -1,7 +1,6 @@
 // src/quittances/services/quittance-calcul.service.ts
 import { Injectable } from '@nestjs/common';
 import Decimal from 'decimal.js';
-import { Quittance } from '../entities/quittance.entity';
 import { QuittancePlacement } from '../entities/quittance-placement.entity';
 
 // Configuration globale : précision et arrondi bancaire
@@ -17,6 +16,7 @@ const FORMULE_VERSION = 'v1';
  * Tous les champs sont optionnels car on peut simuler partiellement.
  */
 export interface QuittancePlacementInputs {
+  estimationPrime?: string | number | Decimal | null;
   primeBrute?: string | number | Decimal | null;
   tauxCession?: string | number | Decimal | null;
   tauxCommission?: string | number | Decimal | null;
@@ -48,21 +48,29 @@ export class QuittancePlacementCalculService {
    */
   calculer(input: QuittancePlacementInputs, scale = 5): QuittancePlacementCalculee {
     // Normalisation des entrées en Decimal
+    const estimationPrime = this.toDecimal(input.estimationPrime);
     const primeBrute = this.toDecimal(input.primeBrute);
     const tauxCession = this.toDecimal(input.tauxCession);
     const tauxCommission = this.toDecimal(input.tauxCommission);
     const commissionFixe = this.toDecimal(input.commissionFixe);
     console.log(" ____________ QuittancePlacementCalculService.calculer _______________")
+    console.log(" estimationPrime :",estimationPrime)
     console.log(" primeBrute      :",primeBrute)
     console.log(" tauxCession     :",tauxCession)
     console.log(" tauxCommission  :",tauxCommission)
     console.log(" commissionFixe  :",commissionFixe)
     console.log(" ____________  _______________")
     // ── ÉTAPE 1 : Prime cédée ─────────────────────────────────
-    const primeCedee = primeBrute
+    const primeCedee =estimationPrime.isZero()?  primeBrute
       .mul(tauxCession.dividedBy(100))
-      .toDecimalPlaces(scale);
+      .toDecimalPlaces(scale) :
+      estimationPrime
+      .mul(tauxCession.dividedBy(100))
+      .toDecimalPlaces(scale)
+      
+      ;
     console.log("ÉTAPE 1 : primeCedee = primeBrute * (tauxCession/100) :",primeCedee )
+    console.log("ÉTAPE 1 : primeCedee = estimationPrime * (tauxCession/100) :",primeCedee )
    
        // ── ÉTAPE 3 : Commission (taux prioritaire sur fixe) ──────
     let commission: Decimal;
@@ -99,6 +107,7 @@ export class QuittancePlacementCalculService {
    */
   appliquer(q: Partial<QuittancePlacement>): Partial<QuittancePlacement> {
     const calc = this.calculer({
+      estimationPrime: q.estimationPrime,
       primeBrute: q.primeBrute,
       tauxCession: q.tauxCession,
       tauxCommission: q.tauxCommission,

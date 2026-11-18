@@ -17,6 +17,7 @@ import { QuittancePlacement } from './quittance-placement.entity';
 import { Bordereau } from 'src/flux-financier/entities/bordereau.entity';
 import { Compte } from 'src/flux-financier/entities/compte.entity';
 import { EcheancePmd } from 'src/flux-financier/entities/echeance-pmd.entity';
+import { QuittanceTranche } from './quittance-tranche.entity';
 
 
 @Entity('quittance')
@@ -247,6 +248,9 @@ export class Quittance extends BaseEntity {
   @OneToMany(() => QuittancePlacement, (sa) => sa.quittance , {eager:true})
   quittancePlacements!: QuittancePlacement[];
 
+  // la liste des tranches d'une quittance
+  @OneToMany(() => QuittanceTranche, (sa) => sa.quittance , {eager:true})
+  quittanceTranches!: QuittanceTranche[];
 
   @OneToMany(() => Bordereau, (sa) => sa.quittance , {eager:true})
   bordereaux!: Bordereau[];

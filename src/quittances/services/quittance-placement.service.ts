@@ -180,6 +180,8 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
     // Charger la quittance avec ses placements (eager:true déjà configuré)
     const quittance = await this.quittanceRepository.findOne({
       where: { id: quittanceId },
+      relations: { police: true },
+      loadEagerRelations: false,
     });
 
     if (!quittance) {
@@ -192,63 +194,20 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
       .reduce((acc, p) => acc.plus(p.tauxCession), new Decimal(0));
 
     const nouveauCumul = cumulActuel.plus(nouveauTaux);
-
-    if (nouveauCumul.gt(quittance.tauxAccepte)) {
+    const isProportionnelle = quittance.police.natureOffre.isProportionnelle
+    // les quittances proportionnelles on un tauxAccepte !=0 ET un tauxCession
+    // ce qui n'est pas le cas des quittances non proportionnelles
+    // Donc par defaut tauxAccepte sera égal à 100%
+    const tauxAccepte = isProportionnelle?quittance.tauxAccepte : 100.00
+    if (nouveauCumul.gt(tauxAccepte)) {
       throw new BadRequestException( failure(
         `Le cumul des taux de cession (${nouveauCumul.toFixed(4)}%) ` +
-        `dépasse le taux accepté (${quittance.tauxAccepte.toFixed(4)}%). ` +
+        `dépasse le taux accepté (${tauxAccepte.toFixed(4)}%). ` +
         `Cumul actuel : ${cumulActuel.toFixed(4)}%, taux demandé : ${nouveauTaux.toFixed(4)}%`, )
       );
     }
   }
 
-
-
-    // ── RÉCUPÉRATION ISOLÉE DU CUMUL DES TAUX ─────────────────
-    /**
-     * Retourne le cumul des taux de cession et le disponible pour une quittance
-     * sans charger toute la quittance (juste les placements)
-     */
-    // async getCumulTauxCession(quittanceId: number): Promise<{
-    //   quittanceId: number;
-    //   tauxAccepte: string;
-    //   cumulTauxCession: string;
-    //   tauxDisponible: string;
-    //   nombrePlacementsActifs: number;
-    // }> {
-    //   // Charger uniquement la quittance avec ses placements
-    //   const quittance = await this.quittanceRepository.findOne({
-    //     where: { id: quittanceId },
-    //     select: ['id', 'tauxAccepte'], // ← select limité pour performance
-    //     relations: ['quittancePlacements'],
-    //   });
-
-    //   if (!quittance) {
-    //     throw new NotFoundException( failure(`Quittance ${quittanceId} introuvable`));
-    //   }
-
-    //   // Calculer le cumul (hors placements annulés)
-    //   const placementsActifs = (quittance.quittancePlacements || []).filter(
-    //     (p) => !p.isAnnule,
-    //   );
-
-    //   const cumulTauxCession = placementsActifs.reduce(
-    //     (acc, p) => acc.plus(p.tauxCession),
-    //     new Decimal(0),
-    //   );
-
-    //   const tauxDisponible = quittance.tauxAccepte.minus(cumulTauxCession);
-
-    //   return {
-    //     quittanceId: quittance.id,
-    //     tauxAccepte: quittance.tauxAccepte.toFixed(4),
-    //     cumulTauxCession: cumulTauxCession.toFixed(4),
-    //     tauxDisponible: tauxDisponible.isNegative() ? '0.0000' : tauxDisponible.toFixed(4),
-    //     nombrePlacementsActifs: placementsActifs.length,
-    //   };
-    // }
-
-// ── RÉCUPÉRATION ISOLÉE DU CUMUL DES TAUX ─────────────────
         /**
          * Retourne le cumul des taux de cession et le disponible pour une quittance.
          * Utilisé par le frontend pour afficher l'état en temps réel.
@@ -263,7 +222,7 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
           const quittance = await this.quittanceRepository.findOne({
             where: { id: quittanceId },
             select: ['id', 'tauxAccepte'],
-            relations: ['quittancePlacements'],
+            relations: ['quittancePlacements', 'police'],
           });
 
           if (!quittance) {
@@ -273,17 +232,26 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
           const placementsActifs = (quittance.quittancePlacements || []).filter(
             (p) => !p.isAnnule,
           );
-
+          console.log(' __________ QuittancePlacementService quittance:',quittance)
+          const isProportionnelle = quittance.police.natureOffre.isProportionnelle
           const cumulTauxCession = placementsActifs.reduce(
             (acc, p) => acc.plus(p.tauxCession),
             new Decimal(0),
           );
-
-          const tauxDisponible = quittance.tauxAccepte.minus(cumulTauxCession);
+          console.log(' quittance.police:',quittance.police)
+          console.log(' quittance.police.natureOffre:',quittance.police.natureOffre)
+          console.log(' isProportionnelle:',isProportionnelle)
+          // les quittances proportionnelles on un tauxAccepte !=0 ET un tauxCession
+          // ce qui n'est pas le cas des quittances non proportionnelles
+          // Donc par defaut tauxAccepte sera égal à 100%
+          const taux100NonProportionnel  = new Decimal(100)
+          const tauxDisponible = isProportionnelle?
+                 quittance.tauxAccepte.minus(cumulTauxCession) :
+                 taux100NonProportionnel.minus(cumulTauxCession); 
 
           return {
             quittanceId: quittance.id,
-            tauxAccepte: quittance.tauxAccepte.toFixed(4),
+            tauxAccepte: isProportionnelle? quittance.tauxAccepte.toFixed(4) : taux100NonProportionnel.toFixed(2),
             cumulTauxCession: cumulTauxCession.toFixed(4),
             tauxDisponible: tauxDisponible.isNegative() ? '0.0000' : tauxDisponible.toFixed(4),
             nombrePlacementsActifs: placementsActifs.length,
