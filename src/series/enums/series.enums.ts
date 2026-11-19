@@ -4,7 +4,7 @@ export enum EntityType {
   ASSURE = 'ASSURE',
   POLICE = 'POLICE',
   QUITTANCE = 'QUITTANCE',
-  PLACEMENT = 'PLACEMENT',
+  RETROCESSION = 'RETROCESSION',
   BORDEREAU = 'BORDEREAU',
   COMPTE = 'COMPTE',
   SINISTRE = 'SINISTRE',
@@ -14,7 +14,6 @@ export enum EntityType {
 export enum OperationType {
   ACCEPTATION = 'A',
   CESSION = 'C',
-  PLACEMENT = 'L',
 }
 
 // Mode de réassurance (Facultatif ou Traité)

@@ -45,7 +45,13 @@ export class PoliceController extends CrudController<Police, CreatePoliceDto, Up
               // Filtre pour un assure spécifique
               baseWhere.assure = { id: parseInt(query.assureId, 10) };               
             }
+             ////////////           
+            if (query.cedanteId) {
+              // Filtre pour une cédante spécifique
+              baseWhere.acteurCedante = { id: parseInt(query.cedanteId, 10) };               
+            }
 
+            /////////
             if (query.isCession ) {
               baseWhere.isCession = query.isCession==='true';
             }  

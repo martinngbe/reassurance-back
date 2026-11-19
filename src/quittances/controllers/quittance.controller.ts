@@ -23,8 +23,11 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
       const options: FindManyOptions<Quittance> = {
         where: {},
         order: {},
-        relations: ['police', 'police.natureOffre'], // ✅ AJOUT : Indispensable pour filtrer sur les relations imbriquées
+        relations: ['police', 'police.natureOffre', 'police.acteurCedante', 'police.sousBranche'], // ✅ AJOUT : Indispensable pour filtrer sur les relations imbriquées
       };
+      console.log("_________________________________");
+      console.log("QuittanceController query:", query);
+      console.log("_________________________________");
       
       const baseSort: any = { createdAt: 'DESC' };
       if (query.sortKey && query.sortDirection) {
@@ -43,8 +46,19 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
             // 4. Filtrage sur isFac de la police associée
       if (query.cedanteId !== undefined) {
         if (!baseWhere.police) baseWhere.police = {};
-        baseWhere.police.acteurCedanteId = { id: parseInt(query.acteurCedanteId, 10) };
+        baseWhere.police.acteurCedante = { id: parseInt(query.cedanteId, 10) };
       }
+
+      if (query.sousBrancheId !== undefined) {
+        if (!baseWhere.police) baseWhere.police = {};
+        baseWhere.police.sousBranche = { id: parseInt(query.sousBrancheId, 10) };
+      }
+
+      console.log("options QuittanceController query.cedanteId:", query.cedanteId);
+      console.log("options baseWhere :", baseWhere);
+     
+
+
       // 2. Filtrage sur isCession de la police associée
       if (query.isCession !== undefined) {
         if (!baseWhere.police) baseWhere.police = {};
@@ -81,7 +95,9 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
         options.where = baseWhere;
       }
 
-      console.log("options:", JSON.stringify(options, null, 2));
+      console.log("options QuittanceController:", JSON.stringify(options, null, 2));
+      console.log("options QuittanceController:",options);
+     
       console.log("_____________________________________");
 
       return options;
