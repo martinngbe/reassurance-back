@@ -8,22 +8,29 @@ import { Quittance } from '../entities/quittance.entity';
 import { CrudController } from 'src/common/crud/crud.controller';
 import { CreateQuittanceDto } from '../dto/create-quittance.dto';
 import { UpdateQuittanceDto } from '../dto/update-quittance.dto';
-import { FindManyOptions, Like } from 'typeorm';
+import { Between, FindManyOptions, Like, Raw, Repository } from 'typeorm';
+import { Campagne } from 'src/referentiel/entities/campagne.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @ApiTags('Métier Affaires - Quittances')
 @Controller('quittance')
 export class QuittanceController extends CrudController<Quittance, CreateQuittanceDto, UpdateQuittanceDto> {
-  constructor(private readonly quittanceService: QuittanceService) {
+  constructor(
+    private readonly quittanceService: QuittanceService,
+    @InjectRepository(Campagne) 
+    private readonly campagneRepository: Repository<Campagne>,
+  ) {
     super(quittanceService);
   }
 
   private readonly SEARCHABLE_FIELDS: (keyof Quittance)[] = ['numero', 'dateEffet', 'dateEcheance'];
 
-  protected buildOptions(query: any): FindManyOptions<Quittance> {
+  protected  buildOptions(query: any): FindManyOptions<Quittance> {
       const options: FindManyOptions<Quittance> = {
         where: {},
         order: {},
-        relations: ['police', 'police.natureOffre', 'police.acteurCedante', 'police.sousBranche'], // ✅ AJOUT : Indispensable pour filtrer sur les relations imbriquées
+        relations: ['police', 'police.natureOffre', 'police.acteurCedante', 'police.sousBranche', 'police.natureOffre'], 
+        // ✅ AJOUT : Indispensable pour filtrer sur les relations imbriquées
       };
       console.log("_________________________________");
       console.log("QuittanceController query:", query);
@@ -53,9 +60,12 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
         if (!baseWhere.police) baseWhere.police = {};
         baseWhere.police.sousBranche = { id: parseInt(query.sousBrancheId, 10) };
       }
-
-      console.log("options QuittanceController query.cedanteId:", query.cedanteId);
-      console.log("options baseWhere :", baseWhere);
+      if (query.natureOffreId !== undefined) {
+        if (!baseWhere.police) baseWhere.police = {};
+        baseWhere.police.natureOffre = { id: parseInt(query.natureOffreId, 10) };
+      }
+      // console.log("options QuittanceController query.natureOffreId:", query.natureOffreId);
+      // console.log("options baseWhere :", baseWhere);
      
 
 
@@ -82,6 +92,20 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
         // Conversion de la valeur (string depuis l'URL) en booléen
         baseWhere.police.natureOffre.isProportionnelle = query.isProportionnelle === 'true' || query.isProportionnelle === true;
       }
+
+      // ✅ NOUVEAU : Filtrage sur la Campagne (basé sur la dateEffet)
+    if (query.campagneId) {
+      const campagneId = parseInt(query.campagneId, 10);
+      baseWhere.dateEffet = Raw(
+        (alias) => `${alias} BETWEEN `
+          + `(SELECT c.date_debut FROM campagne c WHERE c.id = :campagneId) `
+          + `AND (SELECT c.date_fin FROM campagne c WHERE c.id = :campagneId)`,
+        { campagneId },
+      );
+    }
+
+
+
 
       // 5. Filtre de recherche globale (LIKE avec OR)
       if (query.search && this.SEARCHABLE_FIELDS.length > 0) {

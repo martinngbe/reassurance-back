@@ -23,6 +23,7 @@ export class SousBrancheController extends CrudController<SousBranche, CreateSou
       const options: FindManyOptions<SousBranche> = {
         where: {},
         order: {}, 
+        relations: ['branche'],
       };
       
       if( query.sortKey && query.sortDirection){
@@ -39,6 +40,13 @@ export class SousBrancheController extends CrudController<SousBranche, CreateSou
         baseWhere.branche = { id: parseInt(query.brancheId, 10) };
       }
   
+      // 2. Filtrage sur isCession de la police associée
+      if (query.isCession !== undefined) {
+        if (!baseWhere.branche) baseWhere.branche = {};
+        baseWhere.branche.isRetroConventionnelle = query.isCession === 'true' || query.isCession === true;
+      }
+
+
       // 4. Filtre de recherche globale (LIKE avec OR)
       if (query.search) {
         const searchTerm = `%${query.search}%`;
