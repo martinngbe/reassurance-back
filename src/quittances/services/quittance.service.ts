@@ -4,23 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quittance } from '../entities/quittance.entity';
 import { Transactional } from '@nestjs-cls/transactional';
-import { BordereauService } from 'src/flux-financier/services/bordereau.service';
-import { EcheancePmdService } from '../../flux-financier/services/echeance-pmd.service';
-import { CompteService } from 'src/flux-financier/services/compte.service';
 import { CrudService } from 'src/common/crud/crud.service';
 import { QuittanceCalculService } from './quittance-calcul.service';
 import { CreateQuittanceDto } from '../dto/create-quittance.dto';
 import { UpdateQuittanceDto } from '../dto/update-quittance.dto';
-import { failure } from 'src/common/helper/response.helper';
 
 @Injectable()
 export class QuittanceService extends CrudService<Quittance> {
   constructor(
     @InjectRepository(Quittance)
     private readonly  quittanceRepository: Repository<Quittance>,
-    // private readonly bordereauService: BordereauService,
-    // private readonly echeancePmdService: EcheancePmdService,
-    // private readonly compteService: CompteService,
     private readonly calculService: QuittanceCalculService,
   ) {
     super(quittanceRepository);
@@ -37,11 +30,6 @@ async create(dto: CreateQuittanceDto): Promise<Quittance> {
   async update(id: number, dto: UpdateQuittanceDto): Promise<Quittance> {
     const quittance = await this.quittanceRepository.findOneOrFail({ where: { id } });
 
-    // if (quittance.estEmise) {
-    //   throw new BadRequestException(
-    //    failure( `Quittance ${id} émise : créez un avenant ou une quittance d'annulation.`)
-    //   );
-    // }
 
     Object.assign(quittance, dto);
     Object.assign(quittance, this.calculService.appliquer(quittance));
@@ -53,10 +41,7 @@ async create(dto: CreateQuittanceDto): Promise<Quittance> {
   @Transactional()
   async emettre(id: number): Promise<Quittance> {
     const quittance = await this.quittanceRepository.findOneOrFail({ where: { id } });
-    // if (quittance.estEmise) {
-    //   throw new BadRequestException( failure(`Quittance ${id} déjà émise.`));
-    // }
-    // quittance.estEmise = true;
+   
     return this.quittanceRepository.save(quittance);
   }
 

@@ -17,8 +17,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class QuittanceController extends CrudController<Quittance, CreateQuittanceDto, UpdateQuittanceDto> {
   constructor(
     private readonly quittanceService: QuittanceService,
-    @InjectRepository(Campagne) 
-    private readonly campagneRepository: Repository<Campagne>,
   ) {
     super(quittanceService);
   }

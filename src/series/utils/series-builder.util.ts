@@ -32,8 +32,18 @@ export function buildSeriesConfig(
       prefix: context.paysCode.toUpperCase(),
       paddingLength: 4,
     };
-  }
+  } 
+  if (entityType === EntityType.ACTEUR) {
+    if (!context.paysCode) {
+      throw new Error('Le code pays est requis pour un assuré');
+    }
 
+    return {
+      seriesKey: `${entityName}_${context.paysCode.toUpperCase()}_${year}`,
+      prefix: context.paysCode.toUpperCase(),
+      paddingLength: 4,
+    };
+  }
   // ========================================
   // CAS 2 : LES AUTRES ENTITÉS (dépendent de l'opération + mode)
   // Format : PAF-26-00001

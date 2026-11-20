@@ -96,7 +96,9 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
   // ── MISE À JOUR : recalcul + verrou si émise ──────────────
   async update(id: number, dto: UpdateQuittancePlacementDto): Promise<QuittancePlacement> {
     const quittancePlacement = await this.quittancePlacementRepository.findOneOrFail({ where: { id } });
-
+    console.log(' ______ QuittancePlacementService.update _____ ')
+    console.log(' dto :',dto)
+    console.log(' quittancePlacement :',quittancePlacement)
     
 
     // 1. Validation métier (en excluant le placement en cours de modif)
@@ -110,9 +112,22 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
 
     // 2. Mise à jour + recalcul
     Object.assign(quittancePlacement, dto);
-    Object.assign(quittancePlacement, this.calculService.appliquer(quittancePlacement));
+    // 3. Mise à jour EXPLICITE des relations (CRUCIAL pour TypeORM)
+    // On utilise 'in' pour gérer correctement les valeurs null (ex: si on veut supprimer la relation)
+    if ('acteurId' in dto) {
+      quittancePlacement.acteur = dto.acteurId ? { id: dto.acteurId } as any : null;
+    }
+    if ('naturePlacementId' in dto) {
+      quittancePlacement.naturePlacement = dto.naturePlacementId ? { id: dto.naturePlacementId } as any : null;
+    }
+    if ('quittanceId' in dto) {
+      quittancePlacement.quittance = dto.quittanceId ? { id: dto.quittanceId } as any : null;
+    }
 
-    return this.quittancePlacementRepository.save(quittancePlacement);
+    Object.assign(quittancePlacement, this.calculService.appliquer(quittancePlacement));
+    const resultat = await this.quittancePlacementRepository.save(quittancePlacement);
+    console.log(' resultat :',resultat)
+    return resultat
   }
 
   // ── ÉMISSION : verrou définitif ───────────────────────────
