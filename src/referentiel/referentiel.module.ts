@@ -39,6 +39,9 @@ import { NatureOffreService } from './services/nature-offre.service';
 import { BrancheRetroCessionController } from './controllers/branche-retro-cession.controller';
 import { BrancheRetroCession } from './entities/branche-retro-cession.entity';
 import { BrancheRetroCessionService } from './services/branche-retro-cession.service';
+import { CessionLegale } from './entities/cession-legale.entity';
+import { CessionLegaleController } from './controllers/cession-legale.controller';
+import { CessionLegaleService } from './services/cession-legale.service';
 
 /**
  * Regroupe les tables de référence communes ("Référentiel" et une partie
@@ -54,6 +57,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
       BrancheRetroCession,
       DomaineActivite,
       Devise,
+      CessionLegale,
       Campagne,
       Mouvement,
       CompteType,
@@ -68,6 +72,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
     BrancheController,
     SousBrancheController,
     DeviseController,
+    CessionLegaleController,
     DomaineActiviteController,
     CampagneController,
     MouvementController,
@@ -82,6 +87,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
     BrancheService,
     SousBrancheService,
     DeviseService,
+    CessionLegaleService,
     DomaineActiviteService,
     CampagneService,
     MouvementService,
@@ -96,6 +102,7 @@ import { BrancheRetroCessionService } from './services/branche-retro-cession.ser
     BrancheService,
     SousBrancheService,
     DeviseService,
+    CessionLegaleService,
     DomaineActiviteService,
     CampagneService,
     MouvementService,

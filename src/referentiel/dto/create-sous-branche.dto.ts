@@ -3,12 +3,13 @@ import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 export class CreateSousBrancheDto {
   @IsString()
   @IsNotEmpty()
-  code: string;
+  code!: string;
 
   @IsString()
   @IsNotEmpty()
-  libelle: string;
+  libelle!: string;
 
   @IsInt()
-  idBranche: number;
+   @IsNotEmpty()
+  brancheId!: number;
 }

@@ -12,8 +12,6 @@ import { seedReferentiel } from './referentiel/seed/seed-refentiel';
 import { ClsService } from 'nestjs-cls';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { seedFluxFinancier } from './flux-financier/seed/seed-flux-financier';
-import { seedAcceptationPoliceQuittance } from './polices/seed/seed-police-acceptation';
-import { seedPoliceRetroCessionQuittance } from './polices/seed/seed-police-retro-cession';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -61,11 +59,14 @@ async function bootstrap() {
    // await seedAcceptationPoliceQuittance(dataSource)
    // await seedPoliceRetroCessionQuittance(dataSource)
   }
-
+  app.enableCors({
+    origin: 'http://reass.local',
+    credentials: true, // si vous utilisez des cookies ou des headers d'authentification
+  });
   const port = process.env.PORT || 3000;
   await app.listen(port);
 
-  console.log(`reassurance-back démarré sur http://localhost:${port} (docs: /docs)`);
+  console.log(`reassurance-back démarré sur http://api.reass.local:${port} (docs: /docs)`);
   console.log(`🚀 Application running on port ${port}`);
   console.log(`🔐 Toutes les routes sont protégées sauf celles marquées @Public()`);
 }

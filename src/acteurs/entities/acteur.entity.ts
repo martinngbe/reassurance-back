@@ -5,6 +5,7 @@ import { DomaineActivite } from '../../referentiel/entities/domaine-activite.ent
 import { Contact } from './contact.entity';
 import { Sinistre } from 'src/sinistres/entities/sinistre.entity';
 import { SinistreActeur } from 'src/sinistres/entities/sinistre-acteur.entity';
+import { CessionLegale } from 'src/referentiel/entities/cession-legale.entity';
 
 /**
  * Toute partie prenante du système : cédante, courtier, réassureur...
@@ -61,6 +62,10 @@ export class Acteur extends BaseEntity {
 
   @OneToMany(() => Contact, (contact) => contact.acteur)
   contacts!: Contact[];
+
+  // Un Acteur peut avoir +sieurs cessionLegales (FAC et TRAITE)
+  @OneToMany(() => CessionLegale, (cl) => cl.acteur , {eager:true})
+  cessionLegales!: CessionLegale[];
 
   // la liste des sinistres d'un acteur
   @OneToMany(() => SinistreActeur, (sa) => sa.acteur)
