@@ -10,9 +10,16 @@ export class CreateQuittancePlacementDto {
   @IsNotEmpty()
   acteurId!: number;
 
-  @IsInt()
+  // @IsInt()
+  // @IsNotEmpty()
+  // natureCessionId!: number;
+
+   @IsInt()
   @IsNotEmpty()
-  natureCessionId!: number;
+  naturePlacementId!: number;
+  
+
+
 
   @IsNumber()
   tauxCession: Decimal= new Decimal(0);

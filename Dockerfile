@@ -2,6 +2,10 @@
 FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
+
+# Ajoutez cette ligne pour utiliser un miroir rapide
+RUN npm config set registry https://registry.npmmirror.com
+
 RUN npm ci
 
 # --- Étape 2 : Compilation du projet ---

@@ -26,6 +26,8 @@ import { SeriesModule } from 'src/series/series.module';
 import { QuittanceTranche } from './entities/quittance-tranche.entity';
 import { QuittanceTrancheController } from './controllers/quittance-tranche.controller';
 import { QuittanceTrancheService } from './services/quittance-tranche.service';
+import { CessionLegale } from 'src/referentiel/entities/cession-legale.entity';
+import { NaturePlacement } from 'src/referentiel/entities/nature-placement.entity';
 
 /**
  * Cœur métier "Affaires" : quittances d'acceptation, leurs rétrocessions
@@ -38,11 +40,13 @@ import { QuittanceTrancheService } from './services/quittance-tranche.service';
   imports: [
     ClsModule, // ⬅️ OBLIGATOIRE pour @Transactional pour que le CLS fonctionne dans ce module    
     FluxFinancierModule,
-     SeriesModule,
+    SeriesModule,
     TypeOrmModule.forFeature([
       Quittance, 
       QuittancePlacement, 
       QuittanceTranche,
+      CessionLegale,     // ← ajouter
+      NaturePlacement,   // ← vérifier que celui-ci y est déjà (sinon l'erreur viendra ensuite)
       ObjetAssure,      
       EcheancePmd,
       TempQuittance,

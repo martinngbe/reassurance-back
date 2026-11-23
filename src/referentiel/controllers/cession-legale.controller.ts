@@ -21,14 +21,15 @@ export class CessionLegaleController extends CrudController<CessionLegale, Creat
   // Ajoutez d'autres champs texte ici si votre entité en possède (ex: 'description')
 
   protected buildOptions(query: any): FindManyOptions<CessionLegale> {
-    const baseSort: any = {libelle: 'ASC'};// Tri par défaut
+    const baseSort: any = {};// Tri par défaut
     const options: FindManyOptions<CessionLegale> = {
       where: {},
       order: {}, 
+      relations: ['acteur'], 
+        // ✅ AJOUT : Indispensable pour filtrer sur les relations imbriquées
     };
     
-    if( query.sortKey && query.sortDirection){
-        
+    if( query.sortKey && query.sortDirection){        
         options.order ={ [query.sortKey]: `${query.sortDirection}`}
     }else {
       options.order = baseSort
@@ -36,7 +37,16 @@ export class CessionLegaleController extends CrudController<CessionLegale, Creat
 
     // 3. Filtres exacts (AND)
     const baseWhere: any = {};
-   
+       
+    // 1. Filtre sur acteurId
+    if (query.acteurId) {
+      baseWhere.acteur = { id: parseInt(query.acteurId, 10) }; 
+    }
+    if (query.isFacultative) {
+      baseWhere.isFac = query.isFacultative === 'true' || query.isFacultative === true; 
+    }
+    
+        
     // 4. Filtre de recherche globale (LIKE avec OR)
     if (query.search) {
       const searchTerm = `%${query.search}%`;      

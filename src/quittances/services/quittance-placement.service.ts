@@ -16,6 +16,8 @@ import { SeriesService } from 'src/series/series.service';
 import { LogMethod } from 'src/common/decorateur/log-method.decorator';
 import { buildContextFromFlags, EntityType } from 'src/series';
 import { fail } from 'node:assert';
+import { CessionLegale } from 'src/referentiel/entities/cession-legale.entity';
+import { NaturePlacement } from 'src/referentiel/entities/nature-placement.entity';
 
 @Injectable()
 export class QuittancePlacementService extends CrudService<QuittancePlacement> {
@@ -24,6 +26,10 @@ export class QuittancePlacementService extends CrudService<QuittancePlacement> {
     private readonly  quittancePlacementRepository: Repository<QuittancePlacement>,
     @InjectRepository(Quittance)
     private readonly quittanceRepository: Repository<Quittance>,
+    @InjectRepository(CessionLegale)
+    private readonly cessionLegaleRepository: Repository<CessionLegale>,
+    @InjectRepository(NaturePlacement)
+    private readonly naturePlacementRepository: Repository<NaturePlacement>,
     private readonly calculService: QuittancePlacementCalculService,
     private readonly txHost: TransactionHost<TransactionalAdapterTypeOrm>,
     private readonly seriesService: SeriesService,
@@ -35,6 +41,10 @@ export class QuittancePlacementService extends CrudService<QuittancePlacement> {
 @Transactional()
 @LogMethod()
 async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
+  console.log(' _____________________________________ ')
+  console.log('     QuittancePlacementService.create ')
+  console.log(' _____________________________________ ')
+    
   const tx = this.txHost.tx;
   /////////////////////////////////////////////////////////////
   ////   Process de numérotation de la QuittancePlacement
@@ -53,7 +63,7 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
   if (!quittance) {
       throw new NotFoundException(failure(`Quittance ${dto.quittanceId} introuvable`));
   }
-
+ console.log('     quittance:',quittance)
   if (!quittance.police) {
         throw new NotFoundException(failure(
           `La Quittance ${dto.quittanceId} n'a pas de Police associée`),
@@ -72,11 +82,8 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
   /////////////////////////////////////////////////////////////
   ////    FIN
   /////////////////////////////////////////////////////////////
-
-
-
-  // 1. Validation métier AVANT calcul
-  
+  //// 1. Validation métier AVANT calcul 
+  console.log('      Validation métier AVANT calcul  dto:',dto) 
   await this.validerTauxCession(
       dto.quittanceId,
       new Decimal(dto.tauxCession),
@@ -88,11 +95,6 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
    // 3. Persistance
   return super.create(data); // ← utilise la méthode parente
 }
-
-
-
-
-
   // ── MISE À JOUR : recalcul + verrou si émise ──────────────
   async update(id: number, dto: UpdateQuittancePlacementDto): Promise<QuittancePlacement> {
     const quittancePlacement = await this.quittancePlacementRepository.findOneOrFail({ where: { id } });
@@ -134,10 +136,7 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
   @Transactional()
   async emettre(id: number): Promise<QuittancePlacement> {
     const quittancePlacement = await this.quittancePlacementRepository.findOneOrFail({ where: { id } });
-    // if (quittancePlacement.estEmise) {
-    //   throw new BadRequestException( failure(`QuittancePlacement ${id} déjà émise.`));
-    // }
-    // quittancePlacement.estEmise = true;
+
     return this.quittancePlacementRepository.save(quittancePlacement);
   }
 
@@ -202,7 +201,7 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
     });
 
     if (!quittance) {
-      throw new NotFoundException(`Quittance ${quittanceId} introuvable`);
+      throw new NotFoundException(failure(`Quittance ${quittanceId} introuvable`) );
     }
 
     // Calculer le cumul actuel (hors placements annulés)
@@ -247,26 +246,23 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
     });
 
     if (!quittance) {
-      throw new NotFoundException(`Quittance ${quittanceId} introuvable`);
+      throw new NotFoundException(failure(`Quittance ${quittanceId} introuvable`) );
     }
 
     const placementsActifs = (quittance.quittancePlacements || []).filter(
       (p) => !p.isAnnule,
     );
-    console.log(' __________ QuittancePlacementService quittance:',quittance)   
+    //console.log(' __________ QuittancePlacementService quittance:',quittance)   
     const police = quittance.police
-    console.log(' __________ QuittancePlacementService police:',police)
+    //console.log(' __________ QuittancePlacementService police:',police)
     const natureOffre=police.natureOffre 
-    console.log(' __________ QuittancePlacementService natureOffre:',natureOffre)
+    //console.log(' __________ QuittancePlacementService natureOffre:',natureOffre)
     const isProportionnelle = natureOffre.isProportionnelle
-    console.log(' __________ QuittancePlacementService isProportionnelle:',isProportionnelle)
+    //console.log(' __________ QuittancePlacementService isProportionnelle:',isProportionnelle)
     const cumulTauxCession = placementsActifs.reduce(
       (acc, p) => acc.plus(p.tauxCession),
       new Decimal(0),
     );
-    console.log(' quittance.police:',quittance.police)
-    console.log(' quittance.police.natureOffre:',quittance.police.natureOffre)
-    console.log(' isProportionnelle:',isProportionnelle)
     // les quittances proportionnelles on un tauxAccepte !=0 ET un tauxCession
     // ce qui n'est pas le cas des quittances non proportionnelles
     // Donc par defaut tauxAccepte sera égal à 100%
@@ -282,6 +278,57 @@ async create(dto: CreateQuittancePlacementDto): Promise<QuittancePlacement> {
       tauxDisponible: tauxDisponible.isNegative() ? '0.0000' : tauxDisponible.toFixed(4),
       nombrePlacementsActifs: placementsActifs.length,
     };
+  }
+
+ @Transactional()
+ @LogMethod()
+  async executeCessionLegale(quittanceId: number , cessionLegaleId : number): Promise<QuittancePlacement>{
+    console.log(' _____________________________________ ')
+    console.log('     QuittancePlacementService.executeCessionLegale ')
+    console.log(' _____________________________________ ')
+    
+    // lecture de la quittance 
+    const quittance = await this.quittanceRepository.findOne({
+      where: { id: quittanceId }     
+    });
+
+    if (!quittance) {
+      throw new NotFoundException(failure(`Quittance ${quittanceId} introuvable`) );
+    }
+    console.log('    quittance:',quittance)
+     // lecture de la cession legale 
+    const cessionLegale = await this.cessionLegaleRepository.findOne({
+      where: { id: cessionLegaleId }     
+    });
+
+    if (!cessionLegale) {
+      throw new NotFoundException(failure(`Cession Legale ${cessionLegaleId} introuvable`) );
+    }
+    console.log('    cessionLegale:',cessionLegale)
+    // lecture NautrePlacement
+    const naturePlacement = await this.naturePlacementRepository.findOne({
+      where: { code: 'LEG' }     
+    });
+
+    if (!naturePlacement) {
+      throw new NotFoundException(failure(`Nature Placement légale introuvable`) );
+    }
+    console.log('    naturePlacement:',naturePlacement)
+    const quittancePlacement = this.quittancePlacementRepository.create({
+      quittanceId : quittance.id,     
+      primeBrute : quittance.primeBrute,   
+      estimationPrime : quittance.estimationPrime,   
+      tauxCession:   cessionLegale.taux,   // TODO taux 
+      tauxCommission: quittance.tauxCommission,   
+      commissionFixe: quittance.commissionFixe,   
+    
+      acteurId:cessionLegale.acteurId, 
+      naturePlacementId:naturePlacement.id,
+    });
+
+    console.log('  quittancePlacement:',quittancePlacement)
+    console.log(' _____________________________________ ')
+    return  this.create(quittancePlacement)
   }
 
 }

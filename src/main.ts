@@ -18,6 +18,29 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
+    // ✅ CORS : un seul appel, AVANT les guards globaux
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://reass.local',
+  ];
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // curl, Postman, same-origin
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      console.warn(`⛔ CORS refusé pour l'origine: ${origin}`);
+      return callback(new Error('Not allowed by CORS'), false);
+    },
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+    // credentials: true, // ⚠️ seulement si vous utilisez des cookies
+    maxAge: 86400,
+  });
+  // app.enableCors({
+  //   origin: 'http://reass.local',
+  //   credentials: true, // si vous utilisez des cookies ou des headers d'authentification
+  // });
+
   app.useLogger(app.get(AppLogger));
 
   app.useGlobalInterceptors(new FormatResponseInterceptor());
@@ -31,8 +54,7 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
-
+ 
   const reflector = app.get(Reflector);
 
 
@@ -59,14 +81,11 @@ async function bootstrap() {
    // await seedAcceptationPoliceQuittance(dataSource)
    // await seedPoliceRetroCessionQuittance(dataSource)
   }
-  app.enableCors({
-    origin: 'http://reass.local',
-    credentials: true, // si vous utilisez des cookies ou des headers d'authentification
-  });
+
   const port = process.env.PORT || 3000;
   await app.listen(port);
 
-  console.log(`reassurance-back démarré sur http://api.reass.local:${port} (docs: /docs)`);
+  console.log(`reassurance-back démarré sur http://reass.local:${port} (docs: /docs)`);
   console.log(`🚀 Application running on port ${port}`);
   console.log(`🔐 Toutes les routes sont protégées sauf celles marquées @Public()`);
 }

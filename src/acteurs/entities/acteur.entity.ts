@@ -64,7 +64,7 @@ export class Acteur extends BaseEntity {
   contacts!: Contact[];
 
   // Un Acteur peut avoir +sieurs cessionLegales (FAC et TRAITE)
-  @OneToMany(() => CessionLegale, (cl) => cl.acteur , {eager:true})
+  @OneToMany(() => CessionLegale, (cl) => cl.acteur , {eager:false})
   cessionLegales!: CessionLegale[];
 
   // la liste des sinistres d'un acteur

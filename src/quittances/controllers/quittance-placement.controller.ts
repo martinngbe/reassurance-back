@@ -1,5 +1,6 @@
 import {
   Controller, Get,  Param,  ParseIntPipe,  Patch,
+  Post,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
@@ -64,5 +65,18 @@ CreateQuittancePlacementDto, UpdateQuittancePlacementDto> {
     @Param('quittanceId', ParseIntPipe) quittanceId: number,
   ) {
     return this.quittancePlacementService.getCumulTauxCession(quittanceId);
+  }
+
+
+  @Post('cession-legale/:quittanceId/:cessionLegaleId')
+  @ApiOperation({ 
+    summary: 'Exécute une cession légale au placement',
+    description: 'Puis retourne le placement'
+  })
+  async executeCessionLegale(
+    @Param('quittanceId', ParseIntPipe) quittanceId: number,
+    @Param('cessionLegaleId', ParseIntPipe) cessionLegaleId: number,
+  ) {
+    return this.quittancePlacementService.executeCessionLegale(quittanceId,cessionLegaleId);
   }
 }

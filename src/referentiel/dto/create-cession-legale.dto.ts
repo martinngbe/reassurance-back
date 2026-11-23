@@ -1,9 +1,9 @@
-import { IsInt,IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt,IsBoolean, IsNotEmpty, IsNumber } from 'class-validator';
 import Decimal from 'decimal.js';
 
 export class CreateCessionLegaleDto {
-  @IsString()
-  @IsNotEmpty()
+  
+  @IsNumber()
   taux: Decimal=new Decimal(0);
 
   @IsBoolean()

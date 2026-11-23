@@ -24,6 +24,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
+      const request = context.switchToHttp().getRequest();
+
+      // ✅ 1. Laisser passer le preflight CORS sans authentification
+      //    (le middleware CORS répondra lui-même avec 204 + headers)
+      if (request.method === 'OPTIONS') {
+        return true;
+      }
+
+
     if (isPublic) {
       return true;
     }
