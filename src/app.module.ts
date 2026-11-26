@@ -18,12 +18,14 @@ import { AppLogger } from './common/logger/app-logger.service';
 import { AuthModule } from './auth/auth.module';
 import { AuditSubscriber } from './common/database/audit.subscriber';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { PdfModule } from './pdf/ pdf.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
+    PdfModule,
     ReferentielModule,
     ActeursModule,
     PolicesModule,

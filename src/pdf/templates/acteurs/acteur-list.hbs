@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>{{{css}}}</style>
+  <style>
+    
+    .col-numero { width: 5%;  font-size: 6.0pt; }
+    .col-sigle  { width: 10%; font-size: 5.0pt; }
+    .col-raison { width: 55%; font-size: 8.0pt; font-weight:  bolder; }
+    .col-pays   { width: 10%; font-size: 5.0pt; }
+    .col-role   { width: 20%; font-size: 5.0pt;}
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-title">Répertoire des Acteurs</div>      
+    </header>
+
+    <main class="content">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>N°</th> 
+            <th class="col-numero">N°Acteur</th>
+            <th class="col-sigle">Sigle</th>
+            <th class="col-raison">Raison Sociale</th>
+            <th class="col-role">Rôles</th>
+            <th class="col-pays">Pays</th>           
+          </tr>
+        </thead>
+        <tbody>
+          {{#each acteurs}}
+          <tr>
+            <td class="col-numero">{{this.numeroLigne}}</td>  <!-- Numéro de ligne -->
+            <td class="col-numero">{{this.numero}}</td> <!-- Numéro métier -->
+            <td class="col-sigle">{{this.sigle}}</td>
+            <td class="col-raison majuscules">{{this.raisonSociale}}</td>
+            <td class="col-role">{{this.rolesString}}</td>
+            <td class="col-pays">{{#if this.pays}}{{this.pays.libelle}}{{else}}-{{/if}}</td>
+           
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </main>
+
+    <footer class="footer">
+      Total : {{acteurs.length}} acteur(s) — Document Confidentiel
+      <div class="header-subtitle">Liste extraite le {{dateGeneration}}</div>      
+    </footer>
+  </div>
+</body>
+</html>

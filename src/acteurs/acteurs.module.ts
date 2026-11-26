@@ -13,7 +13,7 @@ import { ContactService } from './services/contact.service';
 import { SeriesModule } from 'src/series/series.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Acteur, Assure, Contact]), SeriesModule],
+  imports: [TypeOrmModule.forFeature([Acteur, Assure, Contact]), SeriesModule ],
   controllers: [ActeurController, AssureController, ContactController],
   providers: [ActeurService, AssureService, ContactService],
   exports: [ActeurService, AssureService, ContactService],

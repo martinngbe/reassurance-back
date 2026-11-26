@@ -36,10 +36,6 @@ async function bootstrap() {
     // credentials: true, // ⚠️ seulement si vous utilisez des cookies
     maxAge: 86400,
   });
-  // app.enableCors({
-  //   origin: 'http://reass.local',
-  //   credentials: true, // si vous utilisez des cookies ou des headers d'authentification
-  // });
 
   app.useLogger(app.get(AppLogger));
 

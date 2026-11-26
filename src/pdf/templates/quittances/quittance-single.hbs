@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>{{{css}}}</style>
+<style>
+  /* =========================================
+     MISE EN PAGE SPÉCIFIQUE : FICHE QUITTANCE
+     ========================================= */
+
+  /* --- En-tête spécifique quittance --- */
+  .quittance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px double var(--color-accent);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+
+  .quittance-number {
+    font-family: var(--font-title);
+    font-size: 22pt;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0;
+    letter-spacing: 1px;
+  }
+
+  .quittance-police {
+    font-family: var(--font-title);
+    font-size: 11pt;
+    color: var(--color-muted);
+    margin-top: 5px;
+    font-style: italic;
+  }
+/* Badges alignés à droite du titre */
+.quittance-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.badge-status {
+  padding: 4px 12px;
+  border: 1px solid var(--color-accent);
+  font-size: 9pt;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.badge-active {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+
+.majuscules {
+  text-transform: uppercase;
+}
+  .badge-annulee {
+    background-color: #8B4513;
+    color: var(--color-bg);
+    border-color: #8B4513;
+  }
+
+  /* --- Grille d'informations (4 colonnes) --- */
+  .info-grid th {
+    width: 25%;
+    font-weight: normal;
+    color: var(--color-muted);
+    font-style: italic;
+    text-transform: none;
+    border-bottom: 1px dashed var(--color-border);
+    padding: 6px 8px;
+  }
+
+  .info-grid td {
+    width: 25%;
+    font-weight: bold;
+    color: var(--color-text);
+    border-bottom: 1px dashed var(--color-border);
+    padding: 6px 8px;
+  }
+
+  /* --- Montants alignés à droite (style monospace) --- */
+  .amount {
+    text-align: right;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  /* --- Tables de données (placements, tranches, échéances) --- */
+  .data-table th {
+    font-size: 8.5pt;
+    padding: 6px 4px;
+  }
+
+  .data-table td {
+    font-size: 9.5pt;
+    padding: 6px 4px;
+  }
+
+  .data-table td.amount {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: right;
+  }
+
+  /* --- Largeurs colonnes : Placements --- */
+  .placements-table th:nth-child(1), .placements-table td:nth-child(1) { width: 20%; }
+  .placements-table th:nth-child(2), .placements-table td:nth-child(2) { width: 12%; }
+  .placements-table th:nth-child(3), .placements-table td:nth-child(3) { width: 10%; }
+  .placements-table th:nth-child(4), .placements-table td:nth-child(4) { width: 13%; }
+  .placements-table th:nth-child(5), .placements-table td:nth-child(5) { width: 13%; }
+  .placements-table th:nth-child(6), .placements-table td:nth-child(6) { width: 8%; }
+  .placements-table th:nth-child(7), .placements-table td:nth-child(7) { width: 12%; }
+  .placements-table th:nth-child(8), .placements-table td:nth-child(8) { width: 12%; }
+
+  /* --- Largeurs colonnes : Tranches --- */
+  .tranches-table th:nth-child(1), .tranches-table td:nth-child(1) { width: 8%; text-align: center; }
+  .tranches-table th:nth-child(2), .tranches-table td:nth-child(2) { width: 27%; }
+  .tranches-table th:nth-child(3), .tranches-table td:nth-child(3) { width: 15%; }
+  .tranches-table th:nth-child(4), .tranches-table td:nth-child(4) { width: 15%; }
+  .tranches-table th:nth-child(5), .tranches-table td:nth-child(5) { width: 10%; }
+  .tranches-table th:nth-child(6), .tranches-table td:nth-child(6) { width: 25%; }
+
+  /* --- Largeurs colonnes : Échéances PMD --- */
+  .echeances-table th:nth-child(1), .echeances-table td:nth-child(1) { width: 8%; text-align: center; }
+  .echeances-table th:nth-child(2), .echeances-table td:nth-child(2) { width: 22%; }
+  .echeances-table th:nth-child(3), .echeances-table td:nth-child(3) { width: 25%; }
+  .echeances-table th:nth-child(4), .echeances-table td:nth-child(4) { width: 20%; }
+  .echeances-table th:nth-child(5), .echeances-table td:nth-child(5) { width: 25%; }
+
+  /* --- Largeurs colonnes : Objets Assurés --- */
+  .objets-table th:nth-child(1), .objets-table td:nth-child(1) { width: 15%; }
+  .objets-table th:nth-child(2), .objets-table td:nth-child(2) { width: 40%; }
+  .objets-table th:nth-child(3), .objets-table td:nth-child(3) { width: 20%; }
+  .objets-table th:nth-child(4), .objets-table td:nth-child(4) { width: 25%; }
+
+/* --- Table Police spécifique --- */
+.section .police-table {
+  width: 100%;
+  table-layout: fixed; /* ✅ Force le respect des largeurs */
+  border-collapse: collapse;
+}
+
+.section .police-table .police-label {
+  width: 20%;
+  font-family: var(--font-title);
+  font-weight: bold;
+  color: var(--color-text);
+  font-style: normal;
+  text-transform: none;
+  padding: 8px 10px;
+  border-bottom: 1px dashed var(--color-border);
+  vertical-align: top;
+}
+
+.section .police-table .police-value {
+  width: 80%;
+  font-weight: normal;
+  color: var(--color-text);
+  padding: 8px 10px;
+  border-bottom: 1px dashed var(--color-border);
+  vertical-align: top;
+}
+
+
+
+  /* --- Totaux en bas de table --- */
+  .table-total {
+    font-weight: bold;
+    background-color: rgba(92, 83, 74, 0.08);
+  }
+
+  .table-total td {
+    border-top: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+    padding: 8px 6px;
+  }
+
+  /* --- Saut de page avant les tables détaillées --- */
+  .page-break-before {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+  <!-- DEBUG: quittance.numero={{quittance.numero}} | dateGeneration={{dateGeneration}} -->
+<div class="page">
+  <!-- 
+       ============================================
+       EN-TÊTE : Numéro, Police, Badges
+       ============================================ 
+  -->
+  <div class="quittance-header">
+    <div>
+      <h1 class="quittance-number">QUITTANCE N° {{quittance.numero}}</h1>
+      <p>{{quittance.mouvement.libelle}}</p>   
+    </div>
+    <div class="quittance-badges">
+      {{#if quittance.isAnnule}}
+        <span class="badge-status badge-annulee majuscules">Annulée</span>
+      {{else}}
+        <span class="badge-status badge-active">Active</span>
+      {{/if}}
+      <span class="badge-status">{{quittance.devise.code}}</span>
+      <span class="badge-status">Cours : {{quittance.coursDevise}}</span>
+    </div>
+  </div>
+
+  <main class="content">
+    <!-- 
+        ============================================
+         Police
+         ============================================ 
+    -->
+    <section class="section">
+      <h2 class="section-title">Police  N°{{quittance.police.numero}}</h2>
+          <div class="quittance-badges">
+                {{#if quittance.police.isCession}}
+                  <span class="badge-status badge-active">CESSION</span>
+                {{else}}
+                  <span class="badge-status badge-active">ACCEPTATION</span>
+                {{/if}}             
+                {{#if quittance.police.isFac}}
+                  <span class="badge-status badge-active">Facultativie</span>
+                {{else}}
+                  <span class="badge-status badge-active majuscules">Traité</span>
+                {{/if}}            
+                {{#if quittance.police.isIard}}
+                  <span class="badge-status badge-active">IARD</span>
+                {{else}}
+                  <span class="badge-status badge-active">VIE</span>
+                {{/if}}
+
+          </div>
+      <table class="info-grid police-table">
+        <tr>
+          <td class="police-label">Nature offre</td>
+          <td class="police-value">{{quittance.police.natureOffre.libelle}}</td>
+         </tr>
+        <tr>
+          <td  class="police-label">Sous Branche</td>
+          <td  class="police-value">{{quittance.police.sousBranche.libelle}}</td>
+        </tr>
+        <tr>
+          <td  class="police-label">Cédante</td>
+          <td  class="police-value">{{quittance.police.acteurCedante.raisonSociale}}</td>
+          
+        </tr>
+        <tr>
+          <td class="police-label">Courtier</td>
+          <td class="police-value">{{quittance.police.acteurCourtier.raisonSociale}}</td>         
+        </tr> 
+      </table>
+    </section>
+    <!-- 
+        ============================================
+         SECTION 1 : ÉMISSION
+         ============================================ 
+    -->
+    <section class="section">
+      <h2 class="section-title">Émission</h2>
+      <table class="info-grid">
+        <tr>
+          <th>Date d'émission</th>
+          <td>{{quittance.dateEmissionFormatee}}</td>
+          <th>Date d'effet</th>
+          <td>{{#if quittance.dateEffet}}{{quittance.dateEffetFormatee}}{{else}}<span class="empty">—</span>{{/if}}</td>
+        </tr>
+        <tr>
+          <th>Date d'échéance</th>
+          <td>{{#if quittance.dateEcheance}}{{quittance.dateEcheanceFormatee}}{{else}}<span class="empty">—</span>{{/if}}</td>
+          <th>Avis d'échéance</th>
+          <td class="amount">{{quittance.avisEcheance}} jours</td>
+        </tr>
+        <tr>
+          <th>Nbre Échéance PMD</th>
+          <td class="amount">{{quittance.nombreEcheancePmd}}</td>
+          <th>Nbre Tranche</th>
+          <td class="amount">{{quittance.nombreTranche}}</td>
+        </tr>
+        <tr>
+          <th>Avis sinistre</th>
+          <td class="amount">{{quittance.avisSinistre}}</td>
+          <th>Sinistre au comptant</th>
+          <td class="amount">{{quittance.sinistreAuComptant}}</td>
+        </tr>
+      </table>
+    </section>
+
+    <!--
+         ============================================
+         SECTION 2 : CAPITAUX & RISQUES
+         ============================================ 
+    -->
+    <section class="section">
+      <h2 class="section-title">Capitaux & Risques</h2>
+        {{#if isEdp }}
+          <table class="info-grid">
+            <tr>
+              <th>conservation</th>
+              <td class="amount">{{quittance.conservation}}</td>
+              <th>Capacité</th>
+              <td class="amount">{{quittance.capacite}}</td>
+            </tr>
+          </table>
+      {{/if}}
+      {{#if isXs }}
+          <table class="info-grid">         
+            <tr>
+              <th>portée</th>
+              <td class="amount">{{quittance.portee}}</td>
+              <th>priorite</th>
+              <td class="amount">{{quittance.priorite}}</td>
+            </tr>
+          </table>
+      {{/if}}      
+    </section>
+
+    <!-- 
+         ============================================
+         SECTION 3 : PRIMES & COMMISSIONS
+         ============================================ 
+    -->
+    <section class="section">
+      <h2 class="section-title">Primes & Commissions</h2>
+      {{#if isXs}}      
+        <table class="info-grid">
+          <tr>
+            <th>Estimation Prime</th>
+            <td class="amount">{{quittance.estimationPrime}}</td>
+            <th></th>
+            <td class="amount"></td>
+          </tr>
+        </table>
+       {{else}}
+            <p class="empty">Aucun prime enregistrée</p>
+       {{/if}}
+    </section>
+
+  <!-- ============================================
+     SECTIONS EN PAYSAGE : PLACEMENTS + TRANCHES
+     ============================================ -->
+    <div class="paysage-section">
+
+          <!-- SECTION 5 : PLACEMENTS -->
+          <section class="section">
+            <h2 class="section-title">Liste de Sécurité — Placements auprès des Réassureurs</h2>
+            {{#if quittance.quittancePlacements.length}}
+            <table class="data-table placements-table">
+              <thead>
+                <tr>
+                  <th>Rétrocessionnaire</th>
+                  <th>N° RAT</th>
+                  <th>Nature</th>
+                  <th>Taux Cession</th>
+                  <th>Estimation Prime</th>
+                  <th>Prime Cédée</th>
+                  <th>Commission</th>
+                  <th>Prime Nette</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each quittance.quittancePlacements}}
+                <tr>
+                  <td class="strong">{{#if this.acteur}}{{this.acteur.sigle}}{{else}}—{{/if}}</td>
+                  <td>{{this.numero}}</td>
+                  <td>{{#if this.naturePlacement}}{{this.naturePlacement.libelle}}{{else}}—{{/if}}</td>
+                  <td class="amount">{{this.tauxCession}} %</td>
+                  <td class="amount">{{this.estimationPrime}}</td>
+                  <td class="amount">{{this.primeCedee}}</td>
+                  <td class="amount">{{this.commissionFixe}}</td>
+                  <td class="amount">{{this.primeNette}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+              <tfoot>
+                <tr class="table-total">
+                  <td colspan="5" style="text-align:right;">
+                    {{quittance.quittancePlacements.length}} placement(s) actif(s)
+                  </td>
+                  <!--td class="amount">{{totalEstimationPrime}}</td-->
+                  <td class="amount">{{totalPrimeCedee}}</td>
+                  <td class="amount">—</td>
+                  <td class="amount">{{totalPrimeNette}}</td>
+                </tr>
+              </tfoot>
+            </table>
+            {{else}}
+            <p class="empty">Aucun placement enregistré</p>
+            {{/if}}
+          </section>
+
+          <!-- SECTION 6 : TRANCHES (toujours en paysage, même page ou suivante) -->
+          <section class="section">
+            <h2 class="section-title">Tranches</h2>
+            {{#if quittance.quittanceTranches.length}}
+            <table class="data-table tranches-table">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Priorité</th>
+                  <th>Portée</th>
+                  <th>Estimation Prime</th>
+                  <th>Taux Prime</th>
+                  <th>Prime Tranche</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each quittance.quittanceTranches}}
+                <tr>
+                  <td class="amount">{{this.numeroTranche}}</td>
+                  <td class="amount">{{this.priorite}}</td>
+                  <td class="amount">{{this.portee}}</td>
+                  <td class="amount">{{this.estimationPrime}}</td>
+                  <td class="amount">{{this.tauxPrime}} %</td>
+                  <td class="amount">{{this.primeTranche}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            {{else}}
+            <p class="empty">Aucune tranche définie</p>
+            {{/if}}
+          </section>
+
+    </div>
+<!-- Fin de la zone paysage : le reste du document revient en portrait -->
+     <footer class="footer">
+        Quittance N° {{quittance.numero}} — Document généré le {{dateGeneration}} — Confidentiel
+      </footer>
+ 
+  </main>
+
+
+
+</div>
+</body>
+</html>

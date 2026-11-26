@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Quittance } from './quittance.entity';
 import { Acteur } from '../../acteurs/entities/acteur.entity';
@@ -16,6 +16,7 @@ import { NaturePlacement } from 'src/referentiel/entities/nature-placement.entit
  * réassureurs" dans le diagramme), avec le taux de placement appliqué.
  */
 @Entity('quittance_placement')
+@Unique(['quittanceId','acteurId','naturePlacementId'])
 export class QuittancePlacement extends BaseEntity {
 
  @Column({nullable:true , unique: true, update: false})

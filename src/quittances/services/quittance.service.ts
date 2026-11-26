@@ -8,6 +8,12 @@ import { CrudService } from 'src/common/crud/crud.service';
 import { QuittanceCalculService } from './quittance-calcul.service';
 import { CreateQuittanceDto } from '../dto/create-quittance.dto';
 import { UpdateQuittanceDto } from '../dto/update-quittance.dto';
+import Decimal from 'decimal.js';
+import { formatDecimal, formatDate } from 'src/common/utilitaire/formatters';
+import { fail } from 'node:assert';
+import { failure } from 'src/common/helper/response.helper';
+
+
 
 @Injectable()
 export class QuittanceService extends CrudService<Quittance> {
@@ -18,7 +24,11 @@ export class QuittanceService extends CrudService<Quittance> {
   ) {
     super(quittanceRepository);
   }
-
+// En haut de votre classe de service (hors des méthodes)
+// private readonly frCurrencyFormatter = new Intl.NumberFormat('fr-FR', {
+//   minimumFractionDigits: 2,
+//   maximumFractionDigits: 2,
+// });
   // ── CRÉATION : on calcule AVANT de persister ──────────────
 async create(dto: CreateQuittanceDto): Promise<Quittance> {
   const partial = this.calculService.appliquer(dto as any);
@@ -87,5 +97,143 @@ async create(dto: CreateQuittanceDto): Promise<Quittance> {
   // ── SIMULATION : pour le frontend (aperçu non contractuel) ─
   simuler(dto: Partial<Quittance>): Partial<Quittance> {
     return this.calculService.calculer(dto);
+  }
+
+  
+  // Dans votre QuittanceService ou PdfService
+  async printQuittanceSingle(quittanceId: number): Promise<any> {
+    console.log(' ____ QuittanceService.printQuittanceSingle ____') 
+  
+    const quittance = await this.quittanceRepository.findOne({
+      where: { id: quittanceId },
+      relations: [
+        'police', 
+        'police.natureOffre', 
+        'police.sousBranche', 
+        'police.acteurCedante',
+        'devise', 'mouvement',
+        'quittancePlacements',
+        'quittancePlacements.naturePlacement',        
+        'quittanceTranches',
+      ]
+    });
+    if (!quittance) throw new NotFoundException(failure( `Quittance ${quittanceId} introuvable`));
+    console.log(' quittance:',quittance) 
+    const natureOffre = quittance.police.natureOffre
+    const isProportionnelle = natureOffre.isProportionnelle 
+    const isQuotePart =natureOffre.isQuotePart   
+    const isEdp =natureOffre.isEdp   
+    const isFacultative =natureOffre.isFacultative
+    const isFacObligatoire =natureOffre.isFacObligatoire
+    const isXs =natureOffre.isXs
+    // 2. Calculer les totaux pour le tfoot de la table placements
+    const totalEstimationPrime = quittance.quittancePlacements
+      .reduce((sum, p) => sum.plus(p.estimationPrime), new Decimal(0));
+
+    const totalPrimeCedee = quittance.quittancePlacements
+      .reduce((sum, p) => sum.plus(p.primeCedee), new Decimal(0));
+
+    const totalPrimeNette = quittance.quittancePlacements
+      .reduce((sum, p) => sum.plus(p.primeNette), new Decimal(0));
+    console.log(' ___________') 
+    console.log(' totalEstimationPrime:',totalEstimationPrime) 
+    console.log(' totalPrimeCedee:',totalPrimeCedee) 
+    console.log(' totalPrimeNette:',totalPrimeNette) 
+    console.log(' ___________') 
+    // 3. Construire le contexte du template
+    const context = {
+      quittance: {
+        ...quittance,
+        
+        ///////////////////////////// 
+        ////// CAPITAUX 
+        /////////////////////////////          
+        capitaux: formatDecimal(quittance.capitaux),
+        lci: formatDecimal(quittance.lci),
+        smp: formatDecimal(quittance.smp),
+        limite: formatDecimal(quittance.limite),
+        sinistreAuComptant: formatDecimal(quittance.sinistreAuComptant),
+        retention: formatDecimal(quittance.retention),
+        conservation: formatDecimal(quittance.conservation),
+        capacite: formatDecimal(quittance.capacite),
+        portee: formatDecimal(quittance.portee),
+        priorite: formatDecimal(quittance.priorite),
+        
+        ///////////////////////////// 
+        ////// PRIMES 
+        /////////////////////////////
+        estimationPrime: formatDecimal(quittance.estimationPrime),
+        primeBrute: formatDecimal(quittance.primeBrute),
+        primeNette: formatDecimal(quittance.primeNette),
+        primeCedee: formatDecimal(quittance.primeCedee),
+        primeAcceptee: formatDecimal(quittance.primeAcceptee),
+        
+        ///////////////////////////// 
+        ////// TAUX & TAXES
+        /////////////////////////////
+        coursDevise: formatDecimal(quittance.coursDevise),
+        tauxCedante: formatDecimal(quittance.tauxCedante),
+        tauxAccepte: formatDecimal(quittance.tauxAccepte),
+        commissionFixe: formatDecimal(quittance.commissionFixe),
+        tauxCommission: formatDecimal(quittance.tauxCommission),
+        taxeSurCommission: formatDecimal(quittance.taxeSurCommission),
+        taxeSurPrime: formatDecimal(quittance.taxeSurPrime),
+        avisSinistre: formatDecimal(quittance.avisSinistre),
+        aliment: formatDecimal(quittance.aliment),
+        
+        ///////////////////////////// 
+        ////// DATES
+        /////////////////////////////
+        dateEmissionFormatee: formatDate(quittance.dateEmission),
+        dateEffetFormatee: formatDate(quittance.dateEffet),
+        dateEcheanceFormatee: formatDate(quittance.dateEcheance),
+
+        ///////////////////////////// 
+        ////// PLACEMENTS (tableau formaté)
+        /////////////////////////////
+        quittancePlacements: quittance.quittancePlacements.map(p => ({
+          ...p,
+          estimationPrime: formatDecimal(p.estimationPrime),
+          primeBrute: formatDecimal(p.primeBrute),
+          primeCedee: formatDecimal(p.primeCedee),
+          primeNette: formatDecimal(p.primeNette),
+          commissionFixe: formatDecimal(p.commissionFixe),
+          tauxCession: formatDecimal(p.tauxCession),
+          tauxCommission: formatDecimal(p.tauxCommission),
+          taxeSurPrime: formatDecimal(p.taxeSurPrime),
+          taxeSurCommission: formatDecimal(p.taxeSurCommission),
+        })),
+
+        ///////////////////////////// 
+        ////// TRANCHES (tableau formaté)
+        /////////////////////////////
+        quittanceTranches: quittance.quittanceTranches.map(t => ({
+          ...t,
+          priorite: formatDecimal(t.priorite),
+          portee: formatDecimal(t.portee),
+          estimationPrime: formatDecimal(t.estimationPrime),
+          tauxPrime: formatDecimal(t.tauxPrime),
+          primeTranche: formatDecimal(t.primeTranche),
+          tauxCommission: formatDecimal(t.tauxCommission),
+          taxeSurCommission: formatDecimal(t.taxeSurCommission),
+        })),
+      },
+      // -----
+      isProportionnelle,
+      isQuotePart,
+      isEdp,
+      isFacultative,
+      isFacObligatoire,
+      isXs,
+      // -----
+      totalEstimationPrime: formatDecimal(totalEstimationPrime),
+      totalPrimeCedee: formatDecimal(totalPrimeCedee),
+      totalPrimeNette: formatDecimal(totalPrimeNette),
+      dateGeneration: new Date().toLocaleDateString('fr-FR'),
+    };
+    console.log(' context pour HandleBar:',context)
+    // 4. Appel au service PDF
+    //return this.pdfService.renderTemplate('quittance-single', context);
+    return context;
   }
 }

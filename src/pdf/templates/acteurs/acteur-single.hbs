@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>{{{css}}}</style>
+  <style>
+    /* === MISE EN PAGE SPÉCIFIQUE : FICHE ACTEUR === */
+    .info-grid th:nth-child(odd)  { width: 20%; } /* Labels */
+    .info-grid td:nth-child(even) { width: 30%; } /* Valeurs */
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-title">Fiche Acteur</div>
+      <div class="header-subtitle">{{acteur.raisonSociale}}</div>
+    </header>
+
+    <main class="content">
+      <section class="section">
+        <h2 class="section-title">Identité</h2>
+        <table class="info-grid">
+          <tr>
+            <th>Numéro</th>
+            <td>{{#if acteur.numero}}{{acteur.numero}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+            <th>Sigle</th>
+            <td>{{#if acteur.sigle}}{{acteur.sigle}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+          </tr>
+          <tr>
+            <th>Raison Sociale</th>
+            <td colspan="3">{{#if acteur.raisonSociale}}{{acteur.raisonSociale}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+          </tr>
+          <tr>
+            <th>Pays</th>
+            <td colspan="3">{{#if acteur.pays}}{{acteur.pays.nom}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+          </tr>
+          <tr>
+            <th>Rôles</th>
+            <td colspan="3">
+              {{#if roles.length}}
+                {{#each roles}}
+                  <span class="badge">{{this}}</span>
+                {{/each}}
+              {{else}}
+                <span class="empty">Aucun rôle défini</span>
+              {{/if}}
+            </td>
+          </tr>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Coordonnées</h2>
+        <table class="info-grid">
+          <tr>
+            <th>Email</th>
+            <td>{{#if acteur.email}}{{acteur.email}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+            <th>Téléphone</th>
+            <td>{{#if acteur.telephone}}{{acteur.telephone}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+          </tr>
+          <tr>
+            <th>Site Web</th>
+            <td>{{#if acteur.siteweb}}{{acteur.siteweb}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+            <th>Coordonnées Bancaires</th>
+            <td>{{#if acteur.coordonneesBancaire}}{{acteur.coordonneesBancaire}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+          </tr>
+          <tr>
+            <th>Adresse</th>
+            <td colspan="3">{{#if acteur.adresse}}{{acteur.adresse}}{{else}}<span class="empty">Non renseigné</span>{{/if}}</td>
+          </tr>
+        </table>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Document généré le {{dateGeneration}} — Confidentiel
+    </footer>
+  </div>
+</body>
+</html>

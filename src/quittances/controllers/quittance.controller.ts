@@ -1,6 +1,7 @@
 // quittance.controller.ts
 import {
   Controller, Get, Param, ParseIntPipe, Patch, Post, Body,
+  Res,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { QuittanceService } from '../services/quittance.service';
@@ -8,15 +9,16 @@ import { Quittance } from '../entities/quittance.entity';
 import { CrudController } from 'src/common/crud/crud.controller';
 import { CreateQuittanceDto } from '../dto/create-quittance.dto';
 import { UpdateQuittanceDto } from '../dto/update-quittance.dto';
-import { Between, FindManyOptions, Like, Raw, Repository } from 'typeorm';
-import { Campagne } from 'src/referentiel/entities/campagne.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import {  FindManyOptions, Like, Raw } from 'typeorm';
+import { Response } from 'express';
+import { PdfService } from 'src/pdf/pdf.service';
 
 @ApiTags('Métier Affaires - Quittances')
 @Controller('quittance')
 export class QuittanceController extends CrudController<Quittance, CreateQuittanceDto, UpdateQuittanceDto> {
   constructor(
     private readonly quittanceService: QuittanceService,
+    private readonly pdfService: PdfService, // 🌟 Injection
   ) {
     super(quittanceService);
   }
@@ -144,5 +146,28 @@ export class QuittanceController extends CrudController<Quittance, CreateQuittan
   @ApiOperation({ summary: 'Simule le calcul sans persister' })
   simuler(@Body() dto: Partial<Quittance>): Partial<Quittance> {
     return this.quittanceService.simuler(dto);
+  }
+
+
+  @Get(':id/print')
+  async printQuittanceSingle(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+    console.log(' ____ QuittanceController.printQuittanceSingle ____') 
+    const quittanceContext = await this.quittanceService.printQuittanceSingle(id);
+    
+    const html = this.pdfService.buildQuittanceSingleHtml(quittanceContext);
+    console.log(' html:',html) 
+    const filename = `Quittance-${quittanceContext.numero}.pdf`;
+    const pdfBuffer = await this.pdfService.generatePdf(html, filename);
+
+    // ✅ DEBUG : taille + signature du PDF
+    console.log('pdfBuffer.length:', pdfBuffer.length);
+    console.log('pdfBuffer signature:', pdfBuffer.subarray(0, 5).toString()); // doit être "%PDF-"
+      
+  res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `inline; filename="${filename}"`, // inline pour affichage direct
+      'Content-Length': pdfBuffer.length.toString(),
+    });
+    res.end(pdfBuffer);
   }
 }
